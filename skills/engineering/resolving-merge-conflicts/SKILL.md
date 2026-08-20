@@ -1,6 +1,6 @@
 ---
 name: resolving-merge-conflicts
-description: "Use when you need to resolve an in-progress git merge/rebase conflict, including rebase conflict playbooks."
+description: "Use when a git merge or rebase has stopped on a conflict and you need to resolve by intent (see current state → primary sources → hunk-by-hunk → run automated checks → finish). NOT for routine rebase / squash / git-history investigation (that's omo's git-master). Includes rebase conflict playbooks."
 ---
 
 1. **See the current state** of the merge/rebase. Check git history, and the conflicting files.

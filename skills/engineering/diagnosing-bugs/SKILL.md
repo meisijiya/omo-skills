@@ -1,6 +1,6 @@
 ---
 name: diagnosing-bugs
-description: "Diagnosis loop for hard bugs and performance regressions. Use when the user says 'diagnose'/'debug this', or reports something broken/throwing/failing/slow. Focus: build a tight red-capable feedback loop BEFORE hypothesizing — complements omo's /debugging orchestration."
+description: "Diagnosis loop for hard bugs and performance regressions where cause is opaque and a tight feedback loop can be built (failing test, curl, headless browser, replay harness, bisect). For crashes / hangs / attach-debugger / runtime inspection / sourcemap issues, use omo's built-in /debugging instead — that one owns pwndbg/gdb/lldb/dlv/pdb/playwright-cli workflows."
 ---
 
 # Diagnosing Bugs

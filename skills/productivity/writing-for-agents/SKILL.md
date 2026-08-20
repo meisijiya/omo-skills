@@ -1,6 +1,6 @@
 ---
 name: writing-for-agents
-description: Writing documents for agents. Use when creating or editing skills, or modifying AGENTS.md or CLAUDE.md.
+description: Writing skills and AGENTS.md for agents. Use when creating or editing a skill's SKILL.md, or modifying a project's AGENTS.md. For opencode.json / agent config / subagent wiring, use customize-opencode instead.
 ---
 
 Reference for writing any document an agent consumes: a skill, an `AGENTS.md` / `CLAUDE.md`, a doc reached by a pointer. The packaging differs; the writing does not: the same levers make each one predictable, since the agent takes the same _process_ every run rather than producing the same output.

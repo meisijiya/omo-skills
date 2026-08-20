@@ -1,48 +1,43 @@
-# INSTALL — omo-skills（Meisijiya 13 skill）安装指南
+# INSTALL — omo-skills（Meisijiya 12 skill）安装指南
 
-本指南面向能执行 shell 的 Agent（omo / pi / senpi / Xiaomi mimocode）。Agent 读完本指南后，按流程逐节执行即可，无需再回头询问用户目录。
+本仓库专为 [OhMyOpenCode](https://github.com/code-yeongyu/oh-my-opencode)（omo）服务。INSTALL 仅指导把 12 个采纳 skill 装入 omo。其它 Agent（pi / senpi / Xiaomi mimocode / 等）不在本仓库服务边界内。
+
+Agent 读完本指南后，按流程逐节执行即可，无需再回头询问用户目录。
 
 ## 0. 通用约定
 
 - **不写「自动执行破坏性操作」**：本指南每一步都要求 Agent 先 `ls` 现状、对比能力缺口、再向用户确认目标，再 `cp -r`。
-- **不把 skill 硬编码装到使用目录**：安装位置由用户在「询问装到哪个 Agent」步骤明确指定；Agent 不得自行决定。
-- **「minicode」 / 「mcode」归因**：名称含混时（如 "minicode" / "mcode"），Agent 在确认目标 Agent 前必须先与用户确认名字归属，再进入对应章节。
-- **目录扫描触发**：所有 Agent 都通过启动时扫描 skill 目录自动发现 skill；`cp -r` 完成后下次启动即生效，无需任何额外注册命令（mimocode 见对应章节）。
+- **不把 skill 硬编码装到使用目录**：安装位置由用户在「询问装到哪个目录」步骤明确指定；Agent 不得自行决定。
+- **目录扫描触发**：omo 通过启动时扫描 skill 目录自动发现 skill；`cp -r` 完成后下次启动即生效，无需任何额外注册命令。
 
 ---
 
-## 1. 目标 Agent → skill 目录映射
+## 1. 目标目录映射
 
-| Agent | 目标 skill 目录 | 备注 |
+| 安装源 | 目标 skill 目录 | 备注 |
 | --- | --- | --- |
-| omo (OpenCode) | `~/.config/opencode/skills/` 与 `~/.agents/skills/` | omo 主目录 + Agent 通用目录 |
-| pi | `~/.pi/agent/skills/` 与 `~/.agents/skills/` | 注意：`agent` 单数，目录名只有一个 segment；常见错拼会带额外 s，需避坑 |
-| senpi | `~/.senpi/agent/skills/` 与 `~/.agents/skills/` | senpi 主目录 + Agent 通用目录 |
-| Xiaomi mimocode | 官方未文档化 | 现场检测（见下文 `## Xiaomi mimocode`） |
-
-> 凡标「官方未文档化」者，下方对应章节给出**现场检测**方法；Agent 必须先 `ls` 现状、列可能路径、与用户确认真实目录后才能复制。
+| omo (OpenCode) | `~/.config/opencode/skills/` 与 `~/.agents/skills/` | omo 主目录 + Agent 通用目录；任选其一即可，建议主目录 `~/.config/opencode/skills/` |
 
 ---
 
 ## 2. 能力对照表
 
-本节把 13 个采纳 skill 与 omo 内置的对应能力并列对照，方便选型。
+本节把 12 个采纳 skill 与 omo 内置的对应能力并列对照，方便选型。
 
 | Skill | omo 内置对应 | 备注 |
 |---|---|---|
 | `setup-meisijiya-skills` | — | 仓库初始化（首次使用前跑一次） |
-| `slice-work` | — | 垂直切片拆解 |
-| `codebase-design` | — | 设计意图词典 |
+| `codebase-design` | — | 深模块设计词汇与原则（被 tdd / improve-codebase-architecture 引用为参考源） |
 | `domain-modeling` | — | 领域模型 / ADR |
-| `tdd` | `tdd` skill | 与 omo 内置同名一致 |
+| `tdd` | `tdd` skill | 与 omo 内置同名一致（作为对外承诺保留） |
 | `improve-codebase-architecture` | — | user-invoked |
-| `prototype` | `prototype` skill | 与 omo 内置同名一致 |
-| `diagnosing-bugs` | `/debugging` | 互补：build feedback loop 在先 |
-| `code-review` | `/review-work` | 互补：日常 review vs PR 交接 |
-| `resolving-merge-conflicts` | — | rebase conflict playbooks |
+| `prototype` | `prototype` skill | 与 omo 内置同名一致（作为对外承诺保留） |
+| `diagnosing-bugs` | `/debugging` | 互补：build feedback loop 在先；崩溃 / hang / attach-debugger 走 `/debugging` |
+| `code-review` | `/review-work` | 互补：日常 diff review vs PR 交接 full QA |
+| `resolving-merge-conflicts` | — | rebase conflict playbooks（不是常规 rebase / squash / git-history） |
 | `wizard` | — | 多步人工向导 |
 | `grilling` | — | 严格交叉质询 |
-| `writing-for-agents` | — | AGENTS.md / SKILL.md 写作 |
+| `writing-for-agents` | — | SKILL.md / AGENTS.md 写作 |
 
 ---
 
@@ -54,36 +49,37 @@ omo 已内置同名或同等能力的 skill，跳过避免重复触发。
 |---|---|---|
 | `tdd` | 装 | 与 omo `tdd` skill 内容一致，作为对外承诺保留 |
 | `prototype` | 装 | 同上 |
-| `diagnosing-bugs` | 装 | 互补 `omo /debugging`：diagnosis loop 聚焦先建 feedback loop，再做假设；不重叠 |
-| `code-review` | 装 | 互补 `omo /review-work`：日常 diff review vs PR 交接 full QA；不重叠 |
+| `diagnosing-bugs` | 装 | 互补 `omo /debugging`：diagnosis loop 聚焦先建 feedback loop，再做假设；崩溃 / hang / 运行时 attach 走 `/debugging` |
+| `code-review` | 装 | 互补 `omo /review-work`：日常 diff review vs PR 交接 full QA |
 | `research` | skip | 范围过大，触发噪音明显；omo 的 `/ulw-research` 已覆盖 |
 | `handoff` | skip | 与 omo `task()` 多 Agent 委派机制重叠 |
 | `ask-matt` | skip | 路由型 skill，omo 无内置对应；上游分发即可 |
 | `grill-with-docs` | skip | 与 `grilling` + `domain-modeling` 工作流重叠 |
 | `implement` | skip | 与 omo `task()` 多 Agent 委派机制重叠 |
-| `to-spec` | skip | 由 `slice-work` 承接 |
-| `to-tickets` | skip | 由 `slice-work` 承接 |
+| `to-spec` | skip | 由 omo `ulw-plan` 承接（specification 作为计划产物） |
+| `to-tickets` | skip | 由 omo `ulw-plan` 承接（任务拆分作为计划产物） |
 | `triage` | skip | omo `issue-tracker` workflow 内置类似流程 |
 | `wayfinder` | skip | 仅大型 monorepo 需要，触发噪音明显 |
 | `grill-me` | skip | 由 `grilling` 合并 |
 | `teach` | skip | omo 内置 `teach` skill |
 | `to-questionnaire` | skip | 与 `grilling` 工作流重叠 |
 | `wait-what` | skip | 由 `grilling` 承接 |
+| `slice-work` | skip | 与 omo `/ulw-plan` 触发面重叠、缺任务行语法约束；omo prompt_append 内化垂直切片纪律（见 §5.1） |
 | `setup-matt-pocock-skills` | skip | 重命名为 `setup-meisijiya-skills` |
 
 ---
 
 ## 4. 安装流程（先问，再检测，再复制，再汇报）
 
-**步骤 0：先问「装到哪个 Agent」。**
+**步骤 0：先问「装到哪个目录」。**
 
 进入对话后第一句话必须包含以下要点（不写「自动执行破坏性操作」措辞）：
 
-> 「请问本次要把这 13 个采纳 skill 装到哪个 Agent？可选：omo / pi / senpi / Xiaomi mimocode。装到 omo 时默认 13 个全量；装到 pi / senpi / mimocode 时同样 13 个全量（请先核实目标 Agent 的内置覆盖表是否一致）。」
+> 「请问本次要把这 12 个采纳 skill 装到 omo 的哪个目录？默认 `~/.config/opencode/skills/`；如已有同名 skill，`cp -r` 会覆盖原目录。」
 
-收到明确答复（必须是 4 个之一）后才进入步骤 1；未明确前不复制任何文件。
+收到明确答复后才进入步骤 1；未明确前不复制任何文件。
 
-**步骤 1：现场检测目标 Agent 的现状。**
+**步骤 1：现场检测 omo 的现状。**
 
 按 §1 映射表执行 `ls`，记录：
 
@@ -91,7 +87,7 @@ omo 已内置同名或同等能力的 skill，跳过避免重复触发。
 - 已存在哪些同名 skill 目录（避免覆盖）
 - 是否需要先 `mkdir -p` 创建目录
 
-命令示例（omo）：
+命令示例：
 
 ```bash
 ls -1 ~/.config/opencode/skills/ 2>/dev/null
@@ -102,9 +98,9 @@ ls -1 ~/.agents/skills/ 2>/dev/null
 
 对照 §2 能力对照表，逐项打标：
 
-- 目标 Agent 中已存在的 skill → skip
-- 目标 Agent 中缺失但 omo 内置覆盖的（仅 omo）→ 标「omo 内置覆盖，按 §3 skip」
-- 目标 Agent 中缺失且未覆盖的 → 列入待复制清单
+- omo 中已存在的 skill → skip
+- omo 中缺失但 omo 内置覆盖的 → 标「omo 内置覆盖，按 §3 skip」
+- omo 中缺失且未覆盖的 → 列入待复制清单
 
 把待复制清单打印给用户确认（一次确认即可，不需要逐项确认）。
 
@@ -120,67 +116,39 @@ cp -r skills/<bucket>/<name> <目标skill目录>/
 
 - `<bucket>` 取值 `engineering` 或 `productivity`（见 §2 能力对照表第三列）。
 - `<name>` 是 skill 目录名（不带斜杠、不带 `.md`）。
-- `<目标skill目录>` 是 §1 表里该 Agent 的目录字面值。
+- `<目标skill目录>` 是 §1 表里的目录字面值。
 - 同一目标目录多次复制不同 skill 时，每次 `cp -r` 独立执行；不要写 `cp -r ... skills/* <dir>/` 这种一把梭的写法——会顺带把 bucket 下的 `README.md` 复制进去，污染目标目录。
+- 本仓库 12 个 skill 与 omo 用户层已装副本同名，`cp -r` 会**覆盖**已存在的同名目录；如需保留原版，先 `mv ~/.config/opencode/skills/engineering/<name> ~/.config/opencode/skills/engineering/<name>.bak`。
 
 **步骤 4：汇报。**
 
 汇报模板：
 
 ```
-已为 <Agent> 复制 <N> 个 skill 到 <目录>：
-  - engineering/<name1> → 追问对齐（带文档背景）
-  - productivity/<name2> → 追问对齐（开放反问）
+已为 omo 复制 <N> 个 skill 到 <目录>：
+  - engineering/<name1> → ...
+  - productivity/<name2> → ...
 未安装 <M> 个（已弃用或 omo 内置覆盖，见 README 弃用表 + §3 表）：
   - ask-matt / grill-with-docs / implement / research / to-spec / to-tickets
   - triage / wayfinder / grill-me / handoff / teach / to-questionnaire
-  - wait-what / setup-matt-pocock-skills
+  - wait-what / slice-work / setup-matt-pocock-skills
 ```
 
 若用户在 §4 步骤 2 显式排除某些 skill，则一并写入"未安装 <M> 个"段。
 
-汇报完即可结束；不需要重启 Agent——下次启动会自动扫描到新 skill。
+汇报完即可结束；不需要重启 omo——下次启动会自动扫描到新 skill。
 
 ---
 
-## 5. 各 Agent 章节
-
-下面 4 个章节分别给出 omo / pi / senpi / Xiaomi mimocode 四个 Agent 的目录、装机策略与复制命令示例。每个 Agent 一节，标题均为二级 `##`，便于 grep 与跳转。
-
-为方便别名 grep（`^## mimocode` 等模式），下一行作为锚点跳转目标：
-
-## mimocode
-
-见下文 `## Xiaomi mimocode`（Xiaomi 出品的代码 Agent，skill 目录官方未文档化）。
-
-## omo (OpenCode)
+## 5. omo 安装
 
 **目录**：`~/.config/opencode/skills/` 与 `~/.agents/skills/`（任选其一即可，建议主目录 `~/.config/opencode/skills/`）。
 
-**装机策略**：默认 13 个 skill 全量。
-
-### omo / Atlas 安装
-
-```bash
-# 把 13 个 skill 复制到 omo skills 目录
-SKILLS=(
-  setup-meisijiya-skills slice-work codebase-design domain-modeling
-  tdd improve-codebase-architecture prototype
-  diagnosing-bugs code-review resolving-merge-conflicts wizard
-  grilling writing-for-agents
-)
-
-for s in "${SKILLS[@]}"; do
-  cp -r "skills/engineering/$s" ~/.config/opencode/skills/engineering/ 2>/dev/null || \
-  cp -r "skills/productivity/$s" ~/.config/opencode/skills/productivity/ 2>/dev/null
-done
-```
-
-更精确的命令（直接同步到 omo 期望目录）：
+**装机策略**：默认 12 个 skill 全量。
 
 ```bash
 ENGINEERING=(
-  setup-meisijiya-skills slice-work codebase-design domain-modeling
+  setup-meisijiya-skills codebase-design domain-modeling
   tdd improve-codebase-architecture prototype
   diagnosing-bugs code-review resolving-merge-conflicts wizard
 )
@@ -189,6 +157,13 @@ PRODUCTIVITY=(grilling writing-for-agents)
 mkdir -p ~/.config/opencode/skills/engineering ~/.config/opencode/skills/productivity
 for s in "${ENGINEERING[@]}"; do cp -r "skills/engineering/$s" ~/.config/opencode/skills/engineering/; done
 for s in "${PRODUCTIVITY[@]}"; do cp -r "skills/productivity/$s" ~/.config/opencode/skills/productivity/; done
+```
+
+**复制完成标志**：
+
+```bash
+ls -1 ~/.config/opencode/skills/engineering/ | wc -l   # 期望 ≥ 10
+ls -1 ~/.config/opencode/skills/productivity/ | wc -l  # 期望 ≥ 2
 ```
 
 ## 5.1 prompt_append 配置（Prometheus 垂直切片内化）
@@ -208,139 +183,13 @@ for s in "${PRODUCTIVITY[@]}"; do cp -r "skills/productivity/$s" ~/.config/openc
 }
 ```
 
-加入后，Prometheus 生成的 `## Todos` 会自然按垂直切片形式产出，不再依赖 `slice-work` skill 的显式调用。`slice-work` skill 仍保留用于计划已写好之后做进一步拆分。
-
----
-
-## pi
-
-**目录**：`~/.pi/agent/skills/` 与 `~/.agents/skills/`（任选其一即可，建议主目录 `~/.pi/agent/skills/`）。
-
-**装机策略**：默认 13 个全量（pi 与 omo 内置覆盖是否一致未在本机验证；§4 步骤 2 现场对比能力表后由用户决定是否加 `mattpocock-` 前缀避让）。
-
-**复制示例**（13 个全量，无前缀；如需避让见命令后注释）：
-
-```bash
-TARGET=~/.pi/agent/skills/
-
-# engineering 11 个
-for s in \
-  setup-meisijiya-skills slice-work codebase-design \
-  domain-modeling tdd improve-codebase-architecture \
-  prototype diagnosing-bugs code-review \
-  resolving-merge-conflicts wizard; do
-  cp -r skills/engineering/$s "$TARGET/"
-done
-
-# productivity 2 个
-for s in \
-  grilling writing-for-agents; do
-  cp -r skills/productivity/$s "$TARGET/"
-done
-
-# 如 pi 内置撞名 code-review，cp 后改名为 mattpocock-code-review
-```
-
-**复制完成标志**：
-
-```bash
-ls -1 ~/.pi/agent/skills/ | wc -l   # 期望 ≥ 13
-```
-
-> 注意：`agent` 为单数。错拼成 `agents`（额外 s）的目录不会被任何已知 Agent 扫描。
-
----
-
-## senpi
-
-**目录**：`~/.senpi/agent/skills/` 与 `~/.agents/skills/`（任选其一即可，建议主目录 `~/.senpi/agent/skills/`）。
-
-**装机策略**：默认 13 个全量（senpi 与 omo 内置覆盖是否一致未在本机验证；§4 步骤 2 现场对比能力表后由用户决定是否加 `mattpocock-` 前缀避让）。
-
-**复制示例**（13 个全量，与 pi 同；目标目录替换为 `~/.senpi/agent/skills/`）：
-
-```bash
-TARGET=~/.senpi/agent/skills/
-
-for s in \
-  setup-meisijiya-skills slice-work codebase-design \
-  domain-modeling tdd improve-codebase-architecture \
-  prototype diagnosing-bugs code-review \
-  resolving-merge-conflicts wizard; do
-  cp -r skills/engineering/$s "$TARGET/"
-done
-
-for s in \
-  grilling writing-for-agents; do
-  cp -r skills/productivity/$s "$TARGET/"
-done
-```
-
-**复制完成标志**：
-
-```bash
-ls -1 ~/.senpi/agent/skills/ | wc -l   # 期望 ≥ 13
-```
-
----
-
-## Xiaomi mimocode
-
-**目录**：**官方未文档化**。本指南不为其硬编码路径。
-
-**现场检测方法**（必须执行，不可跳过）：
-
-1. 同样执行 `ls` 探查 `~/.mimocode/skills/`、`~/.xiaomi/mimocode/skills/`、`~/.config/mimocode/skills/`、`~/.config/xiaomi/skills/` 等常见模式——但本指南**不为它硬编码**任何一条具体路径，逐项试完后未命中即询问用户。
-2. 询问用户：「mimocode 的 skill 目录实际放在哪个路径？本机常见的几个位置我用 `ls` 没命中，需要你确认。」
-3. 拿到确认路径后，再走 §4 步骤 2–4。
-
-**装机策略**：默认 13 个全量可选（mimocode 内置覆盖未验证，按 §3 不预设 skip）。
-
-**复制命令模板**（路径由用户确认后填入 `<USER_CONFIRMED_DIR>`）：
-
-```bash
-TARGET=<USER_CONFIRMED_DIR>   # 现场检测后由用户给定
-
-for s in \
-  setup-meisijiya-skills slice-work codebase-design \
-  domain-modeling tdd improve-codebase-architecture \
-  prototype diagnosing-bugs code-review \
-  resolving-merge-conflicts wizard; do
-  cp -r skills/engineering/$s "$TARGET/"
-done
-
-for s in \
-  grilling writing-for-agents; do
-  cp -r skills/productivity/$s "$TARGET/"
-done
-```
-
-**复制完成标志**：
-
-```bash
-ls -1 <USER_CONFIRMED_DIR> | wc -l   # 期望 ≥ 13
-```
-
-> **不写「自动执行破坏性操作」**：mimocode 路径未定前，**不**直接 `mkdir -p` 任何路径、不 `cp` 到任何目录；先 `ls`、再询问用户。
-
----
-
-### 已验证装机清单（维护者手动记录）
-
-| Agent | 验证版本 | 验证日期 | 装机策略 | 备注 |
-| --- | --- | --- | --- | --- |
-| omo (OpenCode) | main | — | 13 全量（engineering 11 + productivity 2，无前缀） | 待本机验证后补日期 |
-| pi | — | — | 13 全量可选（按需加前缀） | 未在本机验证 |
-| senpi | — | — | 13 全量可选（按需加前缀） | 未在本机验证 |
-| Xiaomi mimocode | — | — | 13 全量可选（按需加前缀） | 路径官方未文档化 |
-
-新验证一种 Agent 后，在表格里补一行；`MAINTENANCE.md` §2 监控信号"INSTALL.md 漏 Agent"已对照此表。
+加入后，Prometheus 生成的 `## Todos` 会自然按垂直切片形式产出，不再依赖 `slice-work` skill。`slice-work` 已弃用（§3），由 `ulw-plan` + 本 prompt_append 共同承担。
 
 ---
 
 ## 6. 反向操作（卸载）
 
-如需卸载某个 skill，`rm -rf` 对应目录即可；所有 4 个 Agent 都按目录扫描发现 skill，删目录即下架，无注册表/缓存需清理。
+如需卸载某个 skill，`rm -rf` 对应目录即可；omo 按目录扫描发现 skill，删目录即下架，无注册表/缓存需清理。
 
 ```bash
 # 例：从 omo 卸载 grill-with-docs
@@ -351,6 +200,16 @@ rm -rf ~/.config/opencode/skills/grill-with-docs
 
 ---
 
-## 7. 一句话总结
+## 7. 已验证装机清单（维护者手动记录）
 
-> 问 Agent → `ls` 现状 → 对照 §2 能力表列缺口 → `cp -r` 对应 skill 目录 → 汇报。
+| Agent | 验证版本 | 验证日期 | 装机策略 | 备注 |
+| --- | --- | --- | --- | --- |
+| omo (OpenCode) | main | — | 12 全量（engineering 10 + productivity 2，无前缀） | 待本机验证后补日期 |
+
+新验证一种 omo 安装环境（不同 ~/.config/opencode/ 路径或带 .agents/skills/ 双写）后，在表格里补一行；`MAINTENANCE.md §2` 监控信号 "INSTALL.md 漏目录" 已对照此表。
+
+---
+
+## 8. 一句话总结
+
+> 问目录 → `ls` 现状 → 对照 §2 能力表列缺口 → `cp -r` 对应 skill 目录 → 汇报。

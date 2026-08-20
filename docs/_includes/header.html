@@ -1,0 +1,30 @@
+<header class="site-header" role="banner">
+  <div class="wrap nav-row">
+    <a href="{{ '/' | relative_url }}" class="brand mono accent" aria-label="omo-skills — home">omo-skills</a>
+
+    <nav class="primary-nav" aria-label="Primary">
+      <ul class="nav-list">
+        <li>
+          <a href="{{ '/skills/' | relative_url }}"{% if page.url == '/skills/' %} class="active"{% endif %}>Skills</a>
+        </li>
+        <li>
+          <a href="{{ '/workflow/' | relative_url }}"{% if page.url == '/workflow/' %} class="active"{% endif %}>Workflow</a>
+        </li>
+        <li>
+          <a href="{{ '/install/' | relative_url }}"{% if page.url == '/install/' %} class="active"{% endif %}>Install</a>
+        </li>
+        <li>
+          <a href="{{ '/maintenance/' | relative_url }}"{% if page.url == '/maintenance/' %} class="active"{% endif %}>Maintenance</a>
+        </li>
+        <li>
+          <a href="{{ '/retired/' | relative_url }}"{% if page.url == '/retired/' %} class="active"{% endif %}>Retired</a>
+        </li>
+      </ul>
+    </nav>
+
+    <button type="button" class="cmd-k-trigger" data-cmd-k-open aria-label="Open command palette (⌘K)">
+      <span class="cmd-k-trigger-label mono">Search</span>
+      <kbd class="kbd-hint" aria-hidden="true">⌘K</kbd>
+    </button>
+  </div>
+</header>

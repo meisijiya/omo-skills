@@ -1,0 +1,83 @@
+- name: setup-meisijiya-skills
+  tag: engineering · once
+  category: engineering
+  phase: init
+  desc: 初始化领域文档布局（CONTEXT.md + docs/adr/），首次使用前跑一次。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/setup-meisijiya-skills/SKILL.md
+
+- name: codebase-design
+  tag: engineering · planning
+  category: engineering
+  phase: planning
+  desc: 深模块设计词汇与原则（被 tdd / improve-codebase-architecture 引用为参考源）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/codebase-design/SKILL.md
+
+- name: domain-modeling
+  tag: engineering · planning
+  category: engineering
+  phase: planning
+  desc: 用领域模型梳理业务实体与边界（更新 CONTEXT.md / 写 ADR）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/domain-modeling/SKILL.md
+
+- name: tdd
+  tag: engineering · execution
+  category: engineering
+  phase: execution
+  desc: 严格 TDD 节奏（红→绿→重构）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/tdd/SKILL.md
+
+- name: improve-codebase-architecture
+  tag: engineering · user-invoked
+  category: engineering
+  phase: user-invoked
+  desc: 渐进式架构改良（user-invoked 守卫，仅用户显式触发）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/improve-codebase-architecture/SKILL.md
+
+- name: prototype
+  tag: engineering · execution
+  category: engineering
+  phase: execution
+  desc: 快速原型与可行性验证。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/prototype/SKILL.md
+
+- name: diagnosing-bugs
+  tag: engineering · daily
+  category: engineering
+  phase: daily
+  desc: 硬 bug / 性能回退的诊断循环（与 /debugging 互补，崩溃 / hang 走 omo /debugging）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/diagnosing-bugs/SKILL.md
+
+- name: code-review
+  tag: engineering · execution
+  category: engineering
+  phase: execution
+  desc: 两轴差异评审（Standards vs Spec），/review-work 走 PR 交接 full QA。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/code-review/SKILL.md
+
+- name: resolving-merge-conflicts
+  tag: engineering · execution
+  category: engineering
+  phase: execution
+  desc: 解决 in-progress merge / rebase 冲突（非常规 rebase 走 omo git-master）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/resolving-merge-conflicts/SKILL.md
+
+- name: wizard
+  tag: engineering · daily
+  category: engineering
+  phase: daily
+  desc: 复杂流程的多步向导（只能人工操作的基础设施 / 凭据 / CI）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/wizard/SKILL.md
+
+- name: grilling
+  tag: productivity · user-invoked
+  category: productivity
+  phase: user-invoked
+  desc: 严格交叉质询流程（质询用户的 plan / design）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/productivity/grilling/SKILL.md
+
+- name: writing-for-agents
+  tag: productivity · daily
+  category: productivity
+  phase: daily
+  desc: 写让 Agent 看得懂的文档（SKILL.md / AGENTS.md；opencode 配置走 customize-opencode）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/productivity/writing-for-agents/SKILL.md

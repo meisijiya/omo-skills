@@ -1,5 +1,7 @@
 # omo-skills
 
+> 📖 在线指南：[meisijiya.github.io/omo-skills/](https://meisijiya.github.io/omo-skills/)
+
 Matt Pocock [`mattpocock/skills`](https://github.com/mattpocock/skills) 的 **omo 适配仓库**。
 
 本仓库专为 [OhMyOpenCode](https://github.com/code-yeongyu/oh-my-opencode)（omo）服务，吸收其 skill 工具栈约定，让上游 Matt Pocock 的工程 skill 在 omo 下稳定触发。其它 Agent（pi / senpi / Xiaomi mimocode 等）不在本仓库服务边界内。

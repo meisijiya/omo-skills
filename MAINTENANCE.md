@@ -1,5 +1,7 @@
 # MAINTENANCE — omo-skills 长期维护手册
 
+> 📖 在线指南：[meisijiya.github.io/omo-skills/](https://meisijiya.github.io/omo-skills/)
+
 > 面向：用户本人 / Agent / 团队成员。按手册逐节执行即可，无需额外约定。
 
 本仓库专为 [OhMyOpenCode](https://github.com/code-yeongyu/oh-my-opencode)（omo）服务，已脱离任何上游 fork；`skills/` 是唯一来源。本手册的所有流程都基于此前提。

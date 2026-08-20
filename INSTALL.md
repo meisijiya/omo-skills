@@ -1,5 +1,7 @@
 # INSTALL — omo-skills（Meisijiya 12 skill）安装指南
 
+> 📖 在线指南：[meisijiya.github.io/omo-skills/](https://meisijiya.github.io/omo-skills/)
+
 本仓库专为 [OhMyOpenCode](https://github.com/code-yeongyu/oh-my-opencode)（omo）服务。INSTALL 仅指导把 12 个采纳 skill 装入 omo。其它 Agent（pi / senpi / Xiaomi mimocode / 等）不在本仓库服务边界内。
 
 Agent 读完本指南后，按流程逐节执行即可，无需再回头询问用户目录。

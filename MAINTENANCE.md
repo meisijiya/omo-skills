@@ -66,6 +66,8 @@ git add <冲突文件>
 git rebase --continue
 ```
 
+> **push 后增量**：本仓库已 push 到 `https://github.com/meisijiya/omo-skills.git`，`mattpocock-skills/omo` 分支 rebase 后需 `git push --force-with-lease` 同步远端。`--force-with-lease` 比 `--force` 安全（只在远端没有新提交时才强推）。
+
 ---
 
 ## §4. rebase 后必跑验证（关键 — 不跑就别继续）

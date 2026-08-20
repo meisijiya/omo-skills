@@ -108,9 +108,9 @@ omo-skills/
 - 仓库拓扑与边界（`skills/` 产物 vs `mattpocock-skills/` 开发源）
 - 监控信号（什么时候该维护）
 - 上游同步历史 playbook（§3，已脱离上游，仅参考）
-- rebase 后必跑的 4 个断言
+- 变更后必跑的 3 个断言（断言 4 路径断言已删）
 - **§5 Skill 引入规则（讨论流程）**：先讨论再决定，不靠自动化
 - **§9 文档落地路径分类**：提交类（`docs/adr/` `CONTEXT.md` `CONTEXT-MAP.md` `docs/agents/`）vs 临时态（`.omo/scratch/` `.omo/out-of-scope/`）的判定标准（讨论参考，非自动化）
-- **§10 mattpocock-skills → skills/ 同步流程**：先讨论哪些 skill 要同步，再决定复制
+- **§10 skill 同步与新建流程（已脱离上游）**：按 §5 Step 0 讨论后再决定是否纳入，详见 §10
 - 添加新 Agent / 退役 skill 的流程
 - 故障排查速查表

@@ -1,0 +1,25 @@
+title: omo-skills
+description: >-
+  omo 适配的 Matt Pocock 工程 skill 仓库在线指南 —— 12 个采纳 skill、
+  三 Agent 接力工作流、4 步安装与维护手册。
+baseurl: "/omo-skills"
+url: "https://meisijiya.github.io"
+markdown: kramdown
+highlighter: rouge
+# 自定义主题：不依赖 minima，使用仓库自带 _sass + _layouts
+theme: null
+plugins:
+  - jekyll-feed
+sass:
+  style: compressed
+  # 支持 @use 模块化导入（Jekyll 3.10 / sassc）
+  load_paths:
+    - _sass
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - .sass-cache
+  - _site
+  - vendor
+permalink: pretty

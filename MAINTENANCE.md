@@ -31,6 +31,7 @@ omo-skills/
 | 信号 | 检测命令 | 触发维护场景 |
 |---|---|---|
 | 上游有新 commit | `git -C mattpocock-skills fetch origin && git -C mattpocock-skills log --oneline origin/main ^omo` | 上游有未合入提交 |
+| 上游有 breaking PR | `gh pr list --repo mattpocock/skills --state open --json number,title \| jq -r '.[] \| select(.title \| test("flatt\|flatten\|rename\|break\|major\|agent plugins"; "i")) \| "\(.number) \(.title)"'` | 上游结构/约定变更（如 PR #807 Flatten + Agent Plugins 1.0、PR #876 CONTEXT→GLOSSARY 重命名）→ 触发 §10 Step0 深度讨论 |
 | 守卫失效 | 触发某 skill 后模型没识别 user-invoked | 守卫被覆盖 |
 | INSTALL.md 漏 Agent | 新 Agent 上线但 INSTALL.md 未加章节 | 能力缺口 |
 | 路径残留 | `grep -rn '\.scratch/\|\.out-of-scope/' mattpocock-skills/skills/*/SKILL.md \| grep -v '.omo/'` 非空 | 路径未统一 |
@@ -264,8 +265,10 @@ git commit -m "refactor(docs): migrate remaining scratch/out-of-scope refs into 
 
 1. **触发源**：本次同步是为哪个变化？rebase 后变更？新 skill？bug fix？
 2. **同步范围**：哪些 skill 目录要复制到 `skills/`？对应哪些 bucket（engineering / productivity）？
-3. **排除清单**：哪些不复制？（plan 默认排除 `in-progress/` 与 `misc/` 的所有 skill）
+3. **同步范围**：仅 `engineering/` 与 `productivity/` 两个 bucket（天然不含 `in-progress/`、`misc/`、`deprecated/`）
 4. **冲突预案**：如果外层 `skills/<name>/` 已存在（用户本地手动改过），是先备份还是覆盖？
+
+> **⚠️ 禁止直接编辑 `skills/`**：一律先在 `mattpocock-skills/` 微调后通过本流程同步。直接编辑会被 Step2 静默覆盖。
 
 ### Step 1. 在 `mattpocock-skills/` 内做完上游 rebase + 微调
 
@@ -276,14 +279,21 @@ git commit -m "refactor(docs): migrate remaining scratch/out-of-scope refs into 
 ```bash
 cd /home/ljh2923/opencode-project/omo-skills
 
-# 按 Step 0 决定的范围复制
-# 例：同步 grill-with-docs 和 triage
+# ponytail: 覆盖式同步，先 git status 确认 skills/ 无未提交微调
+if git status --porcelain -- skills/ | grep -q .; then
+  echo "ERROR: skills/ 有未提交改动，先处理（提交 / stash / 备份）"
+  exit 1
+fi
+
+# 按 Step 0 决定的范围复制（二选一）
+
+# (a) 指定 skill 列表（按 Step 0 决定）
 for skill in grill-with-docs; do
   rm -rf "skills/engineering/$skill"
   cp -r "mattpocock-skills/skills/engineering/$skill" "skills/engineering/$skill"
 done
 
-# 或全量同步（按 bucket，排除 README.md）
+# (b) 全量同步（按 bucket，天然排除 in-progress/misc/deprecated/与 README.md）
 for d in mattpocock-skills/skills/engineering/*/; do
   name=$(basename "$d")
   [ "$name" = "README.md" ] && continue
@@ -306,12 +316,16 @@ done
 ### Step 4. 提交并 push
 
 ```bash
-cd omo-skills
+cd /home/ljh2923/opencode-project/omo-skills  # 外层产物仓库（非 mattpocock-skills/）
 git add skills/
 git commit -m "chore(skills): sync <N> skills from mattpocock-skills (<上游 commit hash>)"
 git push origin main
 ```
 
+> 若 INSTALL.md 能力对照表受影响（如上游新增 / 删除 skill），同时 commit 同步更新。
+
 ### Step 5. 记录
 
 把 Step 0 的决策（哪些同步、为什么）写到 `.omo/notepads/<plan>/decisions.md`，作为下次同步的参考。
+
+> 无 plan 时（如临时手动同步）：写入本次 commit message 末尾的 `Refs:` 段，或追加到 `MAINTENANCE.md §9.5 附表`。

@@ -1,6 +1,6 @@
 ---
 name: setup-meisijiya-skills
-description: "User-invoked only — do not invoke automatically. Configure this repo for the Meisijiya skills: domain doc layout (CONTEXT.md + docs/adr/) and the adopted-skill manifest. Run once before first use."
+description: "User-invoked only — do not invoke automatically. Configure this repo for the Meisijiya skills: domain doc layout (CONTEXT.md + docs/adr/). Run once before first use."
 disable-model-invocation: true
 ---
 

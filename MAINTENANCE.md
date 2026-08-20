@@ -38,7 +38,9 @@ omo-skills/
 
 ---
 
-## §3. 上游同步 Playbook（每周/双周）
+## §3. 上游同步 Playbook（已脱离上游，仅历史参考，不需执行）
+
+> **本节已废弃**。仓库已脱离 `mattpocock-skills/` 上游 fork（见 §10），不再有 fetch / rebase / merge 上游流程。保留本节仅为历史参考。如需了解过去如何从上游同步，请按以下流程「了解思路」即可，**不要执行**。
 
 ```bash
 cd mattpocock-skills      # 假设外层 omo-skills/ 已 clone 到当前工作目录
@@ -128,17 +130,17 @@ done
 3. **冲突检查**：与现有 skill 的 description 是否撞车？路径是否复用？
 4. **联动更新**：INSTALL.md 能力对照表 / README.md 清单是否要改？
 
-### Step 1. 拉最新
+### Step 1. 新建 skill 目录
 
-在 `mattpocock-skills/omo` 分支 `git merge origin/main`（上游新增场景）。
+新 skill 直接在 `skills/<bucket>/<name>/` 下新建（`mkdir -p skills/<bucket>/<name>/agents`），无需从 `mattpocock-skills/` 拉取（已脱离上游，见 §10）。
 
 ### Step 2. 应用守卫与路径
 
-`ls mattpocock-skills/skills/<bucket>/<新skill>/SKILL.md`，按 §9 讨论结果执行：
+检查 `skills/<bucket>/<新skill>/SKILL.md`，按 §9 讨论结果执行：
 
 - user-invoked（前缀 `User-invoked only — do not invoke automatically. `，保留 `disable-model-invocation: true` 字段）
 - model-invoked（不动 description）
-- 含 `.scratch/.out-of-scope` 字面量 → 替换为 `.omo/` 前缀
+- 含 `.scratch/.out-of-scope` 字面量 → 替换为工作区根直接子目录 `.scratch/` / `.out-of-scope/`（无 `.omo/` 前缀）
 
 ### Step 3. 提交
 
@@ -191,7 +193,7 @@ done
 >
 > 自动化可不靠谱 —— Agent 与人一起讨论出来的归类才能长期维护。
 >
-> **历史说明**：早期 omo 专属微调曾用 `.omo/scratch/` / `.omo/out-of-scope/` 前缀（与 omo 的 `.omo/` 工作目录一致）。为兼容 Mavis（无 `.omo/` 约定）+ 还原上游原路径，已在 2026-08 issue #1 中将临时态路径恢复为工作区根直接子目录 `.scratch/` / `.out-of-scope/`。
+> **历史说明**：早期 omo 专属微调曾用 `.omo/scratch/` / `.omo/out-of-scope/` 前缀（与 omo 的 `.omo/` 工作目录一致）。为还原上游原路径，已在 2026-08 issue #1 中将临时态路径恢复为工作区根直接子目录 `.scratch/` / `.out-of-scope/`。
 
 ### §9.1 两类路径
 
@@ -204,7 +206,7 @@ done
 | `CONTEXT-MAP.md` | 上下文导航图（仓库根级） | `setup-meisijiya-skills/SKILL.md` |
 | `docs/agents/` | Agent 角色定义 | 各 skill 引用的元数据 |
 
-**B. 临时态（working / scratch / out-of-scope）** —— 上游原路径，工作区根直接子目录（与 omo / Mavis / 上游三方一致）：
+**B. 临时态（working / scratch / out-of-scope）** —— 上游原路径，工作区根直接子目录（与 omo / 上游双方一致）：
 
 | 路径 | 含义 | 替换关系 |
 |---|---|---|

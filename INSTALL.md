@@ -1,13 +1,13 @@
-# INSTALL — mattpocock-skills 多 Agent 安装指南
+# INSTALL — omo-skills（Meisijiya 13 skill）安装指南
 
-本指南面向能执行 shell 的 Agent（omo / pi / senpi / Mavis / Xiaomi mimocode）。Agent 读完本指南后，按流程逐节执行即可，无需再回头询问用户目录。
+本指南面向能执行 shell 的 Agent（omo / pi / senpi / Xiaomi mimocode）。Agent 读完本指南后，按流程逐节执行即可，无需再回头询问用户目录。
 
 ## 0. 通用约定
 
 - **不写「自动执行破坏性操作」**：本指南每一步都要求 Agent 先 `ls` 现状、对比能力缺口、再向用户确认目标，再 `cp -r`。
 - **不把 skill 硬编码装到使用目录**：安装位置由用户在「询问装到哪个 Agent」步骤明确指定；Agent 不得自行决定。
-- **「minicode」 / 「mcode」归因**：在 MiniMax 体系内，`mcode` 是 **Mavis**（MiniMax 出品的代码 Agent）的 CLI 别名；不在 MiniMax 体系内时，"minicode" 通常指 Xiaomi mimocode。Agent 在确认目标 Agent 前必须先与用户确认名字归属，再进入对应章节。
-- **目录扫描触发**：所有 Agent 都通过启动时扫描 skill 目录自动发现 skill；`cp -r` 完成后下次启动即生效，无需任何额外注册命令（Mavis / mimocode 见各自章节）。
+- **「minicode」 / 「mcode」归因**：名称含混时（如 "minicode" / "mcode"），Agent 在确认目标 Agent 前必须先与用户确认名字归属，再进入对应章节。
+- **目录扫描触发**：所有 Agent 都通过启动时扫描 skill 目录自动发现 skill；`cp -r` 完成后下次启动即生效，无需任何额外注册命令（mimocode 见对应章节）。
 
 ---
 
@@ -18,7 +18,6 @@
 | omo (OpenCode) | `~/.config/opencode/skills/` 与 `~/.agents/skills/` | omo 主目录 + Agent 通用目录 |
 | pi | `~/.pi/agent/skills/` 与 `~/.agents/skills/` | 注意：`agent` 单数，目录名只有一个 segment；常见错拼会带额外 s，需避坑 |
 | senpi | `~/.senpi/agent/skills/` 与 `~/.agents/skills/` | senpi 主目录 + Agent 通用目录 |
-| Mavis（MiniMax mcode） | `~/.minimax/agents/mavis/skills/` | 官方文档化且固定的路径；CLI 别名 `mcode` |
 | Xiaomi mimocode | 官方未文档化 | 现场检测（见下文 `## Xiaomi mimocode`） |
 
 > 凡标「官方未文档化」者，下方对应章节给出**现场检测**方法；Agent 必须先 `ls` 现状、列可能路径、与用户确认真实目录后才能复制。
@@ -49,7 +48,7 @@
 
 ## 3. 内置覆盖表（哪些 skill 跳过）
 
-omo / Mavis 已内置同名或同等能力的 skill，跳过避免重复触发。
+omo 已内置同名或同等能力的 skill，跳过避免重复触发。
 
 | Skill | 状态 | 原因 |
 |---|---|---|
@@ -80,11 +79,9 @@ omo / Mavis 已内置同名或同等能力的 skill，跳过避免重复触发�
 
 进入对话后第一句话必须包含以下要点（不写「自动执行破坏性操作」措辞）：
 
-> 「请问本次要把 Matt 这 25 个 skill 装到哪个 Agent？可选：omo / pi / senpi / Mavis / Xiaomi mimocode。装到 omo 时默认 20 个采纳 skill（按 §3.1 skip 5 个内置覆盖的）；装到 Mavis 时 25 全量 + 3 个加 `mattpocock-` 前缀避让；装到其它 Agent 时 25 个全量可选，由你逐项确认。」
+> 「请问本次要把这 13 个采纳 skill 装到哪个 Agent？可选：omo / pi / senpi / Xiaomi mimocode。装到 omo 时默认 13 个全量；装到 pi / senpi / mimocode 时同样 13 个全量（请先核实目标 Agent 的内置覆盖表是否一致）。」
 
-收到明确答复（必须是 5 个之一）后才进入步骤 1；未明确前不复制任何文件。
-
-> **Mavis 快速通道**：用户答「Mavis / mcode」且明确"走快路"时，可跳过 §4 步骤 1–2，直接走 §5「## Mavis」章节的复制命令（已包含 3 个 `mattpocock-` 前缀避让）。
+收到明确答复（必须是 4 个之一）后才进入步骤 1；未明确前不复制任何文件。
 
 **步骤 1：现场检测目标 Agent 的现状。**
 
@@ -134,15 +131,13 @@ cp -r skills/<bucket>/<name> <目标skill目录>/
 已为 <Agent> 复制 <N> 个 skill 到 <目录>：
   - engineering/<name1> → 追问对齐（带文档背景）
   - productivity/<name2> → 追问对齐（开放反问）
-跳过 <M> 个：
-  - engineering/ask-matt（omo 无内置路由对应，按 §3.1 暂不入 omo；其它 Agent 时已询问用户决定）
-  - engineering/diagnosing-bugs（omo 内置 /debugging 覆盖，按 §3.1 skip）
-  - engineering/code-review（omo 内置 /review-work 覆盖，按 §3.1 skip；Mavis 装机时改名 mattpocock-code-review 共存）
-  - engineering/research（omo 内置 /ulw-research 覆盖，按 §3.1 skip；Mavis 装机时改名 mattpocock-research 共存）
-  - productivity/handoff（omo 内置 /handoff 覆盖，按 §3.1 skip；Mavis 装机时改名 mattpocock-handoff 共存）
+未安装 <M> 个（已弃用或 omo 内置覆盖，见 README 弃用表 + §3 表）：
+  - ask-matt / grill-with-docs / implement / research / to-spec / to-tickets
+  - triage / wayfinder / grill-me / handoff / teach / to-questionnaire
+  - wait-what / setup-matt-pocock-skills
 ```
 
-若用户在 §4 步骤 2 显式排除某些 skill，则一并写入"跳过 <M> 个"段。
+若用户在 §4 步骤 2 显式排除某些 skill，则一并写入"未安装 <M> 个"段。
 
 汇报完即可结束；不需要重启 Agent——下次启动会自动扫描到新 skill。
 
@@ -150,13 +145,9 @@ cp -r skills/<bucket>/<name> <目标skill目录>/
 
 ## 5. 各 Agent 章节
 
-下面 5 个章节分别给出 omo / pi / senpi / Mavis / Xiaomi mimocode 五个 Agent 的目录、装机策略与复制命令示例。每个 Agent 一节，标题均为二级 `##`，便于 grep 与跳转。
+下面 4 个章节分别给出 omo / pi / senpi / Xiaomi mimocode 四个 Agent 的目录、装机策略与复制命令示例。每个 Agent 一节，标题均为二级 `##`，便于 grep 与跳转。
 
-为方便别名 grep（`^## Mavis`、`^## mimocode` 等模式），下两行作为锚点跳转目标：
-
-## Mavis / mcode
-
-见下文 `## Mavis`（MiniMax 出品的代码 Agent，CLI 别名 `mcode`，skill 目录官方文档化为 `~/.minimax/agents/mavis/skills/`）。
+为方便别名 grep（`^## mimocode` 等模式），下一行作为锚点跳转目标：
 
 ## mimocode
 
@@ -225,7 +216,7 @@ for s in "${PRODUCTIVITY[@]}"; do cp -r "skills/productivity/$s" ~/.config/openc
 
 **目录**：`~/.pi/agent/skills/` 与 `~/.agents/skills/`（任选其一即可，建议主目录 `~/.pi/agent/skills/`）。
 
-**装机策略**：默认 13 个全量（pi 与 omo / Mavis 内置覆盖是否一致未在本机验证；§4 步骤 2 现场对比能力表后由用户决定是否加 `mattpocock-` 前缀避让）。
+**装机策略**：默认 13 个全量（pi 与 omo 内置覆盖是否一致未在本机验证；§4 步骤 2 现场对比能力表后由用户决定是否加 `mattpocock-` 前缀避让）。
 
 **复制示例**（13 个全量，无前缀；如需避让见命令后注释）：
 
@@ -264,7 +255,7 @@ ls -1 ~/.pi/agent/skills/ | wc -l   # 期望 ≥ 13
 
 **目录**：`~/.senpi/agent/skills/` 与 `~/.agents/skills/`（任选其一即可，建议主目录 `~/.senpi/agent/skills/`）。
 
-**装机策略**：默认 13 个全量（senpi 与 omo / Mavis 内置覆盖是否一致未在本机验证；§4 步骤 2 现场对比能力表后由用户决定是否加 `mattpocock-` 前缀避让）。
+**装机策略**：默认 13 个全量（senpi 与 omo 内置覆盖是否一致未在本机验证；§4 步骤 2 现场对比能力表后由用户决定是否加 `mattpocock-` 前缀避让）。
 
 **复制示例**（13 个全量，与 pi 同；目标目录替换为 `~/.senpi/agent/skills/`）：
 
@@ -290,61 +281,6 @@ done
 ```bash
 ls -1 ~/.senpi/agent/skills/ | wc -l   # 期望 ≥ 13
 ```
-
----
-
-## Mavis (MiniMax mcode)
-
-> Mavis 是 MiniMax 出品的代码 Agent，CLI 别名 `mcode`，是 OhMyOpenCode (`omo`) 的同源姊妹项目（路径、覆盖判断、风格与 omo 一致）。
-
-**目录**：`~/.minimax/agents/mavis/skills/`（**官方文档化且固定**，无需现场检测）。
-
-> 若用户的 Mavis 安装使用了非默认路径（少数自部署 / 容器场景），按 §4 步骤 1 的 `ls` 探查代替。
-
-**装机策略**：默认 25 个全量 + 3 个加 `mattpocock-` 前缀避让（Mavis 仍装上游版：上游 25 个从 `mattpocock-skills/` 本地 fork 复制，本仓库 `skills/` 已精简为 13 个）。
-
-**复制示例**（一次性复制 25 个，3 个加前缀）：
-
-```bash
-TARGET=~/.minimax/agents/mavis/skills/
-
-# 上游 fork 不存在时先克隆：git clone https://github.com/mattpocock/skills mattpocock-skills
-SRC=mattpocock-skills/skills
-
-# 16 个 engineering 原名（含 ask-matt / diagnosing-bugs）
-for s in \
-  ask-matt codebase-design diagnosing-bugs domain-modeling \
-  grill-with-docs implement improve-codebase-architecture \
-  prototype resolving-merge-conflicts \
-  setup-matt-pocock-skills tdd to-spec to-tickets triage \
-  wayfinder wizard; do
-  cp -r "$SRC/engineering/$s" "$TARGET/"
-done
-
-# 2 个 engineering 加 mattpocock- 前缀（与 Mavis 内置 code-review / research 撞名）
-for src in code-review research; do
-  cp -r "$SRC/engineering/$src" "$TARGET/mattpocock-$src"
-done
-
-# 6 个 productivity 原名
-for s in \
-  grill-me grilling teach to-questionnaire \
-  wait-what writing-for-agents; do
-  cp -r "$SRC/productivity/$s" "$TARGET/"
-done
-
-# 1 个 productivity 加 mattpocock- 前缀（与 Mavis 内置 handoff 撞名）
-cp -r "$SRC/productivity/handoff" "$TARGET/mattpocock-handoff"
-```
-
-**复制完成标志**：
-
-```bash
-ls -1 ~/.minimax/agents/mavis/skills/ | wc -l   # 期望 ≥ 25
-ls -1 ~/.minimax/agents/mavis/skills/ | grep '^mattpocock-'   # 期望 3 个：mattpocock-code-review, mattpocock-research, mattpocock-handoff
-```
-
-**Mavis 启动时的 skill 调用约定**：Mavis 的 skill 工具用裸名调用 —— `skill({name: "xxx"})`，**不**用 `/xxx` 这种 slash command 形式。上游 fork 的 SKILL.md 已统一改为裸名（详见 `mattpocock-skills/skills/engineering/ask-matt/SKILL.md` 改写记录）。
 
 ---
 
@@ -393,8 +329,7 @@ ls -1 <USER_CONFIRMED_DIR> | wc -l   # 期望 ≥ 13
 
 | Agent | 验证版本 | 验证日期 | 装机策略 | 备注 |
 | --- | --- | --- | --- | --- |
-| Mavis | v0.1+ | 2026-08 | 25 全量 + 3 `mattpocock-` 前缀 | 已成功；命名冲突已避让；调用方式 `skill({name:"xxx"})` |
-| omo (OpenCode) | main | — | 13 全量（engineering 11 + productivity 2，无前缀） | 与 Mavis 同源，待本机验证后补日期 |
+| omo (OpenCode) | main | — | 13 全量（engineering 11 + productivity 2，无前缀） | 待本机验证后补日期 |
 | pi | — | — | 13 全量可选（按需加前缀） | 未在本机验证 |
 | senpi | — | — | 13 全量可选（按需加前缀） | 未在本机验证 |
 | Xiaomi mimocode | — | — | 13 全量可选（按需加前缀） | 路径官方未文档化 |
@@ -405,7 +340,7 @@ ls -1 <USER_CONFIRMED_DIR> | wc -l   # 期望 ≥ 13
 
 ## 6. 反向操作（卸载）
 
-如需卸载某个 skill，`rm -rf` 对应目录即可；所有 5 个 Agent 都按目录扫描发现 skill，删目录即下架，无注册表/缓存需清理。
+如需卸载某个 skill，`rm -rf` 对应目录即可；所有 4 个 Agent 都按目录扫描发现 skill，删目录即下架，无注册表/缓存需清理。
 
 ```bash
 # 例：从 omo 卸载 grill-with-docs

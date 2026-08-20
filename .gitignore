@@ -1,0 +1,16 @@
+# mattpocock-skills —— 独立子仓库，自带 .git/，由 INSTALL.md 管理升级
+mattpocock-skills/
+
+# omo 本地工作目录（Boulder 计划状态、evidence、notepads）
+.omo/
+
+# codegraph 符号链接（指向 /home/ljh2923/.omo/codegraph/，跨仓库索引）
+.codegraph
+
+# 常见编辑器 / OS 临时文件
+.DS_Store
+*.swp
+*.swo
+*~
+.vscode/
+.idea/

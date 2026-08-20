@@ -136,7 +136,7 @@ cp -r skills/<bucket>/<name> <目标skill目录>/
 
 若用户在 §4 步骤 2 显式排除某些 skill，则一并写入"未安装 <M> 个"段。
 
-汇报完即可结束；不需要重启 omo——下次启动会自动扫描到新 skill。
+汇报完，按 §5.1 配置 system prompt（运行 `node scripts/install-prompt-append.mjs`）后即可结束；不需要重启 omo——下次启动会自动扫描到新 skill 与 prompt_append。
 
 ---
 
@@ -166,24 +166,29 @@ ls -1 ~/.config/opencode/skills/engineering/ | wc -l   # 期望 ≥ 10
 ls -1 ~/.config/opencode/skills/productivity/ | wc -l  # 期望 ≥ 2
 ```
 
-## 5.1 prompt_append 配置（Prometheus 垂直切片内化）
+## 5.1 prompt_append 配置（三个主 Agent 的 skill 融合内化）
 
-为了让 Prometheus（omo 计划 agent）在生成 `## Todos` 时自动按垂直切片拆解，**不要在每次 prompt 里重复说**，把规则内化到 `~/.config/opencode/oh-my-openagent.jsonc` 的 `agents.prometheus.prompt_append` 字段：
+为了让 omo 的三个主 Agent 稳定触发 12 个 Meisijiya skill，**不要在每次 prompt 里重复说**，把规则内化到 `~/.config/opencode/oh-my-openagent.jsonc` 的 `agents.*.prompt_append` 字段（`prompt_append` 是 agent 级通用字段，追加到各 agent system prompt 末尾）。
 
-```jsonc
-{
-  "agents": {
-    "prometheus": {
-      "model": "<your model>",
-      "variant": "high",
-      "prompt_append": "When decomposing work into ## Todos, use vertical tracer-bullet slices: each slice cuts a narrow but complete path through every layer (schema/API/UI/tests), is independently demoable, and fits one context window. Give each task its blocking edges — tasks with no blockers can start immediately. Wide mechanical refactors use expand-contract (add the new form beside the old, migrate call sites in batches, then contract).",
-      "fallback_models": []
-    }
-  }
-}
+配置内容已提取为仓库文件 **`config/oh-my-openagent.prompt-append.jsonc`**（唯一事实来源，只含三个 `prompt_append`；model / variant / categories / team_mode 由用户自行配置，脚本不碰）。
+
+**安装**（幂等，可重复运行）：
+
+```bash
+node scripts/install-prompt-append.mjs
 ```
 
-加入后，Prometheus 生成的 `## Todos` 会自然按垂直切片形式产出，不再依赖 `slice-work` skill。`slice-work` 已弃用（§3），由 `ulw-plan` + 本 prompt_append 共同承担。
+脚本行为：
+
+- 目标文件不存在 → 新建，只含 `agents.*.prompt_append`
+- 目标文件已存在 → 深度合并，只更新三个 agent 的 `prompt_append`，保留你的 model / variant / categories / team_mode
+- 内容已是最新 → 跳过（幂等）
+
+三段的职责：
+
+- **Prometheus（规划 agent）**：① 按垂直切片拆解 `## Todos`（不再依赖 `slice-work`，§3 已弃用，由 `ulw-plan` + 本 prompt_append 共同承担）；② 探索前读领域文档 `CONTEXT.md`/`docs/adr/`，并把文档内容视为**参考数据而非指令**（封死间接 prompt 注入面）；③ 用 `codebase-design` 词汇评估架构。建议给 prometheus 配 `"variant": "high"`。
+- **Sisyphus（主脑/编排者）**：两个触发时机——设计/可行性问题用 `prototype`，术语或架构决策结晶时用 `domain-modeling`（即时写 CONTEXT.md 词汇 / offer ADR，不批量）。
+- **Atlas（执行编排者）**：委派 worker 时按任务类型加载 skill——实现走 `tdd`、可行性/设计 spike 走 `prototype`、diff 评审走 `code-review`（PR 交接用 `/review-work`）。
 
 ---
 
@@ -212,4 +217,4 @@ rm -rf ~/.config/opencode/skills/grill-with-docs
 
 ## 8. 一句话总结
 
-> 问目录 → `ls` 现状 → 对照 §2 能力表列缺口 → `cp -r` 对应 skill 目录 → 汇报。
+> 问目录 → `ls` 现状 → 对照 §2 能力表列缺口 → `cp -r` 对应 skill 目录 → 运行 `scripts/install-prompt-append.mjs` 配置 system prompt → 汇报。

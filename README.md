@@ -14,6 +14,13 @@ omo-skills/
 ├── INSTALL.md                ← 安装 / 部署指南（专门面向 omo）
 ├── MAINTENANCE.md            ← 长期维护手册（新增 skill / 退役 / 路径分类）
 ├── .gitignore                ← 排除 .omo/（Boulder 工作目录）
+├── config/                   ← omo system prompt 配置（prompt_append 唯一事实来源）
+│   └── oh-my-openagent.prompt-append.jsonc
+├── scripts/                  ← 安装脚本
+│   └── install-prompt-append.mjs
+├── docs/                     ← 工作流文档与 Agent 约定
+│   ├── workflow.md           ← 三个 Agent + skill 使用场景工作流
+│   └── agents/domain.md      ← 领域文档消费契约
 ├── skills/                   ← 微调后的 12 个 skill（产物，INSTALL.md 安装源）
 │   ├── engineering/          ← 10 个工程 skill
 │   └── productivity/         ← 2 个产出/写作 skill
@@ -21,6 +28,8 @@ omo-skills/
 ```
 
 `skills/` 是唯一来源（已脱离上游 fork，不依赖任何本地 fork）。新 skill 在 `skills/` 下新建，详见 `MAINTENANCE.md §5 / §10`。
+
+三个 Agent（Sisyphus / Prometheus / Atlas）+ skill 使用场景的完整工作流见 [`docs/workflow.md`](docs/workflow.md)。
 
 ## 挑选清单
 
@@ -85,7 +94,7 @@ omo-skills/
 它覆盖：
 
 - 把采纳 skill 装入 omo 的步骤（专门服务 omo）
-- `oh-my-openagent.jsonc` 中 `agents.prometheus.prompt_append` 的垂直切片内化配置
+- `oh-my-openagent.jsonc` 中三个主 Agent（`sisyphus`/`prometheus`/`atlas`）`prompt_append` 的 skill 融合内化配置
 - 升级 skill（添加新 skill / 修改现有 skill）的方法
 - 卸载 / 禁用方式
 - 故障排查（触发不灵、与 omo 内置 skill 撞车等）

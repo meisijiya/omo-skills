@@ -1,0 +1,3 @@
+interface:
+  display_name: "Slice Work"
+  short_description: "Vertical tracer-bullet slice decomposition with blocking edges"

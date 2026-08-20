@@ -10,16 +10,19 @@ omo 内置 skill 体系与 Matt 上游 skill 在描述惯例、触发词、引�
 omo-skills/
 ├── README.md                 ← 本文件（人读概览）
 ├── INSTALL.md                ← 安装 / 部署指南（面向 Agent 与人）
-├── MAINTENANCE.md            ← 长期维护手册（rebase / 新 skill / 新 Agent / 故障排查 / 路径分类）
-├── .gitignore                ← 排除 mattpocock-skills/ 与 .omo/
-├── mattpocock-skills/        ← 完整 clone（独立子仓库，独立管理）
+├── MAINTENANCE.md            ← 长期维护手册（rebase / 同步 / 新 skill / 新 Agent / 路径分类）
+├── .gitignore                ← 排除 mattpocock-skills/（本地开发源）与 .omo/
+├── skills/                   ← 微调后的 25 个 skill（产物，INSTALL.md 安装源）
+│   ├── engineering/          ← 18 个工程 skill
+│   └── productivity/         ← 7 个产出/写作 skill
+├── mattpocock-skills/        ← 本地 fork（开发源，不入远端；rebase + 微调都在这里做）
 │   └── skills/
-│       ├── engineering/      ← 18 个工程 skill
-│       └── productivity/     ← 7 个产出/写作 skill
+│       ├── engineering/
+│       └── productivity/
 └── .omo/                     ← Boulder 计划状态、证据与 notepads（不入版本控制）
 ```
 
-`mattpocock-skills/` 是一个独立 Git 仓库（拥有自己的 `.git/`），与外层 `omo-skills` 仓库解耦。它的升级方式见 [`INSTALL.md`](INSTALL.md)。
+`skills/` 是产物（已微调，可直接 `cp -r` 给 Agent 安装）。`mattpocock-skills/` 是本地开发源（上游 rebase + 微调 commit 的地方）。两者通过 `MAINTENANCE.md §10` 同步流程维护。
 
 ## 挑选清单
 
@@ -78,37 +81,38 @@ omo-skills/
 它覆盖：
 - 把采纳 skill 装入 omo 的步骤
 - 把采纳 + 备用 skill 装入 pi / senpi / mcode / mimocode 的步骤
-- 升级 `mattpocock-skills/` 子仓库的方法
+- 同步上游新提交到 `skills/` 的方法
 - 卸载 / 禁用方式
 - 故障排查（触发不灵、与 omo 内置 skill 撞车等）
 
 ## 上游同步
 
-`mattpocock-skills/` 保留完整 Git 历史，可在本地用其内置的 `git` 工作流升级：
+`mattpocock-skills/` 是本地 fork（开发源），保留完整 Git 历史。本仓库 `skills/` 是产物（微调后可直接安装）。两者关系：
 
 ```bash
 cd mattpocock-skills
 git fetch origin
 git rebase origin/main      # 在 omo 分支上 rebase 上游 main
+# rebase 完成后, 按 MAINTENANCE.md §10 同步流程把微调后的 skill 复制到 ../skills/
 ```
-
-rebase 后如有冲突，回到外层仓库重新跑 Wave 2 微调脚本。
 
 ## 许可
 
-本仓库（`omo-skills/`，不含 `mattpocock-skills/` 子目录）下的微调与文档以仓库作者偏好为准。
-各 skill 本身的许可证见 `mattpocock-skills/` 内对应目录 —— 上游为 MIT。
+本仓库 `omo-skills/` 下的微调（`skills/` + `INSTALL.md` / `README.md` / `MAINTENANCE.md`）以仓库作者偏好为准。
+各 skill 本身的许可证见 `skills/<bucket>/<name>/` 内对应目录（同步自 mattpocock/skills） —— 上游为 MIT。
+`mattpocock-skills/` 子目录为开发源，不入远端，遵循上游许可证。
 
 ## 长期维护
 
 如果你将来要同步上游 Matt 的新提交、添加新 skill、新 Agent、或排查触发问题，看 [`MAINTENANCE.md`](MAINTENANCE.md)。
 
 它覆盖：
-- 仓库拓扑与边界（mattpocock-skills/ 是独立子仓库）
+- 仓库拓扑与边界（`skills/` 产物 vs `mattpocock-skills/` 开发源）
 - 监控信号（什么时候该维护）
 - 上游同步 `git rebase` 工作流（含冲突处理 playbook）
 - rebase 后必跑的 4 个断言
 - **§5 Skill 引入规则（讨论流程）**：先讨论再决定，不靠自动化
 - **§9 文档落地路径分类**：提交类（`docs/adr/` `CONTEXT.md` `CONTEXT-MAP.md` `docs/agents/`）vs 临时态（`.omo/scratch/` `.omo/out-of-scope/`）的判定标准（讨论参考，非自动化）
+- **§10 mattpocock-skills → skills/ 同步流程**：先讨论哪些 skill 要同步，再决定复制
 - 添加新 Agent / 退役 skill 的流程
 - 故障排查速查表

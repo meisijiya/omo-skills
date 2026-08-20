@@ -8,18 +8,20 @@
 
 ```
 omo-skills/
-├── mattpocock-skills/   ← 独立 git 仓库 @ omo 分支（本地微调）
-├── README.md            ← 人读概览
-├── INSTALL.md           ← Agent 询问后安装指引
-├── MAINTENANCE.md       ← 本文件（维护手册）
-└── .omo/                ← 工作状态（不入版本控制）
+├── skills/                 ← 微调后的 25 个 skill（产物，push 到 GitHub，INSTALL.md 安装源）
+├── mattpocock-skills/      ← 本地 fork（开发源，不入远端；rebase + 微调都在这里做）
+├── README.md               ← 人读概览
+├── INSTALL.md              ← Agent 询问后安装指引
+├── MAINTENANCE.md          ← 本文件（维护手册）
+└── .omo/                   ← 工作状态（不入版本控制）
 ```
 
-- `mattpocock-skills/` 是一个独立 git 仓库，跟踪上游 `mattpocock/skills`，本地分支为 `omo`。
-- `mattpocock-skills/` 内部 `git log omo ^origin/main -- skills/engineering/ skills/productivity/` 应只有 2 个本地 commit：
+- **`skills/`（产物）**：微调后可直接 `cp -r` 给 Agent 安装的 skill 目录。push 到 GitHub。
+- **`mattpocock-skills/`（开发源）**：本地 fork，独立 git 仓库，跟踪上游 `mattpocock/skills`，本地分支为 `omo`。**不入 GitHub**，在 `.gitignore` 排除。
+- **同步关系**：微调在 `mattpocock-skills/omo` 分支做 commit，然后按 §10 流程复制到外层 `skills/`。
+- **`mattpocock-skills/`** 内部 `git log omo ^origin/main -- skills/engineering/ skills/productivity/` 应只有 2 个本地 commit：
   - `feat(skills): prefix user-invoked guard on 14 skill descriptions`
   - `refactor(skills): route temp artifacts (.scratch/.out-of-scope) into .omo/`
-- **不 push 到任何远程**（本地 fork，演进靠 `rebase`）。
 - **不要把 `mattpocock-skills/` 加为 submodule**（plan 已禁止，保持独立仓库 + `.gitignore` 排除）。
 
 ---
@@ -249,3 +251,67 @@ git commit -m "refactor(docs): migrate remaining scratch/out-of-scope refs into 
 ```
 
 迁移后跑 §4 验证，零 FAIL 才算迁移完成。
+
+---
+
+## §10. `mattpocock-skills/` → `skills/` 同步流程（讨论式）
+
+> **核心立场**：每次同步前**先讨论、再决定**。不靠脚本自动同步所有 skill，靠人/Agent 决定哪些 skill 要同步到外层 `skills/`、哪些保留在 mattpocock-skills/（如 in-progress/misc）。
+
+### Step 0. 讨论（必走）
+
+与用户讨论以下议题，把决策写到 `.omo/notepads/<plan>/decisions.md`：
+
+1. **触发源**：本次同步是为哪个变化？rebase 后变更？新 skill？bug fix？
+2. **同步范围**：哪些 skill 目录要复制到 `skills/`？对应哪些 bucket（engineering / productivity）？
+3. **排除清单**：哪些不复制？（plan 默认排除 `in-progress/` 与 `misc/` 的所有 skill）
+4. **冲突预案**：如果外层 `skills/<name>/` 已存在（用户本地手动改过），是先备份还是覆盖？
+
+### Step 1. 在 `mattpocock-skills/` 内做完上游 rebase + 微调
+
+（按 §3 / §5 流程）
+
+### Step 2. 同步脚本
+
+```bash
+cd /home/ljh2923/opencode-project/omo-skills
+
+# 按 Step 0 决定的范围复制
+# 例：同步 grill-with-docs 和 triage
+for skill in grill-with-docs; do
+  rm -rf "skills/engineering/$skill"
+  cp -r "mattpocock-skills/skills/engineering/$skill" "skills/engineering/$skill"
+done
+
+# 或全量同步（按 bucket，排除 README.md）
+for d in mattpocock-skills/skills/engineering/*/; do
+  name=$(basename "$d")
+  [ "$name" = "README.md" ] && continue
+  rm -rf "skills/engineering/$name"
+  cp -r "$d" "skills/engineering/$name"
+done
+# productivity 同理
+```
+
+### Step 3. 在外层 `omo-skills/` 验证
+
+```bash
+# 跑 §4 的 4 个断言（在 omo-skills/ 仓库根，不是 mattpocock-skills/）
+# 断言 1: python3 -c "YAML 解析 skills/*/SKILL.md"
+# 断言 2: 14 个 user-invoked 守卫 + disable-model-invocation 字段
+# 断言 3: 11 个 model-invoked 零守卫
+# 断言 4: 5 个路径文件含 .omo/scratch/.omo/out-of-scope
+```
+
+### Step 4. 提交并 push
+
+```bash
+cd omo-skills
+git add skills/
+git commit -m "chore(skills): sync <N> skills from mattpocock-skills (<上游 commit hash>)"
+git push origin main
+```
+
+### Step 5. 记录
+
+把 Step 0 的决策（哪些同步、为什么）写到 `.omo/notepads/<plan>/decisions.md`，作为下次同步的参考。

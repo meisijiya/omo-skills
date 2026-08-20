@@ -27,7 +27,7 @@
 
 ## 2. 能力对照表（25 个 skill）
 
-下表列出本仓库 `mattpocock-skills/skills/` 下的全部 25 个 skill（engineering/ 18 + productivity/ 7）及其能力归属。装机前先读这一节，圈出目标 Agent 真正缺的能力，再决定装哪些。
+下表列出本仓库 `skills/` 下的全部 25 个 skill（engineering/ 18 + productivity/ 7）及其能力归属。装机前先读这一节，圈出目标 Agent 真正缺的能力，再决定装哪些。
 
 | skill | 能力标签 | bucket |
 | --- | --- | --- |
@@ -119,10 +119,10 @@ ls -1 ~/.agents/skills/ 2>/dev/null
 
 ```bash
 # 复制单个 skill（engineering bucket）
-cp -r mattpocock-skills/skills/engineering/<name> <目标skill目录>/
+cp -r skills/engineering/<name> <目标skill目录>/
 
 # 复制单个 skill（productivity bucket）
-cp -r mattpocock-skills/skills/<bucket>/<name> <目标skill目录>/
+cp -r skills/<bucket>/<name> <目标skill目录>/
 ```
 
 - `<bucket>` 取值 `engineering` 或 `productivity`（见 §2 能力对照表第三列）。
@@ -183,14 +183,14 @@ for s in \
   prototype resolving-merge-conflicts \
   setup-matt-pocock-skills tdd to-spec to-tickets triage \
   wayfinder wizard; do
-  cp -r mattpocock-skills/skills/engineering/$s "$TARGET/"
+  cp -r skills/engineering/$s "$TARGET/"
 done
 
 # 7 个 productivity 采纳（不含 handoff）
 for s in \
   grill-me grilling teach to-questionnaire \
   wait-what writing-for-agents; do
-  cp -r mattpocock-skills/skills/productivity/$s "$TARGET/"
+  cp -r skills/productivity/$s "$TARGET/"
 done
 ```
 
@@ -222,14 +222,14 @@ for s in \
   improve-codebase-architecture prototype research \
   resolving-merge-conflicts setup-matt-pocock-skills tdd \
   to-spec to-tickets triage wayfinder wizard; do
-  cp -r mattpocock-skills/skills/engineering/$s "$TARGET/"
+  cp -r skills/engineering/$s "$TARGET/"
 done
 
 # productivity 7 个（含 handoff）
 for s in \
   grill-me grilling handoff teach to-questionnaire \
   wait-what writing-for-agents; do
-  cp -r mattpocock-skills/skills/productivity/$s "$TARGET/"
+  cp -r skills/productivity/$s "$TARGET/"
 done
 ```
 
@@ -260,13 +260,13 @@ for s in \
   improve-codebase-architecture prototype research \
   resolving-merge-conflicts setup-matt-pocock-skills tdd \
   to-spec to-tickets triage wayfinder wizard; do
-  cp -r mattpocock-skills/skills/engineering/$s "$TARGET/"
+  cp -r skills/engineering/$s "$TARGET/"
 done
 
 for s in \
   grill-me grilling handoff teach to-questionnaire \
   wait-what writing-for-agents; do
-  cp -r mattpocock-skills/skills/productivity/$s "$TARGET/"
+  cp -r skills/productivity/$s "$TARGET/"
 done
 ```
 
@@ -301,13 +301,13 @@ for s in \
   improve-codebase-architecture prototype research \
   resolving-merge-conflicts setup-matt-pocock-skills tdd \
   to-spec to-tickets triage wayfinder wizard; do
-  cp -r mattpocock-skills/skills/engineering/$s "$TARGET/"
+  cp -r skills/engineering/$s "$TARGET/"
 done
 
 for s in \
   grill-me grilling handoff teach to-questionnaire \
   wait-what writing-for-agents; do
-  cp -r mattpocock-skills/skills/productivity/$s "$TARGET/"
+  cp -r skills/productivity/$s "$TARGET/"
 done
 ```
 
@@ -344,13 +344,13 @@ for s in \
   improve-codebase-architecture prototype research \
   resolving-merge-conflicts setup-matt-pocock-skills tdd \
   to-spec to-tickets triage wayfinder wizard; do
-  cp -r mattpocock-skills/skills/engineering/$s "$TARGET/"
+  cp -r skills/engineering/$s "$TARGET/"
 done
 
 for s in \
   grill-me grilling handoff teach to-questionnaire \
   wait-what writing-for-agents; do
-  cp -r mattpocock-skills/skills/productivity/$s "$TARGET/"
+  cp -r skills/productivity/$s "$TARGET/"
 done
 ```
 

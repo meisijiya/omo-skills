@@ -8,8 +8,8 @@
 
 ```
 omo-skills/
-├── skills/                 ← 微调后的 25 个 skill（产物，push 到 GitHub，INSTALL.md 安装源）
-├── mattpocock-skills/      ← 本地 fork（开发源，不入远端；rebase + 微调都在这里做）
+├── skills/                 ← 微调后的 13 个 skill（产物，push 到 GitHub，INSTALL.md 安装源）
+├── mattpocock-skills/      ← 本地 fork（已脱离上游，仅历史参考，不入远端）
 ├── README.md               ← 人读概览
 ├── INSTALL.md              ← Agent 询问后安装指引
 ├── MAINTENANCE.md          ← 本文件（维护手册）
@@ -17,8 +17,8 @@ omo-skills/
 ```
 
 - **`skills/`（产物）**：微调后可直接 `cp -r` 给 Agent 安装的 skill 目录。push 到 GitHub。
-- **`mattpocock-skills/`（开发源）**：本地 fork，独立 git 仓库，跟踪上游 `mattpocock/skills`，本地分支为 `omo`。**不入 GitHub**，在 `.gitignore` 排除。
-- **同步关系**：微调在 `mattpocock-skills/omo` 分支做 commit，然后按 §10 流程复制到外层 `skills/`。
+- **`mattpocock-skills/`（开发源）**：本地 fork，独立 git 仓库，跟踪上游 `mattpocock/skills`，本地分支为 `omo`。**不入 GitHub**，在 `.gitignore` 排除。**已脱离上游**，仅历史参考，不参与同步。
+- **同步关系**：新 skill 直接在 `skills/<bucket>/<name>/` 下新建，按 §10 流程维护。
 - **`mattpocock-skills/`** 内部 `git log omo ^origin/main -- skills/engineering/ skills/productivity/` 应只有 2 个本地 commit：
   - `feat(skills): prefix user-invoked guard on 14 skill descriptions`
   - `refactor(skills): route temp artifacts (.scratch/.out-of-scope) into .omo/`
@@ -73,15 +73,18 @@ git rebase --continue
 
 ---
 
-## §4. rebase 后必跑验证（关键 — 不跑就别继续）
+## §4. 变更后必跑验证（关键 — 不跑就别继续）
 
 ```bash
-cd omo-skills/      # 外层产物仓库根
+cd omo-skills/      # 产物仓库根
 
-# 断言 1: 25 个 SKILL.md YAML 解析
+# 断言 1: 13 个 SKILL.md YAML 解析（engineering 11 + productivity 2）
 python3 -c "
 import glob, yaml, sys
-files = sorted(glob.glob('mattpocock-skills/skills/engineering/*/SKILL.md')) + sorted(glob.glob('mattpocock-skills/skills/productivity/*/SKILL.md'))
+files = sorted(glob.glob('skills/engineering/*/SKILL.md')) + sorted(glob.glob('skills/productivity/*/SKILL.md'))
+if len(files) != 13:
+    print(f'FAIL: expected 13 SKILL.md, got {len(files)}')
+    sys.exit(1)
 errs = []
 for f in files:
     try:
@@ -92,19 +95,16 @@ for f in files:
 sys.exit(1 if errs else 0)
 "
 
-# 断言 2: 14 个守卫 + 字段保留
-for f in mattpocock-skills/skills/engineering/{grill-with-docs,implement,improve-codebase-architecture,setup-matt-pocock-skills,to-spec,to-tickets,triage,wayfinder,ask-matt}/SKILL.md mattpocock-skills/skills/productivity/{grill-me,teach,to-questionnaire,wait-what,handoff}/SKILL.md; do
+# 断言 2: 2 个 user-invoked 守卫 + 字段保留
+for f in skills/engineering/{improve-codebase-architecture,setup-meisijiya-skills}/SKILL.md; do
   grep -q 'User-invoked only — do not invoke automatically' "$f" || echo "FAIL_GUARD $f"
   grep -q 'disable-model-invocation: true' "$f" || echo "FAIL_FIELD $f"
 done
 
 # 断言 3: 11 个 model-invoked 零守卫
-for f in mattpocock-skills/skills/engineering/{codebase-design,domain-modeling,tdd,resolving-merge-conflicts,wizard,prototype,code-review,diagnosing-bugs,research}/SKILL.md mattpocock-skills/skills/productivity/{grilling,writing-for-agents}/SKILL.md; do
+for f in skills/engineering/{codebase-design,domain-modeling,tdd,resolving-merge-conflicts,wizard,prototype,code-review,diagnosing-bugs,slice-work}/SKILL.md skills/productivity/{grilling,writing-for-agents}/SKILL.md; do
   grep -q 'User-invoked only' "$f" && echo "FAIL_EXTRA $f"
 done
-
-# 断言 4: 5 个路径文件含 .scratch/ 或 .out-of-scope/（与 Mavis / 上游一致，无 .omo/ 前缀）
-grep -E '\.scratch|\.out-of-scope' mattpocock-skills/skills/engineering/{ask-matt,code-review,setup-matt-pocock-skills,to-tickets,triage}/SKILL.md
 ```
 任何 `FAIL` 立即停下来调查。
 
@@ -150,7 +150,7 @@ grep -E '\.scratch|\.out-of-scope' mattpocock-skills/skills/engineering/{ask-mat
 
 ### Step 5. 验证
 
-跑 §4 的 4 个断言。
+跑 §4 的 3 个断言。
 
 ---
 
@@ -168,10 +168,10 @@ grep -E '\.scratch|\.out-of-scope' mattpocock-skills/skills/engineering/{ask-mat
 
 ## §7. 退役/废弃 Playbook
 
-1. 上游删除某 skill：`git -C mattpocock-skills fetch && git -C mattpocock-skills log --diff-filter=D --name-only --pretty=format: origin/main ^omo`
+1. 确认退役：与用户讨论退役理由（已脱离上游，无 `mattpocock-skills fetch` 检测步骤）
 2. 从 INSTALL.md 能力对照表删除该行
 3. 从 README.md 清单删除该行（无论采纳还是备用）
-4. `git commit -m "docs: retire <skill> (deleted upstream)"`
+4. `git commit -m "docs: retire <skill>"`
 5. **不删**本地 SKILL.md（保留历史；但 INSTALL.md 不再推荐）
 
 ---
@@ -199,9 +199,9 @@ grep -E '\.scratch|\.out-of-scope' mattpocock-skills/skills/engineering/{ask-mat
 
 | 路径 | 含义 | 权威源 |
 |---|---|---|
-| `docs/adr/` | Architecture Decision Records | `setup-matt-pocock-skills/SKILL.md` |
-| `CONTEXT.md` | 项目主上下文（仓库根级） | `setup-matt-pocock-skills/SKILL.md` |
-| `CONTEXT-MAP.md` | 上下文导航图（仓库根级） | `setup-matt-pocock-skills/SKILL.md` |
+| `docs/adr/` | Architecture Decision Records | `setup-meisijiya-skills/SKILL.md` |
+| `CONTEXT.md` | 项目主上下文（仓库根级） | `setup-meisijiya-skills/SKILL.md` |
+| `CONTEXT-MAP.md` | 上下文导航图（仓库根级） | `setup-meisijiya-skills/SKILL.md` |
 | `docs/agents/` | Agent 角色定义 | 各 skill 引用的元数据 |
 
 **B. 临时态（working / scratch / out-of-scope）** —— 上游原路径，工作区根直接子目录（与 omo / Mavis / 上游三方一致）：
@@ -225,9 +225,9 @@ grep -E '\.scratch|\.out-of-scope' mattpocock-skills/skills/engineering/{ask-mat
 
 ### §9.3 上游原路径的"权威源"
 
-- 提交类主权威：`mattpocock-skills/skills/engineering/setup-matt-pocock-skills/SKILL.md`
-- 临时态细则：`mattpocock-skills/skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md`
-- 临时态范围外细则：`mattpocock-skills/skills/engineering/triage/OUT-OF-SCOPE.md`
+- 提交类主权威：`skills/engineering/setup-meisijiya-skills/SKILL.md`
+- 临时态细则：`mattpocock-skills/skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md`（**仅 mattpocock-skills/ 历史参考**）
+- 临时态范围外细则：`mattpocock-skills/skills/engineering/triage/OUT-OF-SCOPE.md`（**仅 mattpocock-skills/ 历史参考**）
 
 ### §9.4 边界争议处理（讨论时参考）
 
@@ -237,93 +237,41 @@ grep -E '\.scratch|\.out-of-scope' mattpocock-skills/skills/engineering/{ask-mat
 2. **次选**：在 `docs/adr/` 中加 `## working notes` 段引用 `.scratch/xxx`
 3. **最次选**：保留在原 SKILL.md 正文里（同文件内多 section），但加路径前缀
 
-### §9.5 已知裸路径（监控列表 — 不需迁移，仅观察）
+### §9.5 已知裸路径（历史参考 — 仅 mattpocock-skills/）
 
 | 文件 | 命中数 | 状态 |
 |---|---|---|
-| `setup-matt-pocock-skills/issue-tracker-local.md` | 多处 `.scratch/` | **设计如此**（无前缀 = 工作区根直接子目录） |
-| `triage/OUT-OF-SCOPE.md` | 多处 `.out-of-scope/` | **设计如此**（无前缀） |
-| `triage/AGENT-BRIEF.md` | 多处 `.out-of-scope/` | **历史快照豁免**（不在迁移范围） |
+| `setup-matt-pocock-skills/issue-tracker-local.md` | 多处 `.scratch/` | **仅 mattpocock-skills/ 历史参考**（无前缀 = 工作区根直接子目录） |
+| `triage/OUT-OF-SCOPE.md` | 多处 `.out-of-scope/` | **仅 mattpocock-skills/ 历史参考**（无前缀） |
+| `triage/AGENT-BRIEF.md` | 多处 `.out-of-scope/` | **仅 mattpocock-skills/ 历史参考**（不在迁移范围） |
 
-> 监控命令（检查是否有人误加了 `.omo/` 前缀）：
->
-> ```bash
-> bash scripts/lint-path-conventions.sh
-> ```
+> 已脱离上游：`skills/` 为唯一来源，以上条目仅指向 `mattpocock-skills/` 历史目录，不参与同步，无监控脚本。
 
 ---
 
-## §10. `mattpocock-skills/` → `skills/` 同步流程（讨论式）
+## §10 skill 同步与新建流程（已脱离上游）
 
-> **核心立场**：每次同步前**先讨论、再决定**。不靠脚本自动同步所有 skill，靠人/Agent 决定哪些 skill 要同步到外层 `skills/`、哪些保留在 mattpocock-skills/（如 in-progress/misc）。
+**状态**：本仓库已脱离 `mattpocock-skills` 上游 fork，`skills/` 是唯一来源。新 skill 在 `skills/<bucket>/<name>/` 下新建，按 §5 Step 0 讨论后再决定是否纳入。
 
-### Step 0. 讨论（必走）
+### Step 0. 讨论
 
-与用户讨论以下议题，把决策写到 `.omo/notepads/<plan>/decisions.md`：
+新 skill 引入必须先讨论（见 §5）。讨论通过后再执行 Step 1-3。
 
-1. **触发源**：本次同步是为哪个变化？rebase 后变更？新 skill？bug fix？
-2. **同步范围**：哪些 skill 目录要复制到 `skills/`？对应哪些 bucket（engineering / productivity）？
-3. **同步范围**：仅 `engineering/` 与 `productivity/` 两个 bucket（天然不含 `in-progress/`、`misc/`、`deprecated/`）
-4. **冲突预案**：如果外层 `skills/<name>/` 已存在（用户本地手动改过），是先备份还是覆盖？
-
-> **⚠️ 禁止直接编辑 `skills/`**：一律先在 `mattpocock-skills/` 微调后通过本流程同步。直接编辑会被 Step2 静默覆盖。
-
-### Step 1. 在 `mattpocock-skills/` 内做完上游 rebase + 微调
-
-（按 §3 / §5 流程）
-
-### Step 2. 同步脚本
+### Step 1. 新建 skill 目录
 
 ```bash
-cd omo-skills/      # 外层产物仓库根
-
-# ponytail: 覆盖式同步，先 git status 确认 skills/ 无未提交微调
-if git status --porcelain -- skills/ | grep -q .; then
-  echo "ERROR: skills/ 有未提交改动，先处理（提交 / stash / 备份）"
-  exit 1
-fi
-
-# 按 Step 0 决定的范围复制（二选一）
-
-# (a) 指定 skill 列表（按 Step 0 决定）
-for skill in grill-with-docs; do
-  rm -rf "skills/engineering/$skill"
-  cp -r "mattpocock-skills/skills/engineering/$skill" "skills/engineering/$skill"
-done
-
-# (b) 全量同步（按 bucket，天然排除 in-progress/misc/deprecated/与 README.md）
-for d in mattpocock-skills/skills/engineering/*/; do
-  name=$(basename "$d")
-  [ "$name" = "README.md" ] && continue
-  rm -rf "skills/engineering/$name"
-  cp -r "$d" "skills/engineering/$name"
-done
-# productivity 同理
+mkdir -p skills/engineering/<new-skill>/agents
+# 写 SKILL.md（带 frontmatter）+ agents/openai.yaml
 ```
 
-### Step 3. 在外层 `omo-skills/` 验证
+### Step 2. 跑断言
 
-```bash
-# 跑 §4 的 4 个断言（在 omo-skills/ 仓库根，不是 mattpocock-skills/）
-# 断言 1: python3 -c "YAML 解析 skills/*/SKILL.md"
-# 断言 2: 14 个 user-invoked 守卫 + disable-model-invocation 字段
-# 断言 3: 11 个 model-invoked 零守卫
-# 断言 4: 5 个路径文件含 .omo/scratch/.omo/out-of-scope
-```
+参见 §4 的 3 条断言（每个目录都含 SKILL.md / user-invoked 守卫 / model-invoked 零守卫）。
 
-### Step 4. 提交并 push
+### Step 3. 更新文档
 
-```bash
-cd omo-skills/      # 外层产物仓库根（非 mattpocock-skills/）
-git add skills/
-git commit -m "chore(skills): sync <N> skills from mattpocock-skills (<上游 commit hash>)"
-git push origin main
-```
+更新 `README.md` 采纳表、`INSTALL.md` §2 与 §5 复制命令、`MAINTENANCE.md` §4 断言列表。
 
-> 若 INSTALL.md 能力对照表受影响（如上游新增 / 删除 skill），同时 commit 同步更新。
+### 不再有 mattpocock-skills fetch
 
-### Step 5. 记录
-
-把 Step 0 的决策（哪些同步、为什么）写到 `.omo/notepads/<plan>/decisions.md`，作为下次同步的参考。
-
-> 无 plan 时（如临时手动同步）：写入本次 commit message 末尾的 `Refs:` 段，或追加到 `MAINTENANCE.md §9.5 附表`。
+仓库已脱离上游 fork。不再有 `mattpocock-skills fetch origin` + `rebase` 同步流程。`mattpocock-skills/` 本地目录保留作历史参考，`.gitignore` 已排除。

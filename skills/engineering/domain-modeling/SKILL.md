@@ -1,6 +1,6 @@
 ---
 name: domain-modeling
-description: Build and sharpen a project's domain model. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR.
+description: "Build and sharpen a project's domain model: CONTEXT.md vocabulary and ADRs. Use when discussing codebase terminology or recording a design decision. Requires the domain doc layout — run setup-meisijiya-skills first if missing."
 ---
 
 # Domain Modeling

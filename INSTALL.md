@@ -25,78 +25,52 @@
 
 ---
 
-## 2. 能力对照表（25 个 skill）
+## 2. 能力对照表
 
-下表列出本仓库 `skills/` 下的全部 25 个 skill（engineering/ 18 + productivity/ 7）及其能力归属。装机前先读这一节，圈出目标 Agent 真正缺的能力，再决定装哪些。
+本节把 13 个采纳 skill 与 omo 内置的对应能力并列对照，方便选型。
 
-| skill | 能力标签 | bucket |
-| --- | --- | --- |
-| `grill-with-docs` | 追问对齐（带文档背景） | engineering |
-| `grill-me` | 追问对齐（开放反问） | productivity |
-| `grilling` | 追问对齐（持续追问） | productivity |
-| `domain-modeling` | 领域建模 | engineering |
-| `codebase-design` | 深模块设计 | engineering |
-| `tdd` | 测试驱动 | engineering |
-| `improve-codebase-architecture` | 架构扫描 | engineering |
-| `to-spec` | spec 合成 | engineering |
-| `to-tickets` | 工单拆分 | engineering |
-| `triage` | issue 分类 | engineering |
-| `wayfinder` | 多会话规划 | engineering |
-| `implement` | 实现调度 | engineering |
-| `resolving-merge-conflicts` | 冲突解析 | engineering |
-| `wizard` | 交互向导 | engineering |
-| `prototype` | 原型 | engineering |
-| `teach` | 教学 | productivity |
-| `to-questionnaire` | 问卷 | productivity |
-| `setup-matt-pocock-skills` | 一次性配置（装其它 skill 的引导） | engineering |
-| `wait-what` | 纠错 | productivity |
-| `writing-for-agents` | 写作规范 | productivity |
-| `ask-matt` | 路由（指引到正确 skill） | engineering |
-| `diagnosing-bugs` | 调试 | engineering |
-| `code-review` | 审查 | engineering |
-| `research` | 研究 | engineering |
-| `handoff` | 交接 | productivity |
-
-**关于 5 个备用的说明**：`ask-matt` / `diagnosing-bugs` / `code-review` / `research` / `handoff` 这 5 个 skill 的装机策略按目标 Agent 分别处理：omo 默认 skip（见 §3.1）；Mavis 全量装 + 3 个加 `mattpocock-` 前缀避让（见 §3.2）；pi / senpi / mimocode 全量可选，由用户决定。
+| Skill | omo 内置对应 | 备注 |
+|---|---|---|
+| `setup-meisijiya-skills` | — | 仓库初始化（首次使用前跑一次） |
+| `slice-work` | — | 垂直切片拆解 |
+| `codebase-design` | — | 设计意图词典 |
+| `domain-modeling` | — | 领域模型 / ADR |
+| `tdd` | `tdd` skill | 与 omo 内置同名一致 |
+| `improve-codebase-architecture` | — | user-invoked |
+| `prototype` | `prototype` skill | 与 omo 内置同名一致 |
+| `diagnosing-bugs` | `/debugging` | 互补：build feedback loop 在先 |
+| `code-review` | `/review-work` | 互补：日常 review vs PR 交接 |
+| `resolving-merge-conflicts` | — | rebase conflict playbooks |
+| `wizard` | — | 多步人工向导 |
+| `grilling` | — | 严格交叉质询 |
+| `writing-for-agents` | — | AGENTS.md / SKILL.md 写作 |
 
 ---
 
-## 3. Agent 内置覆盖（影响装机清单）
+## 3. 内置覆盖表（哪些 skill 跳过）
 
-omo 与 Mavis（`mcode`）同源但**内置工具栈不同**：
+omo / Mavis 已内置同名或同等能力的 skill，跳过避免重复触发。
 
-- **omo** 用 Claude Code 风格 slash command + 工具栈（`/debugging` / `/review-work` / `/ulw-research` / `/handoff` 等），对 5 个备用的覆盖判断是**功能层覆盖**——omo 自带等价能力，Matt 版是"方法论替代品"。
-- **Mavis** 用 skill 工具栈（`code-review` skill / `deep-research` skill / `task` 工具 + `orchestration` skill），对 5 个备用的覆盖判断是**主题共存**——Matt 版与内置版侧重点不同，建议全量共存。
-
-pi / senpi / mimocode 的覆盖未在本机验证，不预设 skip，由 §4 流程逐项询问用户。
-
-### 3.1 omo 内置覆盖（omo 装机时按本表 skip）
-
-| Matt skill | omo 内置对应 | 装机策略 |
-| --- | --- | --- |
-| `diagnosing-bugs` | `/debugging`（内置调试工作流） | 装 omo → **不装**；装其它 Agent → 可选 |
-| `code-review` | `/review-work`（内置评审编排） | 装 omo → **不装**；装其它 Agent → 可选 |
-| `research` | `/ulw-research`（内置深度研究） | 装 omo → **不装**；装其它 Agent → 可选 |
-| `handoff` | `/handoff`（内置交接摘要） | 装 omo → **不装**；装其它 Agent → 可选 |
-| `ask-matt` | （omo 无内置路由对应） | 装 omo → **不装**；仅供其它 Agent 下载，按用户决定保留 |
-
-### 3.2 Mavis 内置覆盖（Mavis 装机时按本表加 mattpocock- 前缀）
-
-> Matt 原版与 Mavis 内置版侧重不同（Matt 版 = 双轴审稿 / 交接文档方法论；Mavis 内置版 = 独立验证子 Agent / `task` 工具委派）。两者并不互斥，建议**全量安装 + 加前缀避让**。
-
-| Matt skill | Mavis 内置对应 | 装机策略 |
-| --- | --- | --- |
-| `code-review` | ✅ `code-review`（方法论不同：Matt 版 = 自我审稿双轴；Mavis 版 = 独立验证子 Agent） | 改名 `mattpocock-code-review` 共存 |
-| `research` | ✅ `deep-research`（5 步 prompt 法） | 改名 `mattpocock-research` 共存；Matt 版适合"快速摸"，`deep-research` 适合"出报告" |
-| `handoff` | ✅ `task` 工具 + `orchestration` skill | 改名 `mattpocock-handoff` 共存；Matt 版是"交接文档"方法论 |
-| `diagnosing-bugs` | ❌ 无 | **必装**（Mavis 真补全） |
-| `ask-matt` | ❌ 无 | **必装**（Mavis 真补全） |
-
-**结论**：
-
-- **装到 omo → 默认只装 20 个采纳 skill**（§2 表里除 §3.1 中 5 行外的全部）。
-- **装到 Mavis → 默认 25 个全量 + 3 个加 `mattpocock-` 前缀避让**（`code-review` / `research` / `handoff` 三个会与 Mavis 内置撞名，复制命令见 §5 各 Agent 章节）。
-- **装到 pi / senpi / mimocode → 默认 25 个全量可选**。是否需要前缀避让由 §4 步骤 2 现场对比能力表后逐项询问用户。
+| Skill | 状态 | 原因 |
+|---|---|---|
+| `tdd` | 装 | 与 omo `tdd` skill 内容一致，作为对外承诺保留 |
+| `prototype` | 装 | 同上 |
+| `diagnosing-bugs` | 装 | 互补 `omo /debugging`：diagnosis loop 聚焦先建 feedback loop，再做假设；不重叠 |
+| `code-review` | 装 | 互补 `omo /review-work`：日常 diff review vs PR 交接 full QA；不重叠 |
+| `research` | skip | 范围过大，触发噪音明显；omo 的 `/ulw-research` 已覆盖 |
+| `handoff` | skip | 与 omo `task()` 多 Agent 委派机制重叠 |
+| `ask-matt` | skip | 路由型 skill，omo 无内置对应；上游分发即可 |
+| `grill-with-docs` | skip | 与 `grilling` + `domain-modeling` 工作流重叠 |
+| `implement` | skip | 与 omo `task()` 多 Agent 委派机制重叠 |
+| `to-spec` | skip | 由 `slice-work` 承接 |
+| `to-tickets` | skip | 由 `slice-work` 承接 |
+| `triage` | skip | omo `issue-tracker` workflow 内置类似流程 |
+| `wayfinder` | skip | 仅大型 monorepo 需要，触发噪音明显 |
+| `grill-me` | skip | 由 `grilling` 合并 |
+| `teach` | skip | omo 内置 `teach` skill |
+| `to-questionnaire` | skip | 与 `grilling` 工作流重叠 |
+| `wait-what` | skip | 由 `grilling` 承接 |
+| `setup-matt-pocock-skills` | skip | 重命名为 `setup-meisijiya-skills` |
 
 ---
 
@@ -192,39 +166,58 @@ cp -r skills/<bucket>/<name> <目标skill目录>/
 
 **目录**：`~/.config/opencode/skills/` 与 `~/.agents/skills/`（任选其一即可，建议主目录 `~/.config/opencode/skills/`）。
 
-**装机策略**：默认只装 20 个采纳 skill，跳过 §3.1 中 omo 内置覆盖的 5 个（`diagnosing-bugs` / `code-review` / `research` / `handoff` / `ask-matt`）。
+**装机策略**：默认 13 个 skill 全量。
 
-**复制示例**（一次性复制 20 个）：
+### omo / Atlas 安装
 
 ```bash
-TARGET=~/.config/opencode/skills/
+# 把 13 个 skill 复制到 omo skills 目录
+SKILLS=(
+  setup-meisijiya-skills slice-work codebase-design domain-modeling
+  tdd improve-codebase-architecture prototype
+  diagnosing-bugs code-review resolving-merge-conflicts wizard
+  grilling writing-for-agents
+)
 
-# 13 个 engineering（不含 ask-matt / diagnosing-bugs / code-review / research）
-for s in \
-  codebase-design domain-modeling grill-with-docs \
-  implement improve-codebase-architecture \
-  prototype resolving-merge-conflicts \
-  setup-matt-pocock-skills tdd to-spec to-tickets triage \
-  wayfinder wizard; do
-  cp -r skills/engineering/$s "$TARGET/"
-done
-
-# 7 个 productivity（不含 handoff）
-for s in \
-  grill-me grilling teach to-questionnaire \
-  wait-what writing-for-agents; do
-  cp -r skills/productivity/$s "$TARGET/"
+for s in "${SKILLS[@]}"; do
+  cp -r "skills/engineering/$s" ~/.config/opencode/skills/engineering/ 2>/dev/null || \
+  cp -r "skills/productivity/$s" ~/.config/opencode/skills/productivity/ 2>/dev/null
 done
 ```
 
-**复制完成标志**：
+更精确的命令（直接同步到 omo 期望目录）：
 
 ```bash
-ls -1 ~/.config/opencode/skills/ | wc -l   # 期望 ≥ 20（取决于已存在的 skill 数）
-ls -1 ~/.config/opencode/skills/ | grep '^mattpocock-'   # 期望 0 个（omo 不加前缀）
+ENGINEERING=(
+  setup-meisijiya-skills slice-work codebase-design domain-modeling
+  tdd improve-codebase-architecture prototype
+  diagnosing-bugs code-review resolving-merge-conflicts wizard
+)
+PRODUCTIVITY=(grilling writing-for-agents)
+
+mkdir -p ~/.config/opencode/skills/engineering ~/.config/opencode/skills/productivity
+for s in "${ENGINEERING[@]}"; do cp -r "skills/engineering/$s" ~/.config/opencode/skills/engineering/; done
+for s in "${PRODUCTIVITY[@]}"; do cp -r "skills/productivity/$s" ~/.config/opencode/skills/productivity/; done
 ```
 
-**omo 内置覆盖的 5 个 skill 不复制**：见 §3.1。
+## 5.1 prompt_append 配置（Prometheus 垂直切片内化）
+
+为了让 Prometheus（omo 计划 agent）在生成 `## Todos` 时自动按垂直切片拆解，**不要在每次 prompt 里重复说**，把规则内化到 `~/.config/opencode/oh-my-openagent.jsonc` 的 `agents.prometheus.prompt_append` 字段：
+
+```jsonc
+{
+  "agents": {
+    "prometheus": {
+      "model": "<your model>",
+      "variant": "high",
+      "prompt_append": "When decomposing work into ## Todos, use vertical tracer-bullet slices: each slice cuts a narrow but complete path through every layer (schema/API/UI/tests), is independently demoable, and fits one context window. Give each task its blocking edges — tasks with no blockers can start immediately. Wide mechanical refactors use expand-contract (add the new form beside the old, migrate call sites in batches, then contract).",
+      "fallback_models": []
+    }
+  }
+}
+```
+
+加入后，Prometheus 生成的 `## Todos` 会自然按垂直切片形式产出，不再依赖 `slice-work` skill 的显式调用。`slice-work` skill 仍保留用于计划已写好之后做进一步拆分。
 
 ---
 
@@ -232,37 +225,35 @@ ls -1 ~/.config/opencode/skills/ | grep '^mattpocock-'   # 期望 0 个（omo �
 
 **目录**：`~/.pi/agent/skills/` 与 `~/.agents/skills/`（任选其一即可，建议主目录 `~/.pi/agent/skills/`）。
 
-**装机策略**：默认 25 个全量（pi 与 omo / Mavis 内置覆盖是否一致未在本机验证；§4 步骤 2 现场对比能力表后由用户决定是否加 `mattpocock-` 前缀避让）。
+**装机策略**：默认 13 个全量（pi 与 omo / Mavis 内置覆盖是否一致未在本机验证；§4 步骤 2 现场对比能力表后由用户决定是否加 `mattpocock-` 前缀避让）。
 
-**复制示例**（25 个全量，无前缀；如需避让见命令后注释）：
+**复制示例**（13 个全量，无前缀；如需避让见命令后注释）：
 
 ```bash
 TARGET=~/.pi/agent/skills/
 
-# engineering 18 个
+# engineering 11 个
 for s in \
-  ask-matt code-review codebase-design diagnosing-bugs \
-  domain-modeling grill-with-docs implement \
-  improve-codebase-architecture prototype research \
-  resolving-merge-conflicts setup-matt-pocock-skills tdd \
-  to-spec to-tickets triage wayfinder wizard; do
+  setup-meisijiya-skills slice-work codebase-design \
+  domain-modeling tdd improve-codebase-architecture \
+  prototype diagnosing-bugs code-review \
+  resolving-merge-conflicts wizard; do
   cp -r skills/engineering/$s "$TARGET/"
 done
 
-# productivity 7 个
+# productivity 2 个
 for s in \
-  grill-me grilling handoff teach to-questionnaire \
-  wait-what writing-for-agents; do
+  grilling writing-for-agents; do
   cp -r skills/productivity/$s "$TARGET/"
 done
 
-# 如 pi 内置撞名 code-review / research / handoff，按 omo 章节方式 cp 后改名为 mattpocock-*
+# 如 pi 内置撞名 code-review，cp 后改名为 mattpocock-code-review
 ```
 
 **复制完成标志**：
 
 ```bash
-ls -1 ~/.pi/agent/skills/ | wc -l   # 期望 ≥ 25
+ls -1 ~/.pi/agent/skills/ | wc -l   # 期望 ≥ 13
 ```
 
 > 注意：`agent` 为单数。错拼成 `agents`（额外 s）的目录不会被任何已知 Agent 扫描。
@@ -273,25 +264,23 @@ ls -1 ~/.pi/agent/skills/ | wc -l   # 期望 ≥ 25
 
 **目录**：`~/.senpi/agent/skills/` 与 `~/.agents/skills/`（任选其一即可，建议主目录 `~/.senpi/agent/skills/`）。
 
-**装机策略**：默认 25 个全量（senpi 与 omo / Mavis 内置覆盖是否一致未在本机验证；§4 步骤 2 现场对比能力表后由用户决定是否加 `mattpocock-` 前缀避让）。
+**装机策略**：默认 13 个全量（senpi 与 omo / Mavis 内置覆盖是否一致未在本机验证；§4 步骤 2 现场对比能力表后由用户决定是否加 `mattpocock-` 前缀避让）。
 
-**复制示例**（25 个全量，与 pi 同；目标目录替换为 `~/.senpi/agent/skills/`）：
+**复制示例**（13 个全量，与 pi 同；目标目录替换为 `~/.senpi/agent/skills/`）：
 
 ```bash
 TARGET=~/.senpi/agent/skills/
 
 for s in \
-  ask-matt code-review codebase-design diagnosing-bugs \
-  domain-modeling grill-with-docs implement \
-  improve-codebase-architecture prototype research \
-  resolving-merge-conflicts setup-matt-pocock-skills tdd \
-  to-spec to-tickets triage wayfinder wizard; do
+  setup-meisijiya-skills slice-work codebase-design \
+  domain-modeling tdd improve-codebase-architecture \
+  prototype diagnosing-bugs code-review \
+  resolving-merge-conflicts wizard; do
   cp -r skills/engineering/$s "$TARGET/"
 done
 
 for s in \
-  grill-me grilling handoff teach to-questionnaire \
-  wait-what writing-for-agents; do
+  grilling writing-for-agents; do
   cp -r skills/productivity/$s "$TARGET/"
 done
 ```
@@ -299,7 +288,7 @@ done
 **复制完成标志**：
 
 ```bash
-ls -1 ~/.senpi/agent/skills/ | wc -l   # 期望 ≥ 25
+ls -1 ~/.senpi/agent/skills/ | wc -l   # 期望 ≥ 13
 ```
 
 ---
@@ -312,12 +301,15 @@ ls -1 ~/.senpi/agent/skills/ | wc -l   # 期望 ≥ 25
 
 > 若用户的 Mavis 安装使用了非默认路径（少数自部署 / 容器场景），按 §4 步骤 1 的 `ls` 探查代替。
 
-**装机策略**：默认 25 个全量 + 3 个加 `mattpocock-` 前缀避让（覆盖判断见 §3.2）。
+**装机策略**：默认 25 个全量 + 3 个加 `mattpocock-` 前缀避让（Mavis 仍装上游版：上游 25 个从 `mattpocock-skills/` 本地 fork 复制，本仓库 `skills/` 已精简为 13 个）。
 
 **复制示例**（一次性复制 25 个，3 个加前缀）：
 
 ```bash
 TARGET=~/.minimax/agents/mavis/skills/
+
+# 上游 fork 不存在时先克隆：git clone https://github.com/mattpocock/skills mattpocock-skills
+SRC=mattpocock-skills/skills
 
 # 16 个 engineering 原名（含 ask-matt / diagnosing-bugs）
 for s in \
@@ -326,23 +318,23 @@ for s in \
   prototype resolving-merge-conflicts \
   setup-matt-pocock-skills tdd to-spec to-tickets triage \
   wayfinder wizard; do
-  cp -r skills/engineering/$s "$TARGET/"
+  cp -r "$SRC/engineering/$s" "$TARGET/"
 done
 
 # 2 个 engineering 加 mattpocock- 前缀（与 Mavis 内置 code-review / research 撞名）
 for src in code-review research; do
-  cp -r "skills/engineering/$src" "$TARGET/mattpocock-$src"
+  cp -r "$SRC/engineering/$src" "$TARGET/mattpocock-$src"
 done
 
 # 6 个 productivity 原名
 for s in \
   grill-me grilling teach to-questionnaire \
   wait-what writing-for-agents; do
-  cp -r skills/productivity/$s "$TARGET/"
+  cp -r "$SRC/productivity/$s" "$TARGET/"
 done
 
 # 1 个 productivity 加 mattpocock- 前缀（与 Mavis 内置 handoff 撞名）
-cp -r skills/productivity/handoff "$TARGET/mattpocock-handoff"
+cp -r "$SRC/productivity/handoff" "$TARGET/mattpocock-handoff"
 ```
 
 **复制完成标志**：
@@ -352,7 +344,7 @@ ls -1 ~/.minimax/agents/mavis/skills/ | wc -l   # 期望 ≥ 25
 ls -1 ~/.minimax/agents/mavis/skills/ | grep '^mattpocock-'   # 期望 3 个：mattpocock-code-review, mattpocock-research, mattpocock-handoff
 ```
 
-**Mavis 启动时的 skill 调用约定**：Mavis 的 skill 工具用裸名调用 —— `skill({name: "xxx"})`，**不**用 `/xxx` 这种 slash command 形式。本仓库 SKILL.md 已统一改为裸名（详见 `skills/engineering/ask-matt/SKILL.md` 改写记录）。
+**Mavis 启动时的 skill 调用约定**：Mavis 的 skill 工具用裸名调用 —— `skill({name: "xxx"})`，**不**用 `/xxx` 这种 slash command 形式。上游 fork 的 SKILL.md 已统一改为裸名（详见 `mattpocock-skills/skills/engineering/ask-matt/SKILL.md` 改写记录）。
 
 ---
 
@@ -366,7 +358,7 @@ ls -1 ~/.minimax/agents/mavis/skills/ | grep '^mattpocock-'   # 期望 3 个：m
 2. 询问用户：「mimocode 的 skill 目录实际放在哪个路径？本机常见的几个位置我用 `ls` 没命中，需要你确认。」
 3. 拿到确认路径后，再走 §4 步骤 2–4。
 
-**装机策略**：默认 25 个全量可选（mimocode 内置覆盖未验证，按 §3 不预设 skip）。
+**装机策略**：默认 13 个全量可选（mimocode 内置覆盖未验证，按 §3 不预设 skip）。
 
 **复制命令模板**（路径由用户确认后填入 `<USER_CONFIRMED_DIR>`）：
 
@@ -374,17 +366,15 @@ ls -1 ~/.minimax/agents/mavis/skills/ | grep '^mattpocock-'   # 期望 3 个：m
 TARGET=<USER_CONFIRMED_DIR>   # 现场检测后由用户给定
 
 for s in \
-  ask-matt code-review codebase-design diagnosing-bugs \
-  domain-modeling grill-with-docs implement \
-  improve-codebase-architecture prototype research \
-  resolving-merge-conflicts setup-matt-pocock-skills tdd \
-  to-spec to-tickets triage wayfinder wizard; do
+  setup-meisijiya-skills slice-work codebase-design \
+  domain-modeling tdd improve-codebase-architecture \
+  prototype diagnosing-bugs code-review \
+  resolving-merge-conflicts wizard; do
   cp -r skills/engineering/$s "$TARGET/"
 done
 
 for s in \
-  grill-me grilling handoff teach to-questionnaire \
-  wait-what writing-for-agents; do
+  grilling writing-for-agents; do
   cp -r skills/productivity/$s "$TARGET/"
 done
 ```
@@ -392,7 +382,7 @@ done
 **复制完成标志**：
 
 ```bash
-ls -1 <USER_CONFIRMED_DIR> | wc -l   # 期望 ≥ 25
+ls -1 <USER_CONFIRMED_DIR> | wc -l   # 期望 ≥ 13
 ```
 
 > **不写「自动执行破坏性操作」**：mimocode 路径未定前，**不**直接 `mkdir -p` 任何路径、不 `cp` 到任何目录；先 `ls`、再询问用户。
@@ -404,10 +394,10 @@ ls -1 <USER_CONFIRMED_DIR> | wc -l   # 期望 ≥ 25
 | Agent | 验证版本 | 验证日期 | 装机策略 | 备注 |
 | --- | --- | --- | --- | --- |
 | Mavis | v0.1+ | 2026-08 | 25 全量 + 3 `mattpocock-` 前缀 | 已成功；命名冲突已避让；调用方式 `skill({name:"xxx"})` |
-| omo (OpenCode) | main | — | 25 全量 + 3 `mattpocock-` 前缀 | 与 Mavis 同源，待本机验证后补日期 |
-| pi | — | — | 25 全量可选（按需加前缀） | 未在本机验证 |
-| senpi | — | — | 25 全量可选（按需加前缀） | 未在本机验证 |
-| Xiaomi mimocode | — | — | 25 全量可选（按需加前缀） | 路径官方未文档化 |
+| omo (OpenCode) | main | — | 13 全量（engineering 11 + productivity 2，无前缀） | 与 Mavis 同源，待本机验证后补日期 |
+| pi | — | — | 13 全量可选（按需加前缀） | 未在本机验证 |
+| senpi | — | — | 13 全量可选（按需加前缀） | 未在本机验证 |
+| Xiaomi mimocode | — | — | 13 全量可选（按需加前缀） | 路径官方未文档化 |
 
 新验证一种 Agent 后，在表格里补一行；`MAINTENANCE.md` §2 监控信号"INSTALL.md 漏 Agent"已对照此表。
 

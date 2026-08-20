@@ -10,7 +10,9 @@ omo 内置 skill 体系与 Matt 上游 skill 在描述惯例、触发词、引�
 omo-skills/
 ├── README.md                 ← 本文件（人读概览）
 ├── INSTALL.md                ← 安装 / 部署指南（面向 Agent 与人）
-├── MAINTENANCE.md            ← 长期维护手册（rebase / 新 skill / 新 Agent / 故障排查）
+├── MAINTENANCE.md            ← 长期维护手册（rebase / 新 skill / 新 Agent / 故障排查 / 路径分类）
+├── scripts/                  ← 仓库自带 lint 工具（如路径分类检查）
+│   └── lint-path-conventions.sh
 ├── .gitignore                ← 排除 mattpocock-skills/ 与 .omo/
 ├── mattpocock-skills/        ← 完整 clone（独立子仓库，独立管理）
 │   └── skills/
@@ -107,6 +109,7 @@ rebase 后如有冲突，回到外层仓库重新跑 Wave 2 微调脚本。
 - 仓库拓扑与边界（mattpocock-skills/ 是独立子仓库）
 - 监控信号（什么时候该维护）
 - 上游同步 `git rebase` 工作流（含冲突处理 playbook）
-- rebase 后必跑的 4 个断言
+- rebase 后必跑的 5 个断言（含 `.omo/lint-path-conventions.sh`）
+- **§9 文档落地路径分类**：提交类（`docs/adr/` `CONTEXT.md` `CONTEXT-MAP.md` `docs/agents/`）vs 临时态（`.omo/scratch/` `.omo/out-of-scope/`）的判定标准
 - 添加新 skill / 新 Agent / 退役 skill 的流程
 - 故障排查速查表

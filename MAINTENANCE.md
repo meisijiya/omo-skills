@@ -102,6 +102,10 @@ done
 grep -E '\.omo/scratch|\.omo/out-of-scope' mattpocock-skills/skills/engineering/{ask-matt,code-review,setup-matt-pocock-skills,to-tickets,triage}/SKILL.md
 ```
 
+# 断言 5: 路径分类 lint（§9 规则守护）
+bash scripts/lint-path-conventions.sh
+```
+
 任何 `FAIL` 立即停下来调查。
 
 ---
@@ -150,3 +154,74 @@ grep -E '\.omo/scratch|\.omo/out-of-scope' mattpocock-skills/skills/engineering/
 | Skill 触发噪音 | 守卫描述太弱 / model-invoked skill 描述里有 user-invoked 词 | `grep -E 'When\|Use when'` |
 | INSTALL.md 装错目录 | 询问流程被跳过 | INSTALL.md §4 流程是否被 Agent 跳过 |
 | rebase 失败 | 上游改了同一 description 行 | 看 conflict block 类型 A |
+
+## §9. 文档落地路径分类（核心维护规则）
+
+> 这一类比单个 skill 改动更持久：路径分类一旦混乱，**所有 SKILL.md 的引用都会偏移**。把它当作仓库的基础设施来守。
+
+### §9.1 两类规则
+
+**A. 提交类（final / 保留 / decision）** —— 上游原路径，**禁止改动**：
+
+| 路径 | 含义 | 权威源 |
+|---|---|---|
+| `docs/adr/` | Architecture Decision Records | `setup-matt-pocock-skills/SKILL.md` |
+| `CONTEXT.md` | 项目主上下文（仓库根级） | `setup-matt-pocock-skills/SKILL.md` |
+| `CONTEXT-MAP.md` | 上下文导航图（仓库根级） | `setup-matt-pocock-skills/SKILL.md` |
+| `docs/agents/` | Agent 角色定义 | 各 skill 引用的元数据 |
+
+**B. 临时态（working / scratch / out-of-scope）** —— 上游原路径有 `.scratch/` / `.out-of-scope/`，plan 已统一前缀为 `.omo/`：
+
+| 路径 | 含义 | 替换关系 |
+|---|---|---|
+| `.omo/scratch/` | 工作草稿 | 原 `.scratch/` → `.omo/scratch/` |
+| `.omo/out-of-scope/` | 范围外工作笔记 | 原 `.out-of-scope/` → `.omo/out-of-scope/` |
+
+### §9.2 判定标准（写到新文档/迁移旧文档时）
+
+| 判定问题 | → 提交类 | → 临时态 |
+|---|---|---|
+| 内容是 final 决策吗？ | ✅ `docs/adr/` | ❌ `.omo/scratch/` |
+| 是项目级上下文吗？ | ✅ `CONTEXT.md` / `CONTEXT-MAP.md` | ❌ |
+| 是 Agent 角色定义吗？ | ✅ `docs/agents/` | ❌ |
+| 是工作笔记/草稿吗？ | ❌ | ✅ `.omo/scratch/` |
+| 是范围外备查吗？ | ❌ | ✅ `.omo/out-of-scope/` |
+
+### §9.3 上游原路径的"权威源"
+
+- 提交类主权威：`mattpocock-skills/skills/engineering/setup-matt-pocock-skills/SKILL.md`
+- 临时态细则：`mattpocock-skills/skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md`
+- 临时态范围外细则：`mattpocock-skills/skills/engineering/triage/OUT-OF-SCOPE.md`
+
+### §9.4 边界争议处理
+
+如果一份文档跨两类（如既记录决策又含工作笔记）：
+
+1. **优先拆为两份**：决策摘要 → `docs/adr/`；详细笔记 → `.omo/scratch/xxx.md`，并在 ADR 中引用
+2. **次选**：在 `docs/adr/` 中加 `## working notes` 段引用 `.omo/scratch/xxx`
+3. **最次选**：保留在原 SKILL.md 正文里（同文件内多 section），但加路径前缀
+
+### §9.5 长期守护 — `scripts/lint-path-conventions.sh`
+
+仓库根 `scripts/lint-path-conventions.sh` 已就绪（exec），加入 §4 rebase 后必跑：
+
+跑法：`bash scripts/lint-path-conventions.sh`，exit 1 即失败。
+
+### §9.6 已知裸路径（一次性迁移清单）
+
+| 文件 | 命中数 | 状态 |
+|---|---|---|
+| `setup-matt-pocock-skills/issue-tracker-local.md` | 8 处 `.scratch/` | 待迁移（`sed 's\|\.scratch/\|.omo/scratch/\|g'`） |
+| `triage/OUT-OF-SCOPE.md` | 9 处 `.out-of-scope/` | 待迁移（`sed 's\|\.out-of-scope/\|.omo/out-of-scope/\|g'`） |
+| `triage/AGENT-BRIEF.md` | 8 处 `.out-of-scope/` | **历史快照豁免**（不在迁移范围） |
+
+迁移命令（一次性）：
+```bash
+cd mattpocock-skills
+sed -i 's|\.scratch/|\.omo/scratch/|g' skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md
+sed -i 's|\.out-of-scope/|\.omo/out-of-scope/|g' skills/engineering/triage/OUT-OF-SCOPE.md
+git add skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md skills/engineering/triage/OUT-OF-SCOPE.md
+git commit -m "refactor(docs): migrate remaining scratch/out-of-scope refs into .omo/"
+```
+
+迁移后再跑 §4 验证 + §9.5 lint，零 FAIL 才算迁移完成。

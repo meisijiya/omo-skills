@@ -1,0 +1,140 @@
+// =====================================================================
+// _components.scss — building blocks. Variant A: 2px corners, mono UI,
+// CTA inverts on hover, scanline 0.045. Tokens via @use 'variables'.
+// =====================================================================
+@use 'variables' as *;
+@use 'layout' as *;
+
+// ---------- helpers ----------
+.mono { font-family: $font-mono; font-feature-settings: "ss01", "calt"; }
+
+// ---------- eyebrow (mono 11px / .18em / uppercase / accent) ----------
+.eyebrow {
+  font-family: $font-mono;
+  font-size: $fs-eyebrow;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: $accent;
+  margin-bottom: $sp-4;
+  display: flex;
+  align-items: center;
+  gap: $sp-2;
+  &::before { content: ""; width: 22px; height: 1px; background: $accent; opacity: 0.7; flex-shrink: 0; }
+}
+
+// ---------- section head ----------
+.section-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: $sp-4; margin-bottom: $sp-4; flex-wrap: wrap;
+  h2 {
+    font-size: $fs-mono; letter-spacing: 0.14em; text-transform: uppercase;
+    color: $muted; font-family: $font-mono; font-weight: 700;
+  }
+  .count {
+    font-family: $font-mono; font-size: $fs-eyebrow; color: $muted;
+    letter-spacing: 0.08em; border: 1px solid $line; padding: 4px $sp-2; border-radius: 999px;
+  }
+}
+
+// ---------- CTA buttons ----------
+.btn {
+  display: inline-flex; align-items: center; gap: $sp-2;
+  font-family: $font-mono; font-size: $fs-mono; font-weight: 600;
+  padding: $sp-3 $sp-5; border-radius: $radius; border: 1px solid $line;
+  cursor: pointer; transition: all 0.18s ease; white-space: nowrap;
+  background: transparent; color: $fg;
+}
+.btn-primary { background: $accent; color: $bg; border-color: $accent; }
+// Variant A signature: CTA inverts on hover (fill -> transparent)
+.btn-primary:hover { background: transparent; color: $accent; border-color: $accent; }
+.btn-ghost { background: transparent; color: $fg; border-color: $line; }
+.btn-ghost:hover { border-color: $accent; color: $accent; }
+.btn:focus-visible { outline: 2px solid $focus-ring; outline-offset: 2px; }
+.ctas { display: flex; gap: $sp-3; flex-wrap: wrap;
+  @include sm-down { flex-direction: column; .btn { justify-content: center; } } }
+
+// ---------- card (hover lifts -1px + accent border) ----------
+.card {
+  background: $surface; border: 1px solid $line; border-radius: $radius;
+  padding: $sp-4; position: relative; overflow: hidden;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+  &:hover { border-color: $accent; transform: translateY(-1px); }
+  .tag {
+    font-family: $font-mono; font-size: $fs-tag; letter-spacing: 0.12em;
+    text-transform: uppercase; color: $accent; margin-bottom: $sp-2; display: block;
+  }
+  h3 {
+    font-size: $fs-h3; font-weight: 700; line-height: 1.35;
+    margin-bottom: $sp-1; word-break: break-all; color: $fg;
+  }
+  .desc {
+    font-size: 12.5px; color: $muted; line-height: 1.55;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  &::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+    height: 1px; background: $line; opacity: 0.9;
+  }
+}
+
+// ---------- skill grid (3-col ≥720) ----------
+.grid-skills {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: $sp-3;
+  @include md-down { grid-template-columns: repeat(2, 1fr); }
+  @include sm-down { grid-template-columns: 1fr; }
+}
+
+// ---------- terminal (mono 13px / line-height 1.65, accent success) ----------
+.terminal {
+  background: $surface; border: 1px solid $line; border-radius: $radius; overflow: hidden;
+}
+.term-head {
+  display: flex; align-items: center; gap: $sp-2; padding: $sp-3 $sp-4;
+  border-bottom: 1px solid $line; font-family: $font-mono; font-size: $fs-eyebrow;
+  letter-spacing: 0.08em; text-transform: uppercase; color: $muted;
+  &__dots { display: flex; gap: 6px; margin-right: $sp-2;
+    i { width: 9px; height: 9px; border-radius: 50%; display: block; border: 1px solid $line; }
+    // first dot amber-filled; rest line-bordered (CRT terminal cue)
+    i:nth-child(1) { background: $accent; border-color: $accent; }
+  }
+}
+.term-body {
+  padding: $sp-5 $sp-4; font-family: $font-mono; font-size: $fs-mono;
+  line-height: 1.65; overflow-x: auto; color: $fg;
+  .c { color: $muted; } .cmd { color: $fg; } .ok { color: $accent; }
+}
+.term-line { white-space: pre; }
+
+// ---------- relay (4-col ≥860) ----------
+.grid-relay {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: $sp-3;
+  @include lg-down { grid-template-columns: repeat(2, 1fr); .relay-card .arrow { display: none; } }
+  @include sm-down { grid-template-columns: 1fr; }
+}
+.relay-card {
+  background: $surface; border: 1px solid $line; border-radius: $radius;
+  padding: $sp-4; position: relative; transition: border-color 0.18s ease;
+  &:hover { border-color: $accent; }
+  .num {
+    font-family: $font-mono; font-size: 22px; font-weight: 800; line-height: 1;
+    color: $accent; margin-bottom: $sp-2; display: flex; align-items: center; gap: $sp-2;
+    small { font-size: $fs-tag; letter-spacing: 0.14em; text-transform: uppercase; color: $muted; font-weight: 600; }
+  }
+  h4 { font-size: $fs-h3; font-weight: 700; margin-bottom: 4px; color: $fg; }
+  p { font-size: 12.5px; color: $muted; line-height: 1.5; }
+  .arrow {
+    position: absolute; right: -9px; top: 50%; transform: translateY(-50%);
+    width: 18px; height: 18px; border-radius: 50%; background: $bg;
+    border: 1px solid $line; display: flex; align-items: center; justify-content: center;
+    font-size: 10px; color: $muted; z-index: 1;
+  }
+  &:last-child .arrow { display: none; }
+}
+
+// ---------- scanline (CRT retro, fixed overlay) ----------
+.scanline {
+  position: fixed; inset: 0; pointer-events: none; z-index: 2;
+  opacity: $scanline-opacity;
+  background: repeating-linear-gradient(0deg, transparent 0px, transparent 2px, $fg 3px);
+  mix-blend-mode: soft-light;
+}

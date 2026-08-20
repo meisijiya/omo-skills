@@ -1,0 +1,180 @@
+// =====================================================================
+// _layout.scss — global page chrome
+// body reset · sticky mono nav · footer · .wrap container · breakpoints
+// All tokens come from _variables.scss via @use.
+// =====================================================================
+@use 'variables' as *;
+
+// ---------- reset ----------
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+  background: $bg;
+}
+
+body {
+  background: $bg;
+  color: $fg;
+  font-family: $font-mono; // Variant A: mono everywhere
+  font-size: $fs-body;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color 0.18s ease;
+}
+
+a:hover { color: $accent; }
+
+img { max-width: 100%; display: block; }
+
+// ---------- typography ----------
+h1, h2, h3, h4, h5, h6 {
+  font-family: $font-mono;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: $fg;
+}
+
+h1 {
+  font-size: $fs-h1;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  max-width: 720px;
+}
+
+h2 {
+  font-size: $fs-h2;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+h3 { font-size: $fs-h3; line-height: 1.35; }
+
+p { line-height: 1.65; color: $fg; }
+small, .small { font-size: $fs-tag; color: $muted; }
+
+// ---------- container ----------
+.wrap {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: $sp-7 $sp-5 120px;
+
+  @media (max-width: $bp-sm) {
+    padding: $sp-6 $sp-4 120px;
+  }
+}
+
+// ---------- section spacing ----------
+section { margin-bottom: $section-gap; }
+section:last-child { margin-bottom: 0; }
+
+// ---------- header (sticky mono nav) ----------
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: rgba(14, 13, 8, 0.85);
+  backdrop-filter: blur(12px) saturate(1.2);
+  -webkit-backdrop-filter: blur(12px) saturate(1.2);
+  border-bottom: 1px solid $line;
+}
+
+.site-header__inner {
+  max-width: $max-width;
+  margin: 0 auto;
+  padding: $sp-3 $sp-5;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $sp-5;
+}
+
+.site-header__brand {
+  font-family: $font-mono;
+  font-size: $fs-mono;
+  font-weight: 700;
+  color: $accent;
+  letter-spacing: 0.06em;
+}
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: $sp-4;
+  font-family: $font-mono;
+  font-size: $fs-mono;
+  flex-wrap: wrap;
+}
+
+.site-nav a {
+  color: $muted;
+  transition: color 0.18s ease;
+}
+
+.site-nav a:hover,
+.site-nav a.is-active {
+  color: $accent;
+}
+
+.site-header__kbd {
+  font-family: $font-mono;
+  font-size: $fs-tag;
+  color: $muted;
+  border: 1px solid $line;
+  padding: 2px $sp-2;
+  border-radius: $radius;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  background: transparent;
+  transition: border-color 0.18s ease, color 0.18s ease;
+}
+
+.site-header__kbd:hover {
+  border-color: $accent;
+  color: $accent;
+}
+
+// ---------- footer ----------
+.site-footer {
+  border-top: 1px solid $line;
+  padding: $sp-6 $sp-5;
+  background: $bg;
+  color: $muted;
+  font-family: $font-mono;
+  font-size: $fs-mono;
+}
+
+.site-footer__inner {
+  max-width: $max-width;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $sp-4;
+  flex-wrap: wrap;
+}
+
+.site-footer a {
+  color: $muted;
+  border-bottom: 1px dashed $line;
+  transition: color 0.18s ease, border-color 0.18s ease;
+}
+
+.site-footer a:hover {
+  color: $accent;
+  border-color: $accent;
+}
+
+// ---------- responsive breakpoints ----------
+@mixin sm-down { @media (max-width: $bp-sm) { @content; } }
+@mixin md-down { @media (max-width: $bp-md) { @content; } }
+@mixin lg-down { @media (max-width: $bp-lg) { @content; } }
+@mixin xl-down { @media (max-width: $bp-xl) { @content; } }

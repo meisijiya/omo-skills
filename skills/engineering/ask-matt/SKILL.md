@@ -8,13 +8,6 @@ disable-model-invocation: true
 
 You don't remember every skill, so ask.
 
-> **调用约定**：本 skill 中所有 `name` 形式的 skill 名（裸名，无 `/` 前缀）即为调用入口。
->
-> - **omo / Claude Code**：以 `/name` 形式作为 slash command 触发
-> - **Mavis（MiniMax 出品，CLI 别名 `mcode`）**：通过工具调用 `skill({name: "name"})`
->
-> 同一名称在两种 Agent 下指同一份 SKILL.md。
-
 A **flow** is a path through the skills. Most paths run along one **main flow**, and two **on-ramps** merge onto it. Everything else is standalone, or a vocabulary layer that runs underneath.
 
 ## The main flow: idea → ship

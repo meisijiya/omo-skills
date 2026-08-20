@@ -138,3 +138,83 @@
   background: repeating-linear-gradient(0deg, transparent 0px, transparent 2px, $fg 3px);
   mix-blend-mode: soft-light;
 }
+
+// =====================================================================
+// Wave 2 HTML uses these classes; added so build picks them up.
+// Order: muted/accent → term-head__dots → hero → page-head → error-page
+// → skills-group → skills-expanded → skill-expanded* → relay-card .num small
+// =====================================================================
+
+// ---------- text utilities ----------
+.muted { color: $muted; }
+.accent { color: $accent; }
+
+// ---------- term-head__dots (flat BEM; overrides nested &__dots above) ----------
+.term-head__dots {
+  display: inline-flex; gap: $sp-2; margin-right: $sp-3;
+  i { width: 9px; height: 9px; border-radius: 50%; display: block; border: 1px solid $line; }
+  i:nth-child(1) { background: $accent; border-color: $accent; }
+}
+
+// ---------- hero (Wave 2 index.md landing) ----------
+.hero { margin-bottom: $section-gap; }
+.hero h1 {
+  font-size: $fs-h1; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.05; max-width: 720px; margin-bottom: 0;
+}
+.hero-subtitle {
+  color: $muted; font-size: $fs-body; max-width: 640px;
+  margin: 20px 0 28px; line-height: 1.65;
+}
+
+// ---------- page-head (Wave 2 skills.md header) ----------
+.page-head { margin-bottom: $section-gap; }
+.page-head h1 {
+  font-size: $fs-h1; font-weight: 800; letter-spacing: -0.02em;
+  line-height: 1.05; margin: 18px 0;
+}
+
+// ---------- error-page (Wave 2 404.md) ----------
+.error-page { text-align: center; padding: 80px 0; }
+.error-page h1 {
+  font-size: clamp(80px, 12vw, 160px); font-weight: 800; line-height: 1;
+  color: $accent; margin: 24px 0; letter-spacing: -0.04em;
+}
+.error-page .error-hint {
+  color: $muted; margin: 12px 0 32px; max-width: 480px;
+  margin-left: auto; margin-right: auto;
+}
+
+// ---------- skills-group + skills-expanded (Wave 2 skills.md expanded list) ----------
+.skills-group { margin-bottom: $section-gap; }
+.skills-expanded {
+  display: grid; grid-template-columns: 1fr; gap: $sp-3;
+  @media (min-width: 720px) { grid-template-columns: repeat(2, 1fr); }
+}
+.skill-expanded {
+  background: $surface; border: 1px solid $line; border-radius: $radius;
+  padding: $sp-5; transition: border-color 0.18s, transform 0.18s;
+  &:hover { border-color: $accent; transform: translateY(-1px); }
+}
+.skill-expanded-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: $sp-3; margin-bottom: $sp-3; flex-wrap: wrap;
+}
+.skill-expanded h3 {
+  font-size: 18px; font-weight: 700; margin-bottom: $sp-2;
+}
+.skill-expanded-desc {
+  font-size: 14px; line-height: 1.6; color: $fg; margin-bottom: $sp-4;
+}
+.skill-expanded-link {
+  font-size: 12px; color: $muted; text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: color 0.18s, border-color 0.18s; display: inline-block;
+  &:hover { color: $accent; border-bottom-color: $accent; }
+}
+
+// ---------- relay-card .num small (Wave 2 numeric micro-label) ----------
+.relay-card .num small {
+  font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+  color: $muted; font-weight: 600;
+}

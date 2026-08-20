@@ -1,0 +1,129 @@
+// =====================================================================
+// minima-overrides.scss — overrides for Jekyll minima theme defaults.
+// Scope: :root for token rebind + `.site-*` for layout chrome so we
+// never leak global resets into user agent styles.
+// =====================================================================
+@use 'variables' as *;
+
+// ---------- theme tokens at :root (re-affirms variables) ----------
+:root {
+  --bg: #{$bg};
+  --fg: #{$fg};
+  --muted: #{$muted};
+  --line: #{$line};
+  --surface: #{$surface};
+  --accent: #{$accent};
+  --accent-2: #{$accent-2};
+}
+
+// ---------- body / typography (kill minima light default) ----------
+:root body {
+  background: $bg;
+  color: $fg;
+  font-family: $font-mono;
+  font-size: $fs-body;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+:root h1, :root h2, :root h3, :root h4, :root h5, :root h6 {
+  font-family: $font-mono;
+  color: $fg;
+}
+
+// ---------- site title ----------
+.site-title,
+.site-title:visited {
+  color: $accent;
+  font-family: $font-mono;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.site-title:hover { color: $accent; opacity: 0.85; }
+
+// ---------- nav links ----------
+.site-nav .page-link {
+  color: $muted;
+  font-family: $font-mono;
+  font-size: $fs-mono;
+  letter-spacing: 0.04em;
+  transition: color 0.18s ease;
+}
+.site-nav .page-link:hover { color: $accent; }
+
+// ---------- header / footer chrome ----------
+.site-header {
+  background: rgba(14, 13, 8, 0.85);
+  border-top: 1px solid $line;
+  border-bottom: 1px solid $line;
+}
+.site-footer {
+  background: $bg;
+  border-top: 1px solid $line;
+  color: $muted;
+  font-family: $font-mono;
+  font-size: $fs-mono;
+}
+.site-footer .footer-heading { color: $muted; }
+
+// ---------- links ----------
+:root a, :root a:visited { color: $accent; text-decoration: none; }
+:root a:hover { color: $fg; border-bottom: 1px solid $accent; }
+
+// ---------- post / page body content ----------
+.page-content { background: transparent; }
+.page-heading { color: $fg; font-family: $font-mono; }
+.post-meta { color: $muted; font-family: $font-mono; font-size: $fs-tag; }
+.post-link { color: $fg; }
+.post-link:hover { color: $accent; }
+
+// ---------- code ----------
+:root code {
+  font-family: $font-mono;
+  font-size: 12.5px;
+  background: $surface;
+  color: $accent-2;
+  border: 1px solid $line;
+  border-radius: $radius;
+  padding: 1px 6px;
+}
+:root pre {
+  background: $surface;
+  border: 1px solid $line;
+  border-radius: $radius;
+  padding: $sp-4;
+  color: $fg;
+}
+:root pre code { background: transparent; border: none; padding: 0; }
+
+// ---------- blockquote / hr ----------
+:root blockquote {
+  border-left: 2px solid $accent;
+  color: $muted;
+  padding-left: $sp-4;
+  font-family: $font-mono;
+}
+:root hr { border-top: 1px solid $line; }
+
+// ---------- tables ----------
+:root table {
+  border: 1px solid $line;
+  border-radius: $radius;
+}
+:root table th,
+:root table td {
+  border: 1px solid $line;
+  padding: $sp-2 $sp-3;
+  font-family: $font-mono;
+  font-size: $fs-mono;
+}
+:root table th { background: $surface; color: $accent; text-align: left; }
+:root table tr:nth-child(even) td { background: $surface; }
+
+// ---------- selection / focus / scrollbar (variant A flavor) ----------
+::selection { background: $accent; color: $bg; }
+:focus-visible { outline: 2px solid $focus-ring; outline-offset: 2px; }
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: $bg; }
+::-webkit-scrollbar-thumb { background: $line; border-radius: $radius; }
+::-webkit-scrollbar-thumb:hover { background: $accent; }

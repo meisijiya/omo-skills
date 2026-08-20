@@ -1,0 +1,11 @@
+// =====================================================================
+// main.scss — single entry imported by Jekyll layouts.
+// Order: variables -> layout -> components -> syntax -> minima overrides.
+// `minima-overrides` must come last so it wins specificity ties.
+// =====================================================================
+
+@use 'variables';
+@use 'layout';
+@use 'components';
+@use 'syntax';
+@use 'minima-overrides' as *;

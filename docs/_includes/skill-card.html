@@ -1,0 +1,18 @@
+<article class="card skill-card" data-category="{{ include.category }}">
+  <header class="skill-card-head">
+    <span class="tag mono">{{ include.tag }}</span>
+    {% if include.category %}
+      <span class="skill-card-cat mono muted">{{ include.category }}</span>
+    {% endif %}
+  </header>
+
+  <h3 class="mono skill-card-name">{{ include.name }}</h3>
+
+  {% if include.desc %}
+    <p class="desc skill-card-desc">{{ include.desc }}</p>
+  {% endif %}
+
+  {% if include.file %}
+    <a class="more mono" href="{{ include.file | relative_url }}" aria-label="Open {{ include.name }}">&#8594;</a>
+  {% endif %}
+</article>

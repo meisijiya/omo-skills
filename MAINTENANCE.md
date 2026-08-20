@@ -101,27 +101,51 @@ done
 # 断言 4: 5 个路径文件
 grep -E '\.omo/scratch|\.omo/out-of-scope' mattpocock-skills/skills/engineering/{ask-matt,code-review,setup-matt-pocock-skills,to-tickets,triage}/SKILL.md
 ```
-
-# 断言 5: 路径分类 lint（§9 规则守护）
-bash scripts/lint-path-conventions.sh
-```
-
 任何 `FAIL` 立即停下来调查。
 
 ---
 
-## §5. 添加新 skill Playbook
+## §5. Skill 引入规则（讨论流程）
 
-1. 在 `mattpocock-skills/omo` 分支 `git merge origin/main`（拉最新）
-2. `ls mattpocock-skills/skills/<bucket>/<新skill>/SKILL.md`
-3. 看 frontmatter 含 `disable-model-invocation: true`：
-   - 是 → 加守卫前缀 `User-invoked only — do not invoke automatically. `（保留原引号风格）
-   - 否 → 不动 description
-4. `grep '\.scratch/\|\.out-of-scope/' SKILL.md`，有则路径替换为 `.omo/scratch` / `.omo/out-of-scope`
-5. `git commit -m "feat(skills): add <新 skill> with guard/path fixes"`
-6. 更新 INSTALL.md 能力对照表（加一行）
-7. 更新 README.md 采纳清单（如纳入）
-8. 跑 §4 的 4 个断言
+> **核心原则**：新引入 skill 时，**先讨论、再决定、最后执行**。不靠自动化分配路径，靠人/Agent 对照 §9 把每份新文档摊开讨论归类。
+
+### Step 0. 讨论（必走 — 不跳过）
+
+与用户讨论以下议题，把决策写到 `.omo/notepads/<plan>/decisions.md`（同当前 plan 流程）：
+
+1. **文档产出清单**：这个新 skill 会涉及哪些文档？
+   - `SKILL.md`（必有）
+   - `references/*.md`（CONTEXT.md / CONTEXT-MAP.md / issue-tracker-local.md 等）
+   - 是否要新建 ADR？写到 `docs/adr/`
+   - 是否要新建 Agent 角色定义？写到 `docs/agents/`
+   - 是否要新建 scratch 笔记？写到 `.omo/scratch/`
+2. **路径分类**：对照 §9 把每份文档归到「提交类」或「临时态」
+3. **冲突检查**：与现有 skill 的 description 是否撞车？路径是否复用？
+4. **联动更新**：INSTALL.md 能力对照表 / README.md 清单是否要改？
+
+### Step 1. 拉最新
+
+在 `mattpocock-skills/omo` 分支 `git merge origin/main`（上游新增场景）。
+
+### Step 2. 应用守卫与路径
+
+`ls mattpocock-skills/skills/<bucket>/<新skill>/SKILL.md`，按 §9 讨论结果执行：
+
+- user-invoked（前缀 `User-invoked only — do not invoke automatically. `，保留 `disable-model-invocation: true` 字段）
+- model-invoked（不动 description）
+- 含 `.scratch/.out-of-scope` 字面量 → 替换为 `.omo/` 前缀
+
+### Step 3. 提交
+
+`git commit -m "feat(skills): add <新 skill> with guard/path fixes"`（按 Step 0 讨论结果可能多 commit）。
+
+### Step 4. 更新外层文档
+
+按 Step 0 讨论结果更新 INSTALL.md / README.md。
+
+### Step 5. 验证
+
+跑 §4 的 4 个断言。
 
 ---
 
@@ -155,11 +179,13 @@ bash scripts/lint-path-conventions.sh
 | INSTALL.md 装错目录 | 询问流程被跳过 | INSTALL.md §4 流程是否被 Agent 跳过 |
 | rebase 失败 | 上游改了同一 description 行 | 看 conflict block 类型 A |
 
-## §9. 文档落地路径分类（核心维护规则）
+## §9. 文档落地路径分类（讨论参考，非自动化）
 
-> 这一类比单个 skill 改动更持久：路径分类一旦混乱，**所有 SKILL.md 的引用都会偏移**。把它当作仓库的基础设施来守。
+> **核心立场**：这份分类是**讨论的脚手架**，**不是自动执行规则**。新引入 skill 时拿这份表对照，逐份文档讨论归类，而不是让脚本替我们判断。
+>
+> 自动化可不靠谱 —— Agent 与人一起讨论出来的归类才能长期维护。
 
-### §9.1 两类规则
+### §9.1 两类路径
 
 **A. 提交类（final / 保留 / decision）** —— 上游原路径，**禁止改动**：
 
@@ -177,7 +203,9 @@ bash scripts/lint-path-conventions.sh
 | `.omo/scratch/` | 工作草稿 | 原 `.scratch/` → `.omo/scratch/` |
 | `.omo/out-of-scope/` | 范围外工作笔记 | 原 `.out-of-scope/` → `.omo/out-of-scope/` |
 
-### §9.2 判定标准（写到新文档/迁移旧文档时）
+### §9.2 讨论时的判定问题
+
+新引入文档时，逐份对照以下问题决定归类：
 
 | 判定问题 | → 提交类 | → 临时态 |
 |---|---|---|
@@ -193,7 +221,7 @@ bash scripts/lint-path-conventions.sh
 - 临时态细则：`mattpocock-skills/skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md`
 - 临时态范围外细则：`mattpocock-skills/skills/engineering/triage/OUT-OF-SCOPE.md`
 
-### §9.4 边界争议处理
+### §9.4 边界争议处理（讨论时参考）
 
 如果一份文档跨两类（如既记录决策又含工作笔记）：
 
@@ -201,13 +229,7 @@ bash scripts/lint-path-conventions.sh
 2. **次选**：在 `docs/adr/` 中加 `## working notes` 段引用 `.omo/scratch/xxx`
 3. **最次选**：保留在原 SKILL.md 正文里（同文件内多 section），但加路径前缀
 
-### §9.5 长期守护 — `scripts/lint-path-conventions.sh`
-
-仓库根 `scripts/lint-path-conventions.sh` 已就绪（exec），加入 §4 rebase 后必跑：
-
-跑法：`bash scripts/lint-path-conventions.sh`，exit 1 即失败。
-
-### §9.6 已知裸路径（一次性迁移清单）
+### §9.5 已知裸路径（一次性迁移清单）
 
 | 文件 | 命中数 | 状态 |
 |---|---|---|
@@ -224,4 +246,4 @@ git add skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md skill
 git commit -m "refactor(docs): migrate remaining scratch/out-of-scope refs into .omo/"
 ```
 
-迁移后再跑 §4 验证 + §9.5 lint，零 FAIL 才算迁移完成。
+迁移后跑 §4 验证，零 FAIL 才算迁移完成。

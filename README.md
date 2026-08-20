@@ -1,8 +1,10 @@
 # omo-skills
 
-Matt Pocock 的 [`mattpocock/skills`](https://github.com/mattpocock/skills) 在 [OhMyOpenCode](https://github.com/code-yeongyu/oh-my-opencode) (omo) 环境下的精选适配与分发仓库。
+Matt Pocock 的 [`mattpocock/skills`](https://github.com/mattpocock/skills) 的**通用分发与多 Agent 适配仓库**。
 
-omo 内置 skill 体系与 Matt 上游 skill 在描述惯例、触发词、引用路径上不完全一致 —— 本仓库对 25 个上游 skill 做了挑选与微调，让它们能在 omo 风格下稳定触发并被 Agent 正确路由。
+`omo`（[OhMyOpenCode](https://github.com/code-yeongyu/oh-my-opencode)）只是众多目标 Agent 之一 —— 同源的 [Mavis（MiniMax 出品的代码 Agent，CLI 别名 `mcode`）](#mavis) / pi / senpi / Xiaomi mimocode 同样受支持。不同 Agent 的 skill 工具栈差异（路径前缀、命令前缀、内置覆盖）由本仓库统一吸收，使用户在不同 Agent 间安装同一份 skill 时不需要再读一遍上游原文。
+
+本仓库对 25 个上游 skill 做了挑选与微调，让它们在 omo / Mavis 风格下都能稳定触发并被 Agent 正确路由。
 
 ## 仓库布局
 
@@ -80,10 +82,10 @@ omo-skills/
 
 它覆盖：
 - 把采纳 skill 装入 omo 的步骤
-- 把采纳 + 备用 skill 装入 pi / senpi / mcode / mimocode 的步骤
+- 把采纳 + 备用 skill 装入 pi / senpi / Mavis (`mcode`) / Xiaomi mimocode 的步骤
 - 同步上游新提交到 `skills/` 的方法
 - 卸载 / 禁用方式
-- 故障排查（触发不灵、与 omo 内置 skill 撞车等）
+- 故障排查（触发不灵、与目标 Agent 内置 skill 撞车等）
 
 ## 上游同步
 

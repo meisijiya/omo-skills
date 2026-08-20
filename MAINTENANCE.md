@@ -41,7 +41,7 @@ omo-skills/
 ## §3. 上游同步 Playbook（每周/双周）
 
 ```bash
-cd /home/ljh2923/opencode-project/omo-skills/mattpocock-skills
+cd mattpocock-skills      # 假设外层 omo-skills/ 已 clone 到当前工作目录
 git fetch origin
 git rebase origin/main
 
@@ -76,7 +76,7 @@ git rebase --continue
 ## §4. rebase 后必跑验证（关键 — 不跑就别继续）
 
 ```bash
-cd /home/ljh2923/opencode-project/omo-skills
+cd omo-skills/      # 外层产物仓库根
 
 # 断言 1: 25 个 SKILL.md YAML 解析
 python3 -c "
@@ -103,8 +103,8 @@ for f in mattpocock-skills/skills/engineering/{codebase-design,domain-modeling,t
   grep -q 'User-invoked only' "$f" && echo "FAIL_EXTRA $f"
 done
 
-# 断言 4: 5 个路径文件
-grep -E '\.omo/scratch|\.omo/out-of-scope' mattpocock-skills/skills/engineering/{ask-matt,code-review,setup-matt-pocock-skills,to-tickets,triage}/SKILL.md
+# 断言 4: 5 个路径文件含 .scratch/ 或 .out-of-scope/（与 Mavis / 上游一致，无 .omo/ 前缀）
+grep -E '\.scratch|\.out-of-scope' mattpocock-skills/skills/engineering/{ask-matt,code-review,setup-matt-pocock-skills,to-tickets,triage}/SKILL.md
 ```
 任何 `FAIL` 立即停下来调查。
 
@@ -156,12 +156,13 @@ grep -E '\.omo/scratch|\.omo/out-of-scope' mattpocock-skills/skills/engineering/
 
 ## §6. 添加新 Agent Playbook（INSTALL.md）
 
-1. 在 INSTALL.md 现有 `## MiniMax mcode` 章节后加 `## <新 Agent>`
+1. 在 INSTALL.md 现有 `## Xiaomi mimocode` 章节后加 `## <新 Agent>`
 2. 加目录映射（必须先现场 `ls` 检测或问用户，不硬编码！）
 3. 在"询问装到哪个 Agent"流程中加选项
 4. 在能力对照表"装到 X 时默认 Y"行加一行
-5. 跑 INSTALL.md 字符串断言（见 Todo 4 acceptance criteria）
-6. `git commit -m "docs(install): add <新 Agent> install chapter"`
+5. 在 INSTALL.md 末尾"已验证装机清单"表里补一行
+6. 跑 INSTALL.md 字符串断言（见 Todo 4 acceptance criteria）
+7. `git commit -m "docs(install): add <新 Agent> install chapter"`
 
 ---
 
@@ -189,6 +190,8 @@ grep -E '\.omo/scratch|\.omo/out-of-scope' mattpocock-skills/skills/engineering/
 > **核心立场**：这份分类是**讨论的脚手架**，**不是自动执行规则**。新引入 skill 时拿这份表对照，逐份文档讨论归类，而不是让脚本替我们判断。
 >
 > 自动化可不靠谱 —— Agent 与人一起讨论出来的归类才能长期维护。
+>
+> **历史说明**：早期 omo 专属微调曾用 `.omo/scratch/` / `.omo/out-of-scope/` 前缀（与 omo 的 `.omo/` 工作目录一致）。为兼容 Mavis（无 `.omo/` 约定）+ 还原上游原路径，已在 2026-08 issue #1 中将临时态路径恢复为工作区根直接子目录 `.scratch/` / `.out-of-scope/`。
 
 ### §9.1 两类路径
 
@@ -201,12 +204,12 @@ grep -E '\.omo/scratch|\.omo/out-of-scope' mattpocock-skills/skills/engineering/
 | `CONTEXT-MAP.md` | 上下文导航图（仓库根级） | `setup-matt-pocock-skills/SKILL.md` |
 | `docs/agents/` | Agent 角色定义 | 各 skill 引用的元数据 |
 
-**B. 临时态（working / scratch / out-of-scope）** —— 上游原路径有 `.scratch/` / `.out-of-scope/`，plan 已统一前缀为 `.omo/`：
+**B. 临时态（working / scratch / out-of-scope）** —— 上游原路径，工作区根直接子目录（与 omo / Mavis / 上游三方一致）：
 
 | 路径 | 含义 | 替换关系 |
 |---|---|---|
-| `.omo/scratch/` | 工作草稿 | 原 `.scratch/` → `.omo/scratch/` |
-| `.omo/out-of-scope/` | 范围外工作笔记 | 原 `.out-of-scope/` → `.omo/out-of-scope/` |
+| `.scratch/` | 工作草稿 | 上游原路径，**未加前缀** |
+| `.out-of-scope/` | 范围外工作笔记 | 上游原路径，**未加前缀** |
 
 ### §9.2 讨论时的判定问题
 
@@ -214,11 +217,11 @@ grep -E '\.omo/scratch|\.omo/out-of-scope' mattpocock-skills/skills/engineering/
 
 | 判定问题 | → 提交类 | → 临时态 |
 |---|---|---|
-| 内容是 final 决策吗？ | ✅ `docs/adr/` | ❌ `.omo/scratch/` |
+| 内容是 final 决策吗？ | ✅ `docs/adr/` | ❌ `.scratch/` |
 | 是项目级上下文吗？ | ✅ `CONTEXT.md` / `CONTEXT-MAP.md` | ❌ |
 | 是 Agent 角色定义吗？ | ✅ `docs/agents/` | ❌ |
-| 是工作笔记/草稿吗？ | ❌ | ✅ `.omo/scratch/` |
-| 是范围外备查吗？ | ❌ | ✅ `.omo/out-of-scope/` |
+| 是工作笔记/草稿吗？ | ❌ | ✅ `.scratch/` |
+| 是范围外备查吗？ | ❌ | ✅ `.out-of-scope/` |
 
 ### §9.3 上游原路径的"权威源"
 
@@ -230,28 +233,23 @@ grep -E '\.omo/scratch|\.omo/out-of-scope' mattpocock-skills/skills/engineering/
 
 如果一份文档跨两类（如既记录决策又含工作笔记）：
 
-1. **优先拆为两份**：决策摘要 → `docs/adr/`；详细笔记 → `.omo/scratch/xxx.md`，并在 ADR 中引用
-2. **次选**：在 `docs/adr/` 中加 `## working notes` 段引用 `.omo/scratch/xxx`
+1. **优先拆为两份**：决策摘要 → `docs/adr/`；详细笔记 → `.scratch/xxx.md`，并在 ADR 中引用
+2. **次选**：在 `docs/adr/` 中加 `## working notes` 段引用 `.scratch/xxx`
 3. **最次选**：保留在原 SKILL.md 正文里（同文件内多 section），但加路径前缀
 
-### §9.5 已知裸路径（一次性迁移清单）
+### §9.5 已知裸路径（监控列表 — 不需迁移，仅观察）
 
 | 文件 | 命中数 | 状态 |
 |---|---|---|
-| `setup-matt-pocock-skills/issue-tracker-local.md` | 8 处 `.scratch/` | 待迁移（`sed 's\|\.scratch/\|.omo/scratch/\|g'`） |
-| `triage/OUT-OF-SCOPE.md` | 9 处 `.out-of-scope/` | 待迁移（`sed 's\|\.out-of-scope/\|.omo/out-of-scope/\|g'`） |
-| `triage/AGENT-BRIEF.md` | 8 处 `.out-of-scope/` | **历史快照豁免**（不在迁移范围） |
+| `setup-matt-pocock-skills/issue-tracker-local.md` | 多处 `.scratch/` | **设计如此**（无前缀 = 工作区根直接子目录） |
+| `triage/OUT-OF-SCOPE.md` | 多处 `.out-of-scope/` | **设计如此**（无前缀） |
+| `triage/AGENT-BRIEF.md` | 多处 `.out-of-scope/` | **历史快照豁免**（不在迁移范围） |
 
-迁移命令（一次性）：
-```bash
-cd mattpocock-skills
-sed -i 's|\.scratch/|\.omo/scratch/|g' skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md
-sed -i 's|\.out-of-scope/|\.omo/out-of-scope/|g' skills/engineering/triage/OUT-OF-SCOPE.md
-git add skills/engineering/setup-matt-pocock-skills/issue-tracker-local.md skills/engineering/triage/OUT-OF-SCOPE.md
-git commit -m "refactor(docs): migrate remaining scratch/out-of-scope refs into .omo/"
-```
-
-迁移后跑 §4 验证，零 FAIL 才算迁移完成。
+> 监控命令（检查是否有人误加了 `.omo/` 前缀）：
+>
+> ```bash
+> bash scripts/lint-path-conventions.sh
+> ```
 
 ---
 
@@ -277,7 +275,7 @@ git commit -m "refactor(docs): migrate remaining scratch/out-of-scope refs into 
 ### Step 2. 同步脚本
 
 ```bash
-cd /home/ljh2923/opencode-project/omo-skills
+cd omo-skills/      # 外层产物仓库根
 
 # ponytail: 覆盖式同步，先 git status 确认 skills/ 无未提交微调
 if git status --porcelain -- skills/ | grep -q .; then
@@ -316,7 +314,7 @@ done
 ### Step 4. 提交并 push
 
 ```bash
-cd /home/ljh2923/opencode-project/omo-skills  # 外层产物仓库（非 mattpocock-skills/）
+cd omo-skills/      # 外层产物仓库根（非 mattpocock-skills/）
 git add skills/
 git commit -m "chore(skills): sync <N> skills from mattpocock-skills (<上游 commit hash>)"
 git push origin main

@@ -1,0 +1,103 @@
+// =====================================================================
+// _variables.scss — A palette (Amber + Lime / CRT retro)
+// Single source of truth for the site. Tokens are declared as SCSS
+// variables (compile-time) AND mirrored to CSS custom properties at
+// :root so devtools + future runtime tweaks can override them.
+// =====================================================================
+
+// ---------- palette ----------
+$bg:        #0E0D08;  // CRT deep amber-black
+$fg:        #E8E2CF;  // warm bone, body text
+$muted:     #8C846B;  // secondary text
+$line:      #2A2417;  // borders / dividers
+$surface:   #16140E;  // cards / terminal background
+$accent:    #FFB000;  // amber — primary highlight
+$accent-2:  #00FF9C;  // lime — secondary highlight
+
+// ---------- derived ----------
+$accent-hover: #FFC233; // accent × ~1.15 lift on hover/border states
+$focus-ring:   rgba(255, 176, 0, 0.60); // accent at 60% alpha for focus
+$line-hover:   #3A3322;  // line + ~30% for hover borders on ghost buttons
+
+// ---------- typography ----------
+$font-mono: "JetBrains Mono", "Fira Code", ui-monospace, Menlo, Consolas, monospace;
+$font-sans: Inter, -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+
+// ---------- geometry ----------
+$radius:      2px;     // sharp CRT corners (Variant A)
+$max-width:   1180px;  // .wrap container width
+$section-gap: 88px;    // spacing between top-level <section> blocks
+
+// ---------- breakpoints ----------
+$bp-sm: 480px;
+$bp-md: 720px;
+$bp-lg: 860px;
+$bp-xl: 1180px;
+
+// ---------- spacing scale ----------
+$sp-1: 4px;
+$sp-2: 8px;
+$sp-3: 12px;
+$sp-4: 16px;
+$sp-5: 24px;
+$sp-6: 32px;
+$sp-7: 48px;
+
+// ---------- font-size scale ----------
+$fs-mono:    13px;
+$fs-body:    16px;
+$fs-h1:      clamp(40px, 6vw, 72px);
+$fs-h2:      28px;
+$fs-h3:      14px;
+$fs-eyebrow: 11px;
+$fs-tag:     10px;
+
+// ---------- misc ----------
+$scanline-opacity: 0.045;
+
+// =====================================================================
+// Mirror to CSS custom properties at :root. SCSS vars stay primary
+// for compile-time composition; CSS vars enable runtime tweaks.
+// =====================================================================
+:root {
+  --bg: #{$bg};
+  --fg: #{$fg};
+  --muted: #{$muted};
+  --line: #{$line};
+  --surface: #{$surface};
+  --accent: #{$accent};
+  --accent-2: #{$accent-2};
+  --accent-hover: #{$accent-hover};
+  --focus-ring: #{$focus-ring};
+  --line-hover: #{$line-hover};
+
+  --font-mono: #{$font-mono};
+  --font-sans: #{$font-sans};
+
+  --radius: #{$radius};
+  --max-width: #{$max-width};
+  --section-gap: #{$section-gap};
+
+  --bp-sm: #{$bp-sm};
+  --bp-md: #{$bp-md};
+  --bp-lg: #{$bp-lg};
+  --bp-xl: #{$bp-xl};
+
+  --sp-1: #{$sp-1};
+  --sp-2: #{$sp-2};
+  --sp-3: #{$sp-3};
+  --sp-4: #{$sp-4};
+  --sp-5: #{$sp-5};
+  --sp-6: #{$sp-6};
+  --sp-7: #{$sp-7};
+
+  --fs-mono: #{$fs-mono};
+  --fs-body: #{$fs-body};
+  --fs-h1: #{$fs-h1};
+  --fs-h2: #{$fs-h2};
+  --fs-h3: #{$fs-h3};
+  --fs-eyebrow: #{$fs-eyebrow};
+  --fs-tag: #{$fs-tag};
+
+  --scanline-opacity: #{$scanline-opacity};
+}

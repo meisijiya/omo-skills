@@ -57,15 +57,32 @@
 | `research` | 研究 | engineering |
 | `handoff` | 交接 | productivity |
 
-**关于 5 个备用的说明**：`ask-matt` / `diagnosing-bugs` / `code-review` / `research` / `handoff` 这 5 个 skill 在 omo / Mavis 下应全量安装；其中 `code-review` / `research` / `handoff` 三个会与目标 Agent 内置撞名，装机时需加 `mattpocock-` 前缀避让，详见 §3「Mavis Agent 内置覆盖」。
+**关于 5 个备用的说明**：`ask-matt` / `diagnosing-bugs` / `code-review` / `research` / `handoff` 这 5 个 skill 的装机策略按目标 Agent 分别处理：omo 默认 skip（见 §3.1）；Mavis 全量装 + 3 个加 `mattpocock-` 前缀避让（见 §3.2）；pi / senpi / mimocode 全量可选，由用户决定。
 
 ---
 
-## 3. Mavis Agent 内置覆盖（影响装机清单）
+## 3. Agent 内置覆盖（影响装机清单）
 
-omo / Mavis（`mcode`）同源，内置覆盖判断一致。本节以 Mavis 为权威（路径已文档化），omo 沿用同一判断；pi / senpi / mimocode 的覆盖未在本机验证，不预设 skip，由 §4 流程逐项询问用户。
+omo 与 Mavis（`mcode`）同源但**内置工具栈不同**：
 
-> **关于 5 个备用的取舍**：Matt 原版 skill 与 Mavis 内置同名 / 同主题 skill 的关系是**方法论共存**而非"内置覆盖"。Matt 版侧重原则与风格（双轴审稿、交接文档），Mavis 内置版侧重执行（独立验证子 Agent、`task` 工具委派）。两者并不互斥，建议**全量安装 + 必要时加前缀避让**。
+- **omo** 用 Claude Code 风格 slash command + 工具栈（`/debugging` / `/review-work` / `/ulw-research` / `/handoff` 等），对 5 个备用的覆盖判断是**功能层覆盖**——omo 自带等价能力，Matt 版是"方法论替代品"。
+- **Mavis** 用 skill 工具栈（`code-review` skill / `deep-research` skill / `task` 工具 + `orchestration` skill），对 5 个备用的覆盖判断是**主题共存**——Matt 版与内置版侧重点不同，建议全量共存。
+
+pi / senpi / mimocode 的覆盖未在本机验证，不预设 skip，由 §4 流程逐项询问用户。
+
+### 3.1 omo 内置覆盖（omo 装机时按本表 skip）
+
+| Matt skill | omo 内置对应 | 装机策略 |
+| --- | --- | --- |
+| `diagnosing-bugs` | `/debugging`（内置调试工作流） | 装 omo → **不装**；装其它 Agent → 可选 |
+| `code-review` | `/review-work`（内置评审编排） | 装 omo → **不装**；装其它 Agent → 可选 |
+| `research` | `/ulw-research`（内置深度研究） | 装 omo → **不装**；装其它 Agent → 可选 |
+| `handoff` | `/handoff`（内置交接摘要） | 装 omo → **不装**；装其它 Agent → 可选 |
+| `ask-matt` | （omo 无内置路由对应） | 装 omo → **不装**；仅供其它 Agent 下载，按用户决定保留 |
+
+### 3.2 Mavis 内置覆盖（Mavis 装机时按本表加 mattpocock- 前缀）
+
+> Matt 原版与 Mavis 内置版侧重不同（Matt 版 = 双轴审稿 / 交接文档方法论；Mavis 内置版 = 独立验证子 Agent / `task` 工具委派）。两者并不互斥，建议**全量安装 + 加前缀避让**。
 
 | Matt skill | Mavis 内置对应 | 装机策略 |
 | --- | --- | --- |
@@ -77,8 +94,9 @@ omo / Mavis（`mcode`）同源，内置覆盖判断一致。本节以 Mavis 为�
 
 **结论**：
 
-- **装到 omo / Mavis → 默认 25 个全量 + 3 个加 `mattpocock-` 前缀避让**（`code-review` / `research` / `handoff` 三个会与目标 Agent 内置撞名，复制命令见 §5 各 Agent 章节）。
-- **装到 pi / senpi / mimocode → 默认 25 个全量可选**。这些 Agent 的内置覆盖未在本机验证，不预设 skip；是否需要前缀避让由 §4 步骤 2 现场对比能力表后逐项询问用户。
+- **装到 omo → 默认只装 20 个采纳 skill**（§2 表里除 §3.1 中 5 行外的全部）。
+- **装到 Mavis → 默认 25 个全量 + 3 个加 `mattpocock-` 前缀避让**（`code-review` / `research` / `handoff` 三个会与 Mavis 内置撞名，复制命令见 §5 各 Agent 章节）。
+- **装到 pi / senpi / mimocode → 默认 25 个全量可选**。是否需要前缀避让由 §4 步骤 2 现场对比能力表后逐项询问用户。
 
 ---
 
@@ -88,7 +106,7 @@ omo / Mavis（`mcode`）同源，内置覆盖判断一致。本节以 Mavis 为�
 
 进入对话后第一句话必须包含以下要点（不写「自动执行破坏性操作」措辞）：
 
-> 「请问本次要把 Matt 这 25 个 skill 装到哪个 Agent？可选：omo / pi / senpi / Mavis / Xiaomi mimocode。装到 omo / Mavis 时 25 个全量 + 3 个加 `mattpocock-` 前缀避让；装到其它 Agent 时 25 个全量可选，由你逐项确认。」
+> 「请问本次要把 Matt 这 25 个 skill 装到哪个 Agent？可选：omo / pi / senpi / Mavis / Xiaomi mimocode。装到 omo 时默认 20 个采纳 skill（按 §3.1 skip 5 个内置覆盖的）；装到 Mavis 时 25 全量 + 3 个加 `mattpocock-` 前缀避让；装到其它 Agent 时 25 个全量可选，由你逐项确认。」
 
 收到明确答复（必须是 5 个之一）后才进入步骤 1；未明确前不复制任何文件。
 
@@ -142,9 +160,12 @@ cp -r skills/<bucket>/<name> <目标skill目录>/
 已为 <Agent> 复制 <N> 个 skill 到 <目录>：
   - engineering/<name1> → 追问对齐（带文档背景）
   - productivity/<name2> → 追问对齐（开放反问）
-  - engineering/code-review → 改名 mattpocock-code-review（与 Agent 内置撞名，按 §3 加前缀避让）
-  - engineering/research → 改名 mattpocock-research（同上）
-  - productivity/handoff → 改名 mattpocock-handoff（同上）
+跳过 <M> 个：
+  - engineering/ask-matt（omo 无内置路由对应，按 §3.1 暂不入 omo；其它 Agent 时已询问用户决定）
+  - engineering/diagnosing-bugs（omo 内置 /debugging 覆盖，按 §3.1 skip）
+  - engineering/code-review（omo 内置 /review-work 覆盖，按 §3.1 skip；Mavis 装机时改名 mattpocock-code-review 共存）
+  - engineering/research（omo 内置 /ulw-research 覆盖，按 §3.1 skip；Mavis 装机时改名 mattpocock-research 共存）
+  - productivity/handoff（omo 内置 /handoff 覆盖，按 §3.1 skip；Mavis 装机时改名 mattpocock-handoff 共存）
 ```
 
 若用户在 §4 步骤 2 显式排除某些 skill，则一并写入"跳过 <M> 个"段。
@@ -171,45 +192,39 @@ cp -r skills/<bucket>/<name> <目标skill目录>/
 
 **目录**：`~/.config/opencode/skills/` 与 `~/.agents/skills/`（任选其一即可，建议主目录 `~/.config/opencode/skills/`）。
 
-**装机策略**：默认 25 个全量 + 3 个加 `mattpocock-` 前缀避让（与 Mavis 同源，覆盖判断一致，见 §3）。
+**装机策略**：默认只装 20 个采纳 skill，跳过 §3.1 中 omo 内置覆盖的 5 个（`diagnosing-bugs` / `code-review` / `research` / `handoff` / `ask-matt`）。
 
-**复制示例**（一次性复制 25 个，3 个加前缀）：
+**复制示例**（一次性复制 20 个）：
 
 ```bash
 TARGET=~/.config/opencode/skills/
 
-# 18 个 engineering（含 2 个加 mattpocock- 前缀避让：code-review / research）
+# 13 个 engineering（不含 ask-matt / diagnosing-bugs / code-review / research）
 for s in \
-  ask-matt codebase-design diagnosing-bugs domain-modeling \
-  grill-with-docs implement improve-codebase-architecture \
+  codebase-design domain-modeling grill-with-docs \
+  implement improve-codebase-architecture \
   prototype resolving-merge-conflicts \
   setup-matt-pocock-skills tdd to-spec to-tickets triage \
   wayfinder wizard; do
   cp -r skills/engineering/$s "$TARGET/"
 done
 
-# 加前缀的 2 个 engineering skill（与 omo 内置撞名）
-for src in code-review research; do
-  dst="mattpocock-$src"
-  cp -r "skills/engineering/$src" "$TARGET/$dst"
-done
-
-# 7 个 productivity（含 1 个加 mattpocock- 前缀避让：handoff）
+# 7 个 productivity（不含 handoff）
 for s in \
   grill-me grilling teach to-questionnaire \
   wait-what writing-for-agents; do
   cp -r skills/productivity/$s "$TARGET/"
 done
-
-cp -r skills/productivity/handoff "$TARGET/mattpocock-handoff"
 ```
 
 **复制完成标志**：
 
 ```bash
-ls -1 ~/.config/opencode/skills/ | wc -l   # 期望 ≥ 25（取决于已存在的 skill 数）
-ls -1 ~/.config/opencode/skills/ | grep '^mattpocock-'   # 期望 3 个
+ls -1 ~/.config/opencode/skills/ | wc -l   # 期望 ≥ 20（取决于已存在的 skill 数）
+ls -1 ~/.config/opencode/skills/ | grep '^mattpocock-'   # 期望 0 个（omo 不加前缀）
 ```
+
+**omo 内置覆盖的 5 个 skill 不复制**：见 §3.1。
 
 ---
 
@@ -297,7 +312,7 @@ ls -1 ~/.senpi/agent/skills/ | wc -l   # 期望 ≥ 25
 
 > 若用户的 Mavis 安装使用了非默认路径（少数自部署 / 容器场景），按 §4 步骤 1 的 `ls` 探查代替。
 
-**装机策略**：默认 25 个全量 + 3 个加 `mattpocock-` 前缀避让（与 omo 同源，见 §3）。
+**装机策略**：默认 25 个全量 + 3 个加 `mattpocock-` 前缀避让（覆盖判断见 §3.2）。
 
 **复制示例**（一次性复制 25 个，3 个加前缀）：
 

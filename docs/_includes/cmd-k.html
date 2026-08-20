@@ -1,0 +1,30 @@
+<div id="cmd-k" class="cmd-k" role="dialog" aria-modal="true" aria-labelledby="cmd-k-title" aria-hidden="true" tabindex="-1">
+  <div class="cmd-k-overlay" data-cmd-k-close aria-hidden="true"></div>
+
+  <div id="cmd-k-panel" class="cmd-k-panel" role="document">
+    <header class="cmd-k-head">
+      <h2 id="cmd-k-title" class="visually-hidden mono">Command palette</h2>
+      <span class="cmd-k-prompt mono muted" aria-hidden="true">&rsaquo;</span>
+      <input id="cmd-k-input"
+             type="search"
+             class="cmd-k-input mono"
+             placeholder="搜索 skill / 命令 / 章节&hellip;"
+             autocomplete="off"
+             spellcheck="false"
+             autocapitalize="off"
+             autocorrect="off"
+             aria-label="Search skills, commands and sections"
+             aria-controls="cmd-k-results"
+             aria-autocomplete="list">
+      <button type="button" class="cmd-k-close mono" data-cmd-k-close aria-label="Close command palette">&times;</button>
+    </header>
+
+    <ul id="cmd-k-results" class="cmd-k-results" role="listbox" aria-label="Search results"></ul>
+
+    <footer class="cmd-k-foot mono muted" aria-hidden="true">
+      <span class="cmd-k-hint"><kbd class="kbd-hint">&uarr;</kbd><kbd class="kbd-hint">&darr;</kbd> navigate</span>
+      <span class="cmd-k-hint"><kbd class="kbd-hint">&crarr;</kbd> select</span>
+      <span class="cmd-k-hint"><kbd class="kbd-hint">esc</kbd> close</span>
+    </footer>
+  </div>
+</div>

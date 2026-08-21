@@ -231,12 +231,16 @@ section:last-child { margin-bottom: 0; }
 @media (max-width: $bp-md) {
   .nav-toggle { display: inline-flex; }
 
-  // primary-nav becomes off-canvas drawer
+  // primary-nav becomes off-canvas drawer.
+  // Use explicit height: 100vh instead of top/bottom because the parent
+  // .site-header has `backdrop-filter`, which establishes a new containing
+  // block — fixed children would otherwise size to the ~50px header
+  // instead of the viewport.
   .primary-nav {
     position: fixed;
     top: 0;
     left: 0;
-    bottom: 0;
+    height: 100vh;
     width: min(280px, 80vw);
     background: $bg;
     border-right: 1px solid $line;

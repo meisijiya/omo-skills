@@ -51,9 +51,9 @@ description: >-
         <span class="mono" style="color: var(--muted);">~/omo-skills</span>
       </div>
 <pre class="term-body mono"><span class="c"># 复制单个 skill（engineering bucket）</span>
-{% raw %}<span class="cmd">$</span> cp -r skills/engineering/{{ skill_name }} <目标skill目录>/{% endraw %}
+{% raw %}<span class="cmd">$</span> cp -r skills/engineering/{{ skill_name }} &lt;目标skill目录&gt;/{% endraw %}
 <span class="c"># 复制单个 skill（productivity bucket）</span>
-{% raw %}<span class="cmd">$</span> cp -r skills/productivity/{{ skill_name }} <目标skill目录>/{% endraw %}</pre>
+{% raw %}<span class="cmd">$</span> cp -r skills/productivity/{{ skill_name }} &lt;目标skill目录&gt;/{% endraw %}</pre>
     </div>
     <p>默认 12 个全量安装，也可用脚本一把装齐：</p>
     <div class="terminal">

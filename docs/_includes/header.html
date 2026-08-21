@@ -1,8 +1,17 @@
 <header class="site-header" role="banner">
   <div class="wrap nav-row">
+    <button type="button" class="nav-toggle" data-nav-toggle
+      aria-label="Open navigation menu" aria-controls="primary-nav" aria-expanded="false">
+      <span class="nav-toggle-icon" aria-hidden="true">☰</span>
+    </button>
+
     <a href="{{ '/' | relative_url }}" class="brand mono accent" aria-label="omo-skills — home">omo-skills</a>
 
-    <nav class="primary-nav" aria-label="Primary">
+    <nav id="primary-nav" class="primary-nav" aria-label="Primary">
+      <button type="button" class="nav-close" data-nav-toggle
+        aria-label="Close navigation menu" aria-expanded="false">
+        <span aria-hidden="true">×</span>
+      </button>
       <ul class="nav-list">
         <li>
           <a href="{{ '/skills/' | relative_url }}"{% if page.url == '/skills/' %} class="active"{% endif %}>Skills</a>
@@ -27,4 +36,5 @@
       <kbd class="kbd-hint" aria-hidden="true">⌘K</kbd>
     </button>
   </div>
+  <div class="nav-overlay" data-nav-toggle aria-hidden="true"></div>
 </header>

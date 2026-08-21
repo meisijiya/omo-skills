@@ -6,13 +6,16 @@ baseurl: "/omo-skills"
 url: "https://meisijiya.github.io"
 markdown: kramdown
 highlighter: rouge
-# 自定义主题：不依赖 minima，使用仓库自带 _sass + _layouts
-theme: null
+# Jekyll 3.10 (GH Pages) requires a theme to drive sass processing.
+# Default minima is used; our assets/css/main.scss overrides minima's
+# main.scss entirely (minima-overrides.scss resets all the variables
+# and re-defines every selector). Theme layouts are ignored — we ship
+# our own _layouts/default.html.
 plugins:
   - jekyll-feed
 sass:
   style: compressed
-  # 支持 @use 模块化导入（Jekyll 3.10 / sassc）
+  # libsass-compatible load paths; @import resolves partials from _sass/.
   load_paths:
     - _sass
 exclude:
@@ -22,4 +25,7 @@ exclude:
   - .sass-cache
   - _site
   - vendor
+  - README.md
+  - INSTALL.md
+  - MAINTENANCE.md
 permalink: pretty

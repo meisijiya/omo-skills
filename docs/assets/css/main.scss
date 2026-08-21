@@ -2,10 +2,15 @@
 // main.scss — single entry imported by Jekyll layouts.
 // Order: variables -> layout -> components -> syntax -> minima overrides.
 // `minima-overrides` must come last so it wins specificity ties.
+//
+// NOTE: GitHub Pages uses Jekyll 3.10 + sassc (libsass), which does NOT
+// support the modern `@use` module syntax. We use legacy `@import` for
+// libsass compatibility — variables/mixins are global, which is what
+// we want here (no namespace needed across our 5 partials).
 // =====================================================================
 
-@use 'variables';
-@use 'layout';
-@use 'components';
-@use 'syntax';
-@use 'minima-overrides' as *;
+@import 'variables';
+@import 'layout';
+@import 'components';
+@import 'syntax';
+@import 'minima-overrides';

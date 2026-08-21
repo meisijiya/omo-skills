@@ -3,7 +3,7 @@
 // Targets the `<pre class="highlight"><code>` block Jekyll emits from
 // {% highlight %} Liquid tags. Color tokens reused from _variables.
 // =====================================================================
-@use 'variables' as *;
+@import 'variables';
 
 .highlight {
   background: $surface;

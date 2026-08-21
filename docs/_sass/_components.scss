@@ -1,9 +1,10 @@
 // =====================================================================
 // _components.scss — building blocks. Variant A: 2px corners, mono UI,
-// CTA inverts on hover, scanline 0.045. Tokens via @use 'variables'.
+// CTA inverts on hover, scanline 0.045. Tokens + mixins via @import
+// (libsass-compatible; GH Pages uses sassc which does not support @use).
 // =====================================================================
-@use 'variables' as *;
-@use 'layout' as *;
+@import 'variables';
+@import 'layout';
 
 // ---------- helpers ----------
 .mono { font-family: $font-mono; font-feature-settings: "ss01", "calt"; }

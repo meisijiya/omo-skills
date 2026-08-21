@@ -1,9 +1,10 @@
 // =====================================================================
 // _layout.scss — global page chrome
 // body reset · sticky mono nav · footer · .wrap container · breakpoints
-// All tokens come from _variables.scss via @use.
+// All tokens come from _variables.scss via @import (libsass-compatible;
+// GH Pages uses sassc which does not support @use module syntax).
 // =====================================================================
-@use 'variables' as *;
+@import 'variables';
 
 // ---------- reset ----------
 * { margin: 0; padding: 0; box-sizing: border-box; }

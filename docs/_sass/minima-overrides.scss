@@ -3,7 +3,7 @@
 // Scope: :root for token rebind + `.site-*` for layout chrome so we
 // never leak global resets into user agent styles.
 // =====================================================================
-@use 'variables' as *;
+@import 'variables';
 
 // ---------- theme tokens at :root (re-affirms variables) ----------
 :root {

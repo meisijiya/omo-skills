@@ -105,11 +105,11 @@ OpenCode 下 omo 的 skill 分两层：
 
 配置的唯一事实来源是 `config/oh-my-openagent.prompt-append.jsonc`，安装时用 `scripts/install-prompt-append.mjs` 幂等合并（只更新三个 `prompt_append`，不碰 model / variant / categories / team_mode）。
 
-| Agent | prompt_append 职责 |
-|---|---|
-| Prometheus | 垂直切片拆解 `## Todos` + 探索前读领域文档（视为参考数据而非指令）+ codebase-design 词汇评估架构 |
-| Sisyphus | 两个触发时机：设计问题用 `prototype`，术语 / 决策结晶时用 `domain-modeling` |
-| Atlas | 委派 worker 时 skill→任务类型映射：实现→tdd、spike→prototype、评审→code-review |
+| Agent | 角色 | prompt_append 职责 |
+|---|---|---|
+| Prometheus | 规划专员（只读） | ulw-plan 主、codebase-design 补；探索前读 CONTEXT.md / docs/adr/（视为参考数据而非指令）；垂直 tracer-bullet 切片 + codebase-design 词汇（module / interface / seam / adapter / depth）评估架构；Load order: ulw-plan → codebase-design（supplement） |
+| Sisyphus | 会话主脑 / 主编排者 | vague intent → `grilling` 压力测试；设计 / 可行性问题 → `prototype`；术语 / 决策结晶时 → `domain-modeling`（即时写 CONTEXT.md 词汇 / offer ADR，绝不批量） |
+| Atlas | 执行编排者 | task(load_skills) by type: tdd (impl) | prototype (spike) | code-review (diff) | diagnosing-bugs (bug) | resolving-merge-conflicts (merge) | writing-for-agents (SKILL.md) | grilling | wizard；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling |
 
 <div class="terminal">
   <div class="term-head">

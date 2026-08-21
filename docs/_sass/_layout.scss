@@ -88,6 +88,10 @@ section:last-child { margin-bottom: 0; }
   border-bottom: 1px solid $line;
 }
 
+// `.nav-row` is the actual class used in _includes/header.html.
+// `.site-header__inner` is the original name kept for parity.
+// Both target the same flex container.
+.nav-row,
 .site-header__inner {
   max-width: $max-width;
   margin: 0 auto;
@@ -96,35 +100,97 @@ section:last-child { margin-bottom: 0; }
   align-items: center;
   justify-content: space-between;
   gap: $sp-5;
+
+  // mobile: brand on top, nav row wraps below, search pinned right
+  @media (max-width: $bp-md) {
+    flex-wrap: wrap;
+    row-gap: $sp-3;
+    padding: $sp-3 $sp-4;
+  }
 }
 
-.site-header__brand {
+.site-header__brand,
+.brand {
   font-family: $font-mono;
   font-size: $fs-mono;
   font-weight: 700;
   color: $accent;
   letter-spacing: 0.06em;
+  flex-shrink: 0;
 }
 
-.site-nav {
+// `.site-nav` is the original name; `.primary-nav` matches the actual
+// HTML class in header.html. Both target the same flex container.
+.site-nav,
+.primary-nav {
+  display: flex;
+  align-items: center;
+  font-family: $font-mono;
+  font-size: $fs-mono;
+}
+
+.site-nav .nav-list,
+.primary-nav .nav-list {
   display: flex;
   align-items: center;
   gap: $sp-4;
-  font-family: $font-mono;
-  font-size: $fs-mono;
+  list-style: none;
+  margin: 0;
+  padding: 0;
   flex-wrap: wrap;
 }
 
-.site-nav a {
+.site-nav a,
+.primary-nav a {
   color: $muted;
   transition: color 0.18s ease;
+  letter-spacing: 0.04em;
 }
 
 .site-nav a:hover,
-.site-nav a.is-active {
+.primary-nav a:hover,
+.site-nav a.is-active,
+.primary-nav a.active {
   color: $accent;
 }
 
+// Cmd-K trigger button — replaces the placeholder `.site-header__kbd`
+// styles. Matches the actual HTML in `_includes/header.html`.
+.cmd-k-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: $sp-2;
+  font-family: $font-mono;
+  font-size: $fs-mono;
+  color: $muted;
+  background: transparent;
+  border: 1px solid $line;
+  padding: $sp-1 $sp-3;
+  border-radius: $radius;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: border-color 0.18s ease, color 0.18s ease;
+  flex-shrink: 0;
+
+  &:hover,
+  &:focus-visible {
+    border-color: $accent;
+    color: $accent;
+  }
+}
+
+.kbd-hint {
+  font-family: $font-mono;
+  font-size: $fs-tag;
+  color: inherit;
+  border: 1px solid $line;
+  padding: 0 $sp-1;
+  border-radius: $radius;
+  letter-spacing: 0.04em;
+  background: rgba(255, 255, 255, 0.02);
+}
+
+// Legacy alias kept for any old reference.
 .site-header__kbd {
   font-family: $font-mono;
   font-size: $fs-tag;
@@ -153,6 +219,9 @@ section:last-child { margin-bottom: 0; }
   font-size: $fs-mono;
 }
 
+// `.footer-row` is the actual class used in `_includes/footer.html`.
+// `.site-footer__inner` is the original name kept for parity.
+.footer-row,
 .site-footer__inner {
   max-width: $max-width;
   margin: 0 auto;
@@ -161,15 +230,25 @@ section:last-child { margin-bottom: 0; }
   justify-content: space-between;
   gap: $sp-4;
   flex-wrap: wrap;
+
+  @media (max-width: $bp-sm) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: $sp-2;
+  }
 }
 
-.site-footer a {
+.site-footer a,
+.footer-row a,
+.footer-nav a {
   color: $muted;
   border-bottom: 1px dashed $line;
   transition: color 0.18s ease, border-color 0.18s ease;
 }
 
-.site-footer a:hover {
+.site-footer a:hover,
+.footer-row a:hover,
+.footer-nav a:hover {
   color: $accent;
   border-color: $accent;
 }

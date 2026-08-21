@@ -67,8 +67,12 @@
 .site-footer .footer-heading { color: $muted; }
 
 // ---------- links ----------
-:root a, :root a:visited { color: $accent; text-decoration: none; }
-:root a:hover { color: $fg; border-bottom: 1px solid $accent; }
+// Scoped to main content so it does NOT override button color rules
+// (e.g. .btn-primary needs color: $bg, not $accent). Specificity 0,1,2
+// beats `:root a` from older Jekyll minima defaults but loses to
+// `a.btn-primary` declared later in _components.scss.
+main a, main a:visited { color: $accent; text-decoration: none; }
+main a:hover { color: $fg; border-bottom: 1px solid $accent; }
 
 // ---------- post / page body content ----------
 .page-content { background: transparent; }

@@ -45,6 +45,10 @@
   cursor: pointer; transition: all 0.18s ease; white-space: nowrap;
   background: transparent; color: $fg;
 }
+// `a.btn-primary` specificity (0,1,1) beats `:root a` (0,1,1) by source
+// order — and beats `:root main a` (0,1,2) by being declared later in
+// the cascade. Keeps btn text dark-on-amber.
+a.btn-primary,
 .btn-primary { background: $accent; color: $bg; border-color: $accent; }
 // Variant A signature: CTA inverts on hover (fill -> transparent)
 .btn-primary:hover { background: transparent; color: $accent; border-color: $accent; }
@@ -218,4 +222,87 @@
 .relay-card .num small {
   font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
   color: $muted; font-weight: 600;
+}
+
+// ---------- steps (numbered install guide list) ----------
+.steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: $sp-6;
+  counter-reset: step;
+}
+.steps > li {
+  position: relative;
+  padding: $sp-5;
+  background: $surface;
+  border: 1px solid $line;
+  border-radius: $radius;
+  counter-increment: step;
+  transition: border-color 0.18s ease;
+}
+.steps > li:hover { border-color: $accent; }
+.steps .num {
+  font-family: $font-mono;
+  font-size: 22px;
+  font-weight: 800;
+  line-height: 1;
+  color: $accent;
+  display: block;
+  margin-bottom: $sp-3;
+}
+.steps h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0 0 $sp-3;
+  color: $fg;
+}
+.steps p { margin-bottom: $sp-3; color: $fg; line-height: 1.65; }
+.steps p:last-child { margin-bottom: 0; }
+.steps blockquote {
+  margin: $sp-3 0;
+  padding: $sp-3 $sp-4;
+  border-left: 2px solid $accent;
+  color: $muted;
+  background: rgba(255, 255, 255, 0.02);
+}
+.steps code {
+  font-family: $font-mono;
+  font-size: 12.5px;
+  background: $bg;
+  color: $accent-2;
+  border: 1px solid $line;
+  padding: 1px 6px;
+  border-radius: $radius;
+}
+.steps > li > .terminal { margin: $sp-3 0; }
+
+// ---------- tables (mobile overflow + general styling) ----------
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: $font-mono;
+  font-size: $fs-mono;
+  display: block;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+table thead,
+table tbody { display: table; width: 100%; }
+table th, table td {
+  border: 1px solid $line;
+  padding: $sp-2 $sp-3;
+  text-align: left;
+  vertical-align: top;
+}
+table th { background: $surface; color: $accent; font-weight: 700; letter-spacing: 0.04em; }
+table tr:nth-child(even) td { background: rgba(255, 255, 255, 0.02); }
+
+// wrap long <pre> blocks horizontally on mobile
+pre {
+  white-space: pre;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
 }

@@ -192,9 +192,12 @@ section:last-child { margin-bottom: 0; }
 }
 
 // ---------- mobile nav drawer ----------
-// Hamburger button is hidden on desktop; primary-nav becomes a fixed
-// off-canvas drawer on mobile (<=720px). On desktop the existing flex
-// inline nav is unchanged.
+// The drawer is a separate `<div id="nav-drawer">` that lives OUTSIDE the
+// header. We do this on purpose: the sticky header has `backdrop-filter`
+// which establishes a new positioning context for position:fixed
+// descendants, which would size the drawer to the 50px header height.
+// JS (drawer.js) clones the inline nav-list into #nav-drawer-list on
+// init, and mirrors the .active class so current-page highlight works.
 .nav-toggle {
   display: none;
   align-items: center;
@@ -215,85 +218,81 @@ section:last-child { margin-bottom: 0; }
 }
 .nav-toggle-icon { font-family: $font-mono; }
 
+.nav-drawer {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: min(280px, 80vw);
+  height: 100vh;
+  background: $bg;
+  border-right: 1px solid $line;
+  padding: $sp-5;
+  transform: translateX(-100%);
+  transition: transform 0.24s ease;
+  z-index: 60;
+  overflow-y: auto;
+  flex-direction: column;
+  align-items: stretch;
+  &.is-open {
+    display: flex;
+    transform: translateX(0);
+  }
+}
+
 .nav-overlay {
   display: none;
   position: fixed;
   inset: 0;
   background: rgba(14, 13, 8, 0.6);
-  z-index: 49;
+  z-index: 59;
   &.is-open { display: block; }
 }
 
 .nav-close {
-  display: none; // mobile-only
+  display: inline-flex;
+  align-self: flex-end;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  margin-bottom: $sp-4;
+  background: transparent;
+  border: 1px solid $line;
+  color: $muted;
+  font-size: 18px;
+  line-height: 1;
+  cursor: pointer;
+  border-radius: $radius;
+  padding: 0;
+  transition: color 0.18s ease, border-color 0.18s ease;
+  &:hover, &:focus-visible { color: $accent; border-color: $accent; }
+}
+
+.nav-drawer .nav-list {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: 0;
+}
+
+.nav-drawer .nav-list li {
+  border-bottom: 1px solid $line;
+  list-style: none;
+}
+
+.nav-drawer .nav-list a {
+  display: block;
+  padding: $sp-3 0;
+  font-size: 14px;
+  font-family: $font-mono;
+  color: $muted;
+  &:hover, &.active { color: $accent; }
 }
 
 @media (max-width: $bp-md) {
   .nav-toggle { display: inline-flex; }
-
-  // primary-nav becomes off-canvas drawer.
-  // Use explicit height: 100vh instead of top/bottom because the parent
-  // .site-header has `backdrop-filter`, which establishes a new containing
-  // block — fixed children would otherwise size to the ~50px header
-  // instead of the viewport.
-  .primary-nav {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: min(280px, 80vw);
-    background: $bg;
-    border-right: 1px solid $line;
-    padding: $sp-5;
-    transform: translateX(-100%);
-    transition: transform 0.24s ease;
-    z-index: 60;
-    overflow-y: auto;
-    flex-direction: column;
-    align-items: stretch;
-    &.is-open { transform: translateX(0); }
-  }
-
-  .nav-close {
-    display: inline-flex;
-    align-self: flex-end;
-    align-items: center;
-    justify-content: center;
-    width: 32px;
-    height: 32px;
-    margin-bottom: $sp-4;
-    background: transparent;
-    border: 1px solid $line;
-    color: $muted;
-    font-size: 18px;
-    line-height: 1;
-    cursor: pointer;
-    border-radius: $radius;
-    padding: 0;
-    transition: color 0.18s ease, border-color 0.18s ease;
-    &:hover, &:focus-visible { color: $accent; border-color: $accent; }
-  }
-
-  .primary-nav .nav-list {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 0;
-    padding: 0;
-  }
-
-  .primary-nav .nav-list li {
-    border-bottom: 1px solid $line;
-    list-style: none;
-  }
-
-  .primary-nav .nav-list a {
-    display: block;
-    padding: $sp-3 0;
-    font-size: 14px;
-    font-family: $font-mono;
-    color: $muted;
-    &:hover, &.active { color: $accent; }
-  }
 }
 
 body.nav-open { overflow: hidden; }

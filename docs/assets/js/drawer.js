@@ -1,48 +1,59 @@
 // =====================================================================
 // drawer.js — mobile nav off-canvas drawer.
-// Toggle via [data-nav-toggle] (hamburger, X button, overlay); ESC closes;
-// link click closes; resize past 720px auto-closes. Vanilla JS, no deps.
+//
+// Architecture: the drawer is a separate <div id="nav-drawer"> outside
+// the header (escapes the backdrop-filter containing block). On load we
+// clone the inline <ul.nav-list> from #primary-nav into #nav-drawer-list,
+// and mirror aria-expanded across all [data-nav-toggle] buttons.
+// Vanilla JS IIFE, no deps.
 // =====================================================================
 
 (function () {
   'use strict';
 
-  var nav = document.getElementById('primary-nav');
-  if (!nav) return;
+  var drawer = document.getElementById('nav-drawer');
+  var drawerList = document.getElementById('nav-drawer-list');
+  var inlineNav = document.getElementById('primary-nav');
+  var inlineList = inlineNav ? inlineNav.querySelector('.nav-list') : null;
   var overlay = document.querySelector('.nav-overlay');
   var toggles = Array.prototype.slice.call(
     document.querySelectorAll('[data-nav-toggle]')
   );
 
+  if (!drawer || !drawerList) return;
+
+  // Clone nav-list into drawer so we don't duplicate HTML in markup
+  if (inlineList) {
+    drawerList.innerHTML = inlineList.innerHTML;
+  }
+
   function isOpen() {
-    return nav.classList.contains('is-open');
+    return drawer.classList.contains('is-open');
   }
 
   function focusables() {
-    return nav.querySelectorAll(
+    return drawer.querySelectorAll(
       'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])'
     );
   }
 
   function setOpen(open) {
     if (open) {
-      nav.classList.add('is-open');
+      drawer.classList.add('is-open');
       if (overlay) overlay.classList.add('is-open');
       document.body.classList.add('nav-open');
       toggles.forEach(function (el) {
         el.setAttribute('aria-expanded', 'true');
       });
-      // focus first interactive element inside drawer
       var f = focusables()[0];
       if (f) f.focus();
     } else {
-      nav.classList.remove('is-open');
+      drawer.classList.remove('is-open');
       if (overlay) overlay.classList.remove('is-open');
       document.body.classList.remove('nav-open');
       toggles.forEach(function (el) {
         el.setAttribute('aria-expanded', 'false');
       });
-      // return focus to the hamburger (or any visible toggle)
       var hb = toggles.find(function (el) {
         return el.classList.contains('nav-toggle');
       });
@@ -60,8 +71,8 @@
     });
   });
 
-  // Close when any nav link is activated
-  nav.querySelectorAll('a').forEach(function (a) {
+  // Close when any drawer link is activated
+  drawer.querySelectorAll('a').forEach(function (a) {
     a.addEventListener('click', function () {
       if (isOpen()) setOpen(false);
     });
@@ -74,12 +85,12 @@
     }
   });
 
-  // Click outside (overlay handled by toggle listener; this guards
-  // against overlay missing on some pages)
+  // Click outside drawer
   document.addEventListener('click', function (e) {
     if (!isOpen()) return;
-    if (nav.contains(e.target)) return;
+    if (drawer.contains(e.target)) return;
     if (toggles.some(function (el) { return el.contains(e.target); })) return;
+    if (overlay && overlay.contains(e.target)) return;
     setOpen(false);
   });
 

@@ -8,10 +8,6 @@
     <a href="{{ '/' | relative_url }}" class="brand mono accent" aria-label="omo-skills — home">omo-skills</a>
 
     <nav id="primary-nav" class="primary-nav" aria-label="Primary">
-      <button type="button" class="nav-close" data-nav-toggle
-        aria-label="Close navigation menu" aria-expanded="false">
-        <span aria-hidden="true">×</span>
-      </button>
       <ul class="nav-list">
         <li>
           <a href="{{ '/skills/' | relative_url }}"{% if page.url == '/skills/' %} class="active"{% endif %}>Skills</a>
@@ -36,5 +32,15 @@
       <kbd class="kbd-hint" aria-hidden="true">⌘K</kbd>
     </button>
   </div>
-  <div class="nav-overlay" data-nav-toggle aria-hidden="true"></div>
 </header>
+
+<!-- Mobile drawer lives outside the header to escape the backdrop-filter
+     containing block (parent .site-header has backdrop-filter:blur, which
+     establishes a new positioning context for fixed descendants). -->
+<div id="nav-drawer" class="nav-drawer" aria-label="Mobile navigation">
+  <button type="button" class="nav-close" data-nav-toggle aria-label="Close navigation menu">
+    <span aria-hidden="true">×</span>
+  </button>
+  <ul class="nav-list" id="nav-drawer-list"></ul>
+</div>
+<div class="nav-overlay" data-nav-toggle aria-hidden="true"></div>

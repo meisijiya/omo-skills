@@ -1,0 +1,18 @@
+// =====================================================================
+// _sass/minima.scss — override of minima theme's main scss entry.
+//
+// Jekyll 3.10 + minima theme processes this file and outputs to
+// assets/css/style.css. Placing this file in our _sass/ directory
+// overrides minima's own _sass/minima.scss, so we ship our own styles.
+//
+// Import order: variables -> layout -> components -> syntax -> minima-overrides.
+// `minima-overrides` last so it wins specificity ties vs any leaked minima
+// selectors. NOTE: GH Pages uses sassc/libsass, which does not support
+// the modern `@use` module syntax. We use legacy `@import`.
+// =====================================================================
+
+@import 'variables';
+@import 'layout';
+@import 'components';
+@import 'syntax';
+@import 'minima-overrides';

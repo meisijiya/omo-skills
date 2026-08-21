@@ -1,0 +1,11 @@
+// =====================================================================
+// _mixins.scss — responsive breakpoint mixins.
+// Extracted from _layout.scss so _components.scss can use them without
+// double-importing _layout.scss (libsass @import emits each imported
+// file's rules each time — causes cascade order bugs).
+// =====================================================================
+
+@mixin sm-down { @media (max-width: 480px) { @content; } }
+@mixin md-down { @media (max-width: 720px) { @content; } }
+@mixin lg-down { @media (max-width: 860px) { @content; } }
+@mixin xl-down { @media (max-width: 1180px) { @content; } }

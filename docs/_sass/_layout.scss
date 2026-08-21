@@ -5,6 +5,7 @@
 // GH Pages uses sassc which does not support @use module syntax).
 // =====================================================================
 @import 'variables';
+@import 'mixins';
 
 // ---------- reset ----------
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -253,8 +254,4 @@ section:last-child { margin-bottom: 0; }
   border-color: $accent;
 }
 
-// ---------- responsive breakpoints ----------
-@mixin sm-down { @media (max-width: $bp-sm) { @content; } }
-@mixin md-down { @media (max-width: $bp-md) { @content; } }
-@mixin lg-down { @media (max-width: $bp-lg) { @content; } }
-@mixin xl-down { @media (max-width: $bp-xl) { @content; } }
+// ---------- responsive breakpoints (mixins live in _mixins.scss) ----------

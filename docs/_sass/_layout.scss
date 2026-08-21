@@ -64,8 +64,13 @@ p { line-height: 1.65; color: $fg; }
 small, .small { font-size: $fs-tag; color: $muted; }
 
 // ---------- container ----------
+// Fluid width: 720px <= .wrap <= 1280px, prefers 95vw so it scales
+// with desktop window width instead of capping at 1180px and leaving
+// big side whitespace at 1440+/+ resolutions. min(95vw, 1280px) caps
+// the right side so content never overflows the viewport.
 .wrap {
-  max-width: $max-width;
+  width: 100%;
+  max-width: min(95vw, 1280px);
   margin: 0 auto;
   padding: $sp-7 $sp-5 120px;
 
@@ -77,6 +82,44 @@ small, .small { font-size: $fs-tag; color: $muted; }
 // ---------- section spacing ----------
 section { margin-bottom: $section-gap; }
 section:last-child { margin-bottom: 0; }
+
+// ---------- content typography spacing ----------
+// Apply margin to direct children of .wrap only — keeps .steps / .card /
+// .terminal subcomponents in charge of their own inner spacing. Direct
+// child selector avoids polluting nested components.
+.wrap > p {
+  margin-bottom: 1.1em;
+  max-width: 72ch; // readable line length
+}
+.wrap > h2 {
+  margin-top: 1.8em;
+  margin-bottom: 0.7em;
+}
+.wrap > h3 {
+  margin-top: 1.4em;
+  margin-bottom: 0.5em;
+}
+.wrap > ul,
+.wrap > ol {
+  margin-bottom: 1.1em;
+  padding-left: 1.5em;
+}
+.wrap > ul li,
+.wrap > ol li {
+  margin-bottom: 0.5em;
+}
+.wrap > blockquote {
+  margin: 1.2em 0;
+}
+.wrap > pre {
+  margin: 1em 0 1.4em;
+}
+.wrap > hr {
+  margin: 2em 0;
+}
+.wrap > table {
+  margin: 1em 0 1.4em;
+}
 
 // ---------- header (sticky mono nav) ----------
 .site-header {

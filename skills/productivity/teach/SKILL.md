@@ -1,6 +1,6 @@
 ---
 name: teach
-description: User-invoked only — do not invoke automatically. Teach the user (教学) a concept (概念) or an OSS repo / library / framework (仓库), producing interactive lessons inside the user's project. Use on `/teach`, "teach", 概念学习, or 仓库学习.
+description: User-invoked only — do not invoke automatically. Teach the user a concept or an OSS repo / library / framework by producing interactive lessons inside `docs/teach/{concept,repo}/` of the user's project. Use on `/teach`, 'teach', 概念学习, or 仓库学习. NOT for sending a structured questionnaire to a third party (use to-questionnaire) — this skill teaches the user HERE.
 disable-model-invocation: true
 ---
 

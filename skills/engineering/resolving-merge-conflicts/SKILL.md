@@ -1,6 +1,6 @@
 ---
 name: resolving-merge-conflicts
-description: "Use when a git merge or rebase has stopped on a conflict and you need to resolve by intent (see current state → primary sources → hunk-by-hunk → run automated checks → finish). NOT for routine rebase / squash / git-history investigation (that's omo's git-master). Includes rebase conflict playbooks."
+description: "Resolve git merge / rebase conflicts by intent. 按意图解决 git merge / rebase 冲突. Use when: merge/rebase stops on conflict / pull fails with conflicts / rebase needs hunk-by-hunk decision / user says 'help me resolve this conflict' / 'git is fighting me' / git 冲突了 / 帮我解冲突 / rebase 卡住了 / 这冲突什么意思 / git 在跟我打架 / pull 失败. Process: see current state → read primary sources (commits/PRs/issues) → resolve each hunk preserving both intents → run automated checks → finish. Not for routine rebase/squash/git-history (use omo's git-master). Always resolve; never --abort unless asked."
 ---
 
 1. **See the current state** of the merge/rebase. Check git history, and the conflicting files.

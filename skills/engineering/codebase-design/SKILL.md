@@ -1,6 +1,6 @@
 ---
 name: codebase-design
-description: Shared vocabulary for designing deep modules (module / interface / seam / adapter / depth / leverage / locality). Reference vocabulary only — call from tdd / improve-codebase-architecture; for actual codebase scans use improve-codebase-architecture instead of this skill.
+description: Shared deep-modules vocabulary (module / interface / seam / adapter / depth / leverage / locality) used to NAME design tradeoffs in conversation — never a standalone action, never a codebase scan. 深模块设计词汇. Use when: deciding seam placement / judging if a module is too shallow / picking between alternative designs ('design it twice') / 设计一个新模块 / seam 应该放哪 / 这是不是浅模块 / 两种设计怎么选. Called automatically by tdd and improve-codebase-architecture; may be invoked directly during design discussions. NOT for codebase scans (use improve-codebase-architecture), throwaway prototypes (use prototype), writing decisions to docs (use domain-modeling), stress-testing the user (use grilling), or diff review (use code-review).
 ---
 
 # Codebase Design

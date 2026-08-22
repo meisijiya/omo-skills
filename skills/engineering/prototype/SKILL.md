@@ -1,6 +1,6 @@
 ---
 name: prototype
-description: Build a throwaway prototype to answer a design question. Use when the user wants to sanity-check whether a state model or logic feels right, or explore what a UI should look like.
+description: Build a THROWAWAY prototype (single HTML / single route / single module) to answer ONE specific design question — sanity-check a state model, or explore what a UI should look like. Use when: 'what should this look like' / 'does this logic feel right' / 'try it and see' / 想做个原型 / UI 该长啥样 / 这逻辑对吗. NOT for design vocabulary (use codebase-design), diagnosing failures (use diagnosing-bugs), or production code — output is throwaway, never committed to main.
 ---
 
 # Prototype

@@ -1,6 +1,6 @@
 ---
 name: to-questionnaire
-description: User-invoked only — do not invoke automatically. Turn a decision you can't fully answer into a questionnaire (问卷 / 需求问询 / 异步需求收集) for someone else to fill in. Use on `/to-questionnaire` or when the user wants to send a structured async requirement elicitation to a third party.
+description: User-invoked only — do not invoke automatically. Turn a decision you can't fully answer into a questionnaire (问卷 / 异步需求收集) for a THIRD PARTY to fill in. Use on `/to-questionnaire` or when sending structured async requirement elicitation to someone who holds knowledge the user lacks. NOT for asking the user directly in this session (use grilling) — this skill sends questions OUT, grilling asks the user HERE.
 disable-model-invocation: true
 ---
 

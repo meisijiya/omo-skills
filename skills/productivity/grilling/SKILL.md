@@ -1,6 +1,6 @@
 ---
 name: grilling
-description: "Grill the user relentlessly about a plan, decision, or idea to stress-test their thinking. Use when the user wants their plan/design challenged or uses any 'grill' trigger phrase."
+description: "Grill the user relentlessly about a plan, decision, or idea to stress-test their thinking — in this session, with this user. Use when: 'grill me' / 'challenge my plan' / 'stress-test this' / 'poke holes' / their plan/design needs to be questioned before acting / 质疑 / 帮我挑战一下 / 我这个方案对吗 / 是不是想当然了. NOT for sending a structured questionnaire to a third party (use to-questionnaire) — grilling asks the user HERE, to-questionnaire asks someone else."
 ---
 
 Interview the user relentlessly until you reach a shared understanding. Map this as a **design tree**: every decision branches into the decisions that hang off it.

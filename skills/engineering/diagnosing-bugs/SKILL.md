@@ -1,6 +1,6 @@
 ---
 name: diagnosing-bugs
-description: "Diagnosis loop for hard bugs and performance regressions where cause is opaque and a tight feedback loop can be built (failing test, curl, headless browser, replay harness, bisect). For crashes / hangs / attach-debugger / runtime inspection / sourcemap issues, use omo's built-in /debugging instead — that one owns pwndbg/gdb/lldb/dlv/pdb/playwright-cli workflows."
+description: "Diagnosis loop for bugs and performance regressions where the cause isn't obvious. 诊断循环 (bug / 性能回退, 因果不透明). Use when: 'this is broken' / 'I'm seeing X' / 'this used to work' / 'it sometimes fails' / 'why is this slow' / 这有个 bug / 我看到 X 错误 / 之前能跑现在不行 / 偶尔挂 / 怎么这么慢 / 这是性能回退. First step is ALWAYS building a tight feedback loop; if no loop can be built, stop and ask. For crashes / hangs / debugger attach / runtime inspection / sourcemap issues use omo's built-in /debugging instead."
 ---
 
 # Diagnosing Bugs

@@ -1,6 +1,6 @@
 ---
 name: improve-codebase-architecture
-description: User-invoked only — do not invoke automatically. Scan a codebase for deepening opportunities, present them as a visual HTML report, then grill through whichever one you pick.
+description: "User-invoked only — do not invoke automatically. Scan a codebase for deepening opportunities (turn shallow modules into deep ones) and present as a visual HTML report, then grill through whichever one you pick. 渐进式架构改良 (把浅模块变深模块), 出 HTML 报告 + grilling 决策. Use on `/improve-codebase-architecture` or when: tech debt feels heavy / AI agents keep getting stuck / planning a refactor roadmap / before adding a major feature to legacy code / 架构盘点 / 架构改良 / 找个深化的方向 / 技术债太重 / AI agent 老卡在同一个模块. Uses codebase-design vocabulary; feeds candidates into grilling."
 disable-model-invocation: true
 ---
 

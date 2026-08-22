@@ -1,6 +1,6 @@
 ---
 name: domain-modeling
-description: "Build and sharpen a project's domain model: CONTEXT.md vocabulary and ADRs. Use when discussing codebase terminology, writing or editing a CONTEXT.md, or recording or editing an ADR. Requires the domain doc layout — run setup-meisijiya-skills first if missing."
+description: Write or edit the project's domain model: CONTEXT.md vocabulary and docs/adr/ ADRs. Use when: a term or decision crystallises / writing or editing a CONTEXT.md / recording or editing an ADR / 术语结晶 / 写 ADR / 决策敲定. Requires the domain doc layout (run setup-meisijiya-skills first if missing). NOT for SKILL.md or AGENTS.md (use writing-for-agents) or for deep-module design vocabulary (use codebase-design).
 ---
 
 # Domain Modeling

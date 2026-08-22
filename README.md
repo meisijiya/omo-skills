@@ -43,8 +43,8 @@ omo-skills/
 |---|---|---|
 | `setup-meisijiya-skills` | engineering | 初始化领域文档布局（首次使用前跑一次） |
 | `codebase-design` | engineering | 深模块设计词汇与原则（被 tdd / improve-codebase-architecture 引用为参考源） |
-| `domain-modeling` | engineering | 用领域模型梳理业务实体与边界（更新 CONTEXT.md / 写 ADR） |
-| `architecture-decision-records` | engineering | ADR 编写与维护（产物落 `docs/adr/`，与 `domain-modeling` 协同） |
+| `domain-modeling` | engineering | 用领域模型梳理业务实体与边界（更新 CONTEXT.md；架构决策路由到 architecture-decision-records） |
+| `architecture-decision-records` | engineering | ADR 编写与维护（产物落 `docs/adr/`；唯一拥有 ADR 文件的 skill） |
 | `api-and-interface-design` | engineering | API / 模块接口契约设计（Hyrum's Law + contract-first，重大契约写 ADR） |
 | `tdd` | engineering | 严格 TDD 节奏（红→绿→重构） |
 | `improve-codebase-architecture` | engineering | 渐进式架构改良（user-invoked） |
@@ -84,7 +84,7 @@ omo-skills/
 
 - **2 个 user-invoked 守卫**：`improve-codebase-architecture` / `setup-meisijiya-skills` 显式标注 `User-invoked only`，避免 Agent 在不合适时机自动调用。
 - **5 个 omo 触发词 / 去歧义更新**：
-  - `domain-modeling`：保留 setup 依赖句，补回 "writing or editing a CONTEXT.md, or recording or editing an ADR" 具体动作锚点
+  - `domain-modeling`：保留 setup 依赖句；description 缩窄到 "writing or editing a CONTEXT.md"，架构决策明确路由到 `architecture-decision-records`（前者不再写 ADR）
   - `resolving-merge-conflicts`：加 "NOT for routine rebase/squash/git-history investigation (that's omo's git-master)" 反向指引
   - `diagnosing-bugs`：加 "For crashes / hangs / attach-debugger / runtime inspection / sourcemap issues, use omo's built-in /debugging instead" 反向指引
   - `code-review`：加 "Use /review-work instead for pre-PR handoff full QA" 反向指引

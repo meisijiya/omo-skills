@@ -90,7 +90,7 @@ done
 
 | 路径 | 含义 | 权威源 |
 |---|---|---|
-| `docs/adr/` | Architecture Decision Records | `setup-meisijiya-skills/SKILL.md` |
+| `docs/adr/` | Architecture Decision Records（目录 bootstrap 权威 = 创建布局；运行时写入权威 = `architecture-decision-records/SKILL.md`） | `setup-meisijiya-skills/SKILL.md`（bootstrap） + `architecture-decision-records/SKILL.md`（写入） |
 | `CONTEXT.md` | 项目主上下文（仓库根级） | `setup-meisijiya-skills/SKILL.md` |
 | `CONTEXT-MAP.md` | 上下文导航图（仓库根级） | `setup-meisijiya-skills/SKILL.md` |
 | `docs/agents/` | Agent 角色定义 | 各 skill 引用的元数据 |

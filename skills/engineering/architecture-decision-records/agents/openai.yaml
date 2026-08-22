@@ -1,3 +1,3 @@
 interface:
   display_name: "Architecture Decision Records"
-  short_description: "ADR authoring and maintenance (writes to docs/adr/)"
+  short_description: "ADR authoring and maintenance — the ONLY skill that writes to docs/adr/"

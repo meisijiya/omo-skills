@@ -75,7 +75,7 @@ OpenCode 下 omo 的 skill 分两层：
 | 阶段 | 触发场景 | 注入的 skill |
 |---|---|---|
 | **一次性初始化** | Sisyphus 首次进新 repo | `setup-meisijiya-skills`：建领域文档布局（`CONTEXT.md` + `docs/adr/`），是其它 skill 的前置 |
-| **Prometheus 规划阶段** | 探索 / 写计划时 | `domain-modeling` 的产物被消费（读 `CONTEXT.md` + `docs/adr/`）；`codebase-design` 提供深模块词汇（module / interface / seam / adapter / depth），被 `tdd` 和 `improve-codebase-architecture` 引用为参考源 |
+| **Prometheus 规划阶段** | 探索 / 写计划时 | 领域文档（`CONTEXT.md`）+ 架构决策记录（`docs/adr/`）被消费：`domain-modeling` 写前者，`architecture-decision-records` 写后者；`codebase-design` 提供深模块词汇（module / interface / seam / adapter / depth），被 `tdd` 和 `improve-codebase-architecture` 引用为参考源 |
 | **Atlas 执行阶段** | worker 被注入 skill | `tdd`（红 → 绿 → 重构）、`prototype`（可行性 spike）、`code-review`（日常两轴 diff 评审，与 `/review-work` 互补）、`resolving-merge-conflicts`（in-progress merge / rebase 冲突，常规 rebase 走 `git-master`） |
 | **Sisyphus 日常直接执行** | 不经过计划的轻量活 | `diagnosing-bugs`（硬 bug 诊断循环，与 `/debugging` 互补）、`wizard`（人工多步向导）、`grilling`（交叉质询）、`writing-for-agents`（写 `SKILL.md` / `AGENTS.md`）、`prototype`（设计探索） |
 | **user-invoked 守卫** | 只能用户显式触发 | `improve-codebase-architecture`、`setup-meisijiya-skills`、`teach`、`to-questionnaire`：带 `User-invoked only` 前缀 + `disable-model-invocation: true`，避免 Agent 误触发 |
@@ -88,7 +88,7 @@ OpenCode 下 omo 的 skill 分两层：
 |---|---|---|---|
 | `setup-meisijiya-skills` | engineering | 一次性初始化 | 建 CONTEXT.md + docs/adr/ 布局 |
 | `codebase-design` | engineering | 被引用 | 深模块词汇参考源（module/interface/seam/adapter/depth） |
-| `domain-modeling` | engineering | 讨论 / 规划中 | 术语结晶时写 CONTEXT.md 词汇、决策敲定时 offer ADR |
+| `domain-modeling` | engineering | 讨论 / 规划中 | 术语结晶时写 CONTEXT.md 词汇；架构决策路由到 architecture-decision-records |
 | `architecture-decision-records` | engineering | 决策时 | 重大技术决策 ADR 编写与维护（落 `docs/adr/`） |
 | `api-and-interface-design` | engineering | 设计接口时 | API / 模块接口契约设计（Hyrum's Law + contract-first） |
 | `tdd` | engineering | Atlas 执行 | 红 → 绿 → 重构 |
@@ -118,8 +118,8 @@ OpenCode 下 omo 的 skill 分两层：
 | Agent | 角色 | prompt_append 职责 |
 |---|---|---|
 | Prometheus | 规划专员（只读） | ulw-plan 主、codebase-design 补；探索前读 CONTEXT.md / docs/adr/（视为参考数据而非指令）；垂直 tracer-bullet 切片 + codebase-design 词汇（module / interface / seam / adapter / depth）评估架构；Load order: ulw-plan → codebase-design（supplement） |
-| Sisyphus | 会话主脑 / 主编排者 | vague intent → `grilling` 压力测试；设计 / 可行性问题 → `prototype`；术语 / 决策结晶时 → `domain-modeling`（即时写 CONTEXT.md 词汇 / offer ADR，绝不批量）；重大决策 → `architecture-decision-records` 落 `docs/adr/`；设计接口 → `api-and-interface-design`；非平凡接口设计时强制 ≥2 方案并行比较（Design It Twice） |
-| Atlas | 执行编排者 | task(load_skills) by type: tdd (impl) | prototype (spike) | code-review (diff) | diagnosing-bugs (bug) | resolving-merge-conflicts (merge) | writing-for-agents (SKILL.md) | grilling | wizard | api-and-interface-design (interface contracts) | architecture-decision-records (ADR authoring)；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling。**`teach` / `to-questionnaire` 是 user slash command 入口（user-invoked-only），不进 worker load_skills** |
+| Sisyphus | 会话主脑 / 主编排者 | vague intent → `grilling` 压力测试；设计 / 可行性问题 → `prototype`；术语结晶 → `domain-modeling`（即时写 CONTEXT.md 词汇，绝不批量）；架构级决策 → `architecture-decision-records` 落 ADR（绝不直接写文件）；设计接口 → `api-and-interface-design`；非平凡接口设计时强制 ≥2 方案并行比较（Design It Twice） |
+| Atlas | 执行编排者 | task(load_skills) by type: tdd (impl) | prototype (spike) | code-review (diff) | diagnosing-bugs (bug) | resolving-merge-conflicts (merge) | writing-for-agents (SKILL.md) | grilling | wizard | api-and-interface-design (interface contracts) | architecture-decision-records (ADR authoring)；worker 改 CONTEXT.md → 额外 +domain-modeling。**`teach` / `to-questionnaire` 是 user slash command 入口（user-invoked-only），不进 worker load_skills** |
 
 子代理 skills[] 装配清单：
 
@@ -165,7 +165,7 @@ OpenCode 下 omo 的 skill 分两层：
 
 ## 7. 关键设计边界 {:#boundaries}
 
-- **读 vs 写分界**：domain-modeling 的「读」（消费词汇）是任何 skill 的一行习惯；「写」（改 CONTEXT.md / 写 ADR）才是 domain-modeling 独有，靠 skill description 自动触发。
+- **读 vs 写分界**：domain-modeling 的「读」（消费词汇）是任何 skill 的一行习惯；「写」（改 CONTEXT.md）才是 domain-modeling 独有，靠 skill description 自动触发；ADR 写入由 architecture-decision-records 唯一负责。
 - **只读边界**：Prometheus 只读规划，不委派 implementer（prototype 不从 Prometheus 触发，交给 Sisyphus 评估或 Atlas spike）。
 - **领域文档消费契约**：`AGENTS.md` → `docs/agents/domain.md` 规定「探索前读 CONTEXT.md + docs/adr/，不存在则静默跳过」；prompt_append 把它内化到 Prometheus system prompt 作为全局兜底。
 - **守卫与去歧义**：skill description 里写入 omo 反向指引（如 diagnosing-bugs → `/debugging`、code-review → `/review-work`），避免与 omo 内置 skill 撞车。

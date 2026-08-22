@@ -49,7 +49,7 @@ fi
 
 FRAGMENT="$REPO_ROOT/config/oh-my-openagent.prompt-append.jsonc"
 INSTALL="$REPO_ROOT/scripts/install-prompt-append.mjs"
-TARGET="$HOME/.config/opencode/oh-my-openagent.jsonc"
+TARGET="$HOME/.omo/omo.jsonc"
 WORKFLOW_DOC="$REPO_ROOT/docs/workflow.md"
 INSTALL_DOC="$REPO_ROOT/INSTALL.md"
 
@@ -134,7 +134,7 @@ test_S1() {
     for agent in prometheus sisyphus atlas; do
       local expected actual
       expected=$(jq_jsonc "$FRAGMENT" ".agents.${agent}.prompt_append")
-      actual=$(jq_jsonc "$TARGET" ".agents.${agent}.prompt_append")
+      actual=$(jq_jsonc "$TARGET" ".[\"[opencode]\"].agents.${agent}.prompt_append")
       if [ "$expected" != "$actual" ]; then
         fail "$id" "agents.${agent}.prompt_append mismatch"
         echo "expected: $expected" >&2
@@ -161,7 +161,7 @@ test_S3() {
     # 8 non-target agents must NOT have prompt_append
     for agent in oracle librarian explore multimodal-looker metis momus sisyphus-junior hephaestus; do
       local has_pp
-      has_pp=$(jq_jsonc "$TARGET" --arg a "$agent" '.agents[$a] | has("prompt_append")')
+      has_pp=$(jq_jsonc "$TARGET" --arg a "$agent" '.["[opencode]"].agents[$a] | has("prompt_append")')
       if [ "$has_pp" != "false" ]; then
         fail "$id" "non-target agent '$agent' unexpectedly has prompt_append (has_pp=$has_pp)"
         return 1
@@ -170,10 +170,10 @@ test_S3() {
 
     # categories + team_mode byte-equivalent (via JSON-stringified parse) — against Wave 0 baseline
     local cats_pre cats_now tm_pre tm_now
-    cats_pre=$(jq_jsonc "$SNAP_PRE" '.categories // {}')
-    cats_now=$(jq_jsonc "$TARGET" '.categories // {}')
-    tm_pre=$(jq_jsonc "$SNAP_PRE" '.team_mode // null')
-    tm_now=$(jq_jsonc "$TARGET" '.team_mode // null')
+    cats_pre=$(jq_jsonc "$SNAP_PRE" '.["[opencode]"].categories // {}')
+    cats_now=$(jq_jsonc "$TARGET" '.["[opencode]"].categories // {}')
+    tm_pre=$(jq_jsonc "$SNAP_PRE" '.["[opencode]"].team_mode // null')
+    tm_now=$(jq_jsonc "$TARGET" '.["[opencode]"].team_mode // null')
 
     if [ "$cats_pre" != "$cats_now" ]; then
       fail "$id" "categories changed"
@@ -193,7 +193,7 @@ test_S3() {
     for agent in prometheus sisyphus atlas; do
       local expected now
       expected=$(jq_jsonc "$FRAGMENT" --arg a "$agent" '.agents[$a].prompt_append')
-      now=$(jq_jsonc "$TARGET" --arg a "$agent" '.agents[$a].prompt_append // ""')
+      now=$(jq_jsonc "$TARGET" --arg a "$agent" '.["[opencode]"].agents[$a].prompt_append // ""')
       if [ "$expected" != "$now" ]; then
         fail "$id" "agents.${agent}.prompt_append != fragment (dynamic snapshot mismatch)"
         echo "expected: $expected" >&2

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // 幂等地把 config/oh-my-openagent.prompt-append.jsonc 的 prompt_append 合并进
-// ~/.config/opencode/oh-my-openagent.jsonc（只更新三个 agent 的 prompt_append，
+// ~/.omo/omo.jsonc 的 target["[opencode]"].agents.*.prompt_append（只更新三个 agent 的 prompt_append，
 // 不碰用户的 model / variant / categories / team_mode 等其它字段）。
 //
 // 用法：node scripts/install-prompt-append.mjs
@@ -12,7 +12,7 @@ import { fileURLToPath } from "node:url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const FRAGMENT = path.join(__dirname, "..", "config", "oh-my-openagent.prompt-append.jsonc");
-const TARGET = path.join(os.homedir(), ".config", "opencode", "oh-my-openagent.jsonc");
+const TARGET = path.join(os.homedir(), ".omo", "omo.jsonc");
 
 // jsonc → object：剥离 // 注释（含行内；保留字符串内的 //，如 URL）与尾逗号
 function parseJsonc(text) {
@@ -35,12 +35,13 @@ const fragment = parseJsonc(fs.readFileSync(FRAGMENT, "utf8"));
 const targetExists = fs.existsSync(TARGET);
 const target = targetExists ? parseJsonc(fs.readFileSync(TARGET, "utf8")) : {};
 
-target.agents ??= {};
+target["[opencode]"] ??= {};
+target["[opencode]"].agents ??= {};
 
 let changed = 0;
 for (const [name, cfg] of Object.entries(fragment.agents)) {
-  if (target.agents[name]?.prompt_append !== cfg.prompt_append) {
-    target.agents[name] = { ...target.agents[name], prompt_append: cfg.prompt_append };
+  if (target["[opencode]"].agents[name]?.prompt_append !== cfg.prompt_append) {
+    target["[opencode]"].agents[name] = { ...target["[opencode]"].agents[name], prompt_append: cfg.prompt_append };
     changed++;
   }
 }

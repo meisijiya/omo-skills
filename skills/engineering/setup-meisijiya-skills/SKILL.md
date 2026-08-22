@@ -1,6 +1,6 @@
 ---
 name: setup-meisijiya-skills
-description: "User-invoked only — do not invoke automatically. Configure this repo for the Meisijiya skills: domain doc layout (CONTEXT.md + docs/adr/). Run once before first use."
+description: "User-invoked only — do not invoke automatically. Configure this repo for the Meisijiya skills: domain doc layout (CONTEXT.md + docs/adr/) and the ## Agent skills section in AGENTS.md. Run once before first use. For general AGENTS.md writing technique (not this one-shot scaffold), use writing-for-agents instead."
 disable-model-invocation: true
 ---
 

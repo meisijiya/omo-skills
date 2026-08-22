@@ -1,6 +1,6 @@
 ---
 name: code-review
-description: "Lightweight two-axis diff review (Standards vs Spec + Fowler smell baseline). 双轴差异评审 (Standards vs Spec + Fowler 代码气味基线). Use when: 'review since X' / 'review my branch' / 'is this ok to merge' / 'check my WIP' / 'review this PR' / 帮我审一下 / 看看这代码行不行 / 这个改动 ok 吗 / 改完了帮我看看 / 这是 diff 你看看. Use /review-work instead for pre-PR handoff full QA. Not for routine linting (linter handles it) or architectural rewrites (use improve-codebase-architecture)."
+description: "Lightweight two-axis diff review (Standards vs Spec + Fowler smell baseline). 双轴差异评审 (Standards vs Spec + Fowler 代码气味基线). Use when: 'review since X' / 'review my branch' / 'is this ok to merge' / 'check my WIP' / 'review my changes before I push' / 帮我审一下 / 看看这代码行不行 / 这个改动 ok 吗 / 改完了帮我看看 / 这是 diff 你看看. Use /review-work instead for pre-PR handoff full QA. Not for routine linting (linter handles it) or architectural rewrites (use improve-codebase-architecture)."
 ---
 
 Two-axis review of the diff between `HEAD` and a fixed point the user supplies:

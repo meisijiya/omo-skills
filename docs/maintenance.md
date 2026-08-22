@@ -13,9 +13,9 @@ title: "Maintenance"
 
 ```
 omo-skills/
-├── skills/                 ← 微调后的 12 个 skill（产物，push 到 GitHub，INSTALL.md 安装源）
+├── skills/                 ← 微调后的 14 个 skill（产物，push 到 GitHub，INSTALL.md 安装源）
 │   ├── engineering/        ← 10 个工程 skill
-│   └── productivity/       ← 2 个产出/写作 skill
+│   └── productivity/       ← 4 个产出/写作 skill
 ├── README.md               ← 人读概览
 ├── INSTALL.md              ← Agent 询问后安装指引
 ├── MAINTENANCE.md          ← 维护手册源文件（本页为其 web 版）
@@ -40,17 +40,17 @@ omo-skills/
 
 任何 `FAIL` 立即停下来调查。
 
-**断言 1：12 个 SKILL.md YAML 解析（engineering 10 + productivity 2）**
+**断言 1：14 个 SKILL.md YAML 解析（engineering 10 + productivity 4）**
 
 ```bash
 cd omo-skills/      # 产物仓库根
 
-# 断言 1: 12 个 SKILL.md YAML 解析（engineering 10 + productivity 2）
+# 断言 1: 14 个 SKILL.md YAML 解析（engineering 10 + productivity 4）
 python3 -c "
 import glob, yaml, sys
 files = sorted(glob.glob('skills/engineering/*/SKILL.md')) + sorted(glob.glob('skills/productivity/*/SKILL.md'))
-if len(files) != 12:
-    print(f'FAIL: expected 12 SKILL.md, got {len(files)}')
+if len(files) != 14:
+    print(f'FAIL: expected 14 SKILL.md, got {len(files)}')
     sys.exit(1)
 errs = []
 for f in files:
@@ -63,11 +63,11 @@ sys.exit(1 if errs else 0)
 "
 ```
 
-**断言 2：2 个 user-invoked 守卫 + 字段保留**
+**断言 2：4 个 user-invoked 守卫 + 字段保留**
 
 ```bash
-# 断言 2: 2 个 user-invoked 守卫 + 字段保留
-for f in skills/engineering/{improve-codebase-architecture,setup-meisijiya-skills}/SKILL.md; do
+# 断言 2: 4 个 user-invoked 守卫 + 字段保留
+for f in skills/engineering/{improve-codebase-architecture,setup-meisijiya-skills}/SKILL.md skills/productivity/{teach,to-questionnaire}/SKILL.md; do
   grep -q 'User-invoked only — do not invoke automatically' "$f" || echo "FAIL_GUARD $f"
   grep -q 'disable-model-invocation: true' "$f" || echo "FAIL_FIELD $f"
 done

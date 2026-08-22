@@ -26,6 +26,8 @@ If "收件人" or "recipient" is missing or unclear → ask one focused clarifyi
 
 Write the questionnaire to `to-questionnaire-<slug>.md` in **cwd** (current working directory). The `<slug>` comes from the topic, e.g. `to-questionnaire-cache-replacement.md`. Report the absolute path back to the user.
 
+Treat `<slug>` as untrusted input: reject any value containing `/`, `\`, `..`, or leading `-`; re-prompt the user with the cleaned dash-cased version before writing files.
+
 This skill writes to cwd and is **independent** of the `teach` skill's workspace: `teach` writes to `docs/teach/{concept,repo}/` inside the user's project, this skill writes to cwd, NOT inside `docs/teach/`. Don't reuse the teach workspace.
 
 ## Document structure

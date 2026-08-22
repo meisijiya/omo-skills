@@ -2,14 +2,14 @@
 layout: default
 title: "Install"
 description: >-
-  4 步把 12 个 Meisijiya skill 装进 omo —— 问目录 → ls 现状 → cp -r × 12 →
+  4 步把 14 个 Meisijiya skill 装进 omo —— 问目录 → ls 现状 → cp -r × 14 →
   合并 prompt_append。含能力对比表、skip list、卸载、FAQ 与故障排查。
 ---
 
 <section class="page-head">
   <p class="eyebrow mono">4 步安装</p>
-  <h1 class="mono">把 12 skill 装进 omo</h1>
-  <p class="muted">ask dir → ls → cp -r × 12 → merge prompt_append。本仓库专为
+  <h1 class="mono">把 14 skill 装进 omo</h1>
+  <p class="muted">ask dir → ls → cp -r × 14 → merge prompt_append。本仓库专为
   <a href="https://github.com/code-yeongyu/oh-my-opencode">OhMyOpenCode</a>（omo）服务；
   其它 Agent 不在服务边界内。</p>
 </section>
@@ -21,7 +21,7 @@ description: >-
     <span class="num mono" style="color: var(--accent);">01</span>
     <h3 class="mono">先问「装到哪个目录」</h3>
     <p>进入对话后第一句话必须确认安装位置，不写「自动执行破坏性操作」措辞：</p>
-    <blockquote>「请问本次要把这 12 个采纳 skill 装到 omo 的哪个目录？默认
+    <blockquote>「请问本次要把这 14 个采纳 skill 装到 omo 的哪个目录？默认
     <code>~/.config/opencode/skills/</code>；如已有同名 skill，<code>cp -r</code> 会覆盖原目录。」</blockquote>
     <p>收到明确答复后才进入下一步；未明确前不复制任何文件。</p>
   </li>
@@ -55,18 +55,19 @@ description: >-
 <span class="c"># 复制单个 skill（productivity bucket）</span>
 {% raw %}<span class="cmd">$</span> cp -r skills/productivity/{{ skill_name }} &lt;目标skill目录&gt;/{% endraw %}</pre>
     </div>
-    <p>默认 12 个全量安装，也可用脚本一把装齐：</p>
+    <p>默认 14 个全量安装，也可用脚本一把装齐：</p>
     <div class="terminal">
       <div class="term-head">
         <span class="term-head__dots"><i></i><i></i><i></i></span>
         <span class="mono" style="color: var(--muted);">~/omo-skills</span>
       </div>
 <pre class="term-body mono"><span class="cmd">$</span> ENGINEERING=(setup-meisijiya-skills codebase-design domain-modeling tdd improve-codebase-architecture prototype diagnosing-bugs code-review resolving-merge-conflicts wizard)
-<span class="cmd">$</span> PRODUCTIVITY=(grilling writing-for-agents)
+<span class="cmd">$</span> PRODUCTIVITY=(grilling writing-for-agents teach to-questionnaire)
 <span class="cmd">$</span> mkdir -p ~/.config/opencode/skills/engineering ~/.config/opencode/skills/productivity
 <span class="cmd">$</span> for s in "${ENGINEERING[@]}"; do cp -r "skills/engineering/$s" ~/.config/opencode/skills/engineering/; done
 <span class="cmd">$</span> for s in "${PRODUCTIVITY[@]}"; do cp -r "skills/productivity/$s" ~/.config/opencode/skills/productivity/; done
-<span class="ok">✓</span> ls -1 ~/.config/opencode/skills/engineering/ | wc -l   # 期望 ≥ 10</pre>
+<span class="ok">✓</span> ls -1 ~/.config/opencode/skills/engineering/ | wc -l   # 期望 ≥ 10
+<span class="ok">✓</span> ls -1 ~/.config/opencode/skills/productivity/ | wc -l   # 期望 ≥ 4</pre>
     </div>
   </li>
 
@@ -90,7 +91,7 @@ description: >-
 
 ## 2. prompt_append 融合机制 {#prompt-append}
 
-为了让三个主 Agent 稳定触发 12 个 skill，**不要在每次 prompt 里重复说**，把规则内化到
+为了让三个主 Agent 稳定触发 14 个 skill，**不要在每次 prompt 里重复说**，把规则内化到
 <code>~/.config/opencode/oh-my-openagent.jsonc</code> 的 <code>agents.*.prompt_append</code> 字段
 （agent 级通用字段，追加到各 agent system prompt 末尾）。
 
@@ -126,7 +127,7 @@ model / variant / categories / team_mode；内容已最新 → 跳过（幂等�
 
 ## 3. 能力对照表（本仓库 skill vs omo 内置） {#omo-built-in}
 
-12 个采纳 skill 与 omo 内置对应能力的并列对照，方便选型。
+14 个采纳 skill 与 omo 内置对应能力的并列对照，方便选型。
 
 | Skill | omo 内置对应 | 备注 |
 |---|---|---|
@@ -140,12 +141,14 @@ model / variant / categories / team_mode；内容已最新 → 跳过（幂等�
 | `code-review` | `/review-work` | 互补：日常 diff review vs PR 交接 full QA |
 | `resolving-merge-conflicts` | — | rebase conflict playbooks（常规 rebase 走 `git-master`） |
 | `wizard` | — | 多步人工向导 |
+| `teach` | — | 概念 / OSS 仓库学习（user-invoked） |
+| `to-questionnaire` | — | 异步第三方需求问询（user-invoked） |
 | `grilling` | — | 严格交叉质询 |
 | `writing-for-agents` | — | SKILL.md / AGENTS.md 写作 |
 
 ## 4. skip list（哪些不要装） {#skip}
 
-omo 已内置同名或同等能力的 skill，跳过避免重复触发。以下 15 个已从 <code>skills/</code> 删除，**不要安装**：
+omo 已内置同名或同等能力的 skill，跳过避免重复触发。以下 13 个已从 <code>skills/</code> 删除，**不要安装**：
 
 | Skill | 原因 |
 |---|---|
@@ -157,8 +160,7 @@ omo 已内置同名或同等能力的 skill，跳过避免重复触发。以下 
 | `to-spec` / `to-tickets` | 由 omo `ulw-plan` 承接（spec / 任务拆分作为计划产物） |
 | `triage` | omo `issue-tracker` workflow 内置类似流程 |
 | `wayfinder` | 仅大型 monorepo 需要，触发噪音明显 |
-| `grill-me` / `wait-what` / `to-questionnaire` | 由 `grilling` 合并 / 承接 |
-| `teach` | omo 内置 `teach` skill |
+| `grill-me` / `wait-what` | 由 `grilling` 合并 / 承接 |
 | `slice-work` | 与 omo `/ulw-plan` 触发面重叠；prompt_append 已内化垂直切片纪律 |
 | `setup-matt-pocock-skills` | 重命名为 `setup-meisijiya-skills` |
 
@@ -203,4 +205,4 @@ A：互补。`diagnosing-bugs` 聚焦先建 feedback loop 再做假设；崩溃 
 - **与 omo 内置撞车**：本仓库 skill 的 description 已写入 omo 反向指引（如 diagnosing-bugs → `/debugging`、code-review → `/review-work`）；若仍重复触发，按 §4 skip list 卸载本仓库副本。
 - **`cp -r` 后目录被污染**：检查是否用了 `cp -r ... skills/* <dir>/` 一把梭——会带进 bucket 下的 `README.md`；改为逐目录复制。
 - **prompt_append 未生效**：确认 `oh-my-openagent.jsonc` 里三个 agent 名是 `prometheus` / `sisyphus` / `atlas`；重跑安装脚本看是否「内容已最新 → 跳过」。
-- **user-invoked skill 不自动触发**：`improve-codebase-architecture` / `setup-meisijiya-skills` 带 `User-invoked only` 守卫，只能用户显式触发，属预期行为。
+- **user-invoked skill 不自动触发**：`improve-codebase-architecture` / `setup-meisijiya-skills` / `teach` / `to-questionnaire` 带 `User-invoked only` 守卫，只能用户显式触发，属预期行为。

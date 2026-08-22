@@ -6,7 +6,7 @@ Matt Pocock [`mattpocock/skills`](https://github.com/mattpocock/skills) 的 **om
 
 本仓库专为 [OhMyOpenCode](https://github.com/code-yeongyu/oh-my-opencode)（omo）服务，吸收其 skill 工具栈约定，让上游 Matt Pocock 的工程 skill 在 omo 下稳定触发。其它 Agent（pi / senpi / Xiaomi mimocode 等）不在本仓库服务边界内。
 
-本仓库对 12 个采纳 skill 做了挑选与微调（含去歧义描述、user-invoked 守卫、路径约定），让它们在 omo 风格下稳定触发并被 Agent 正确路由。
+本仓库对 14 个采纳 skill 做了挑选与微调（含去歧义描述、user-invoked 守卫、路径约定），让它们在 omo 风格下稳定触发并被 Agent 正确路由。
 
 ## 仓库布局
 
@@ -23,9 +23,9 @@ omo-skills/
 ├── docs/                     ← 工作流文档与 Agent 约定
 │   ├── workflow.md           ← 三个 Agent + skill 使用场景工作流
 │   └── agents/domain.md      ← 领域文档消费契约
-├── skills/                   ← 微调后的 12 个 skill（产物，INSTALL.md 安装源）
+├── skills/                   ← 微调后的 14 个 skill（产物，INSTALL.md 安装源）
 │   ├── engineering/          ← 10 个工程 skill
-│   └── productivity/         ← 2 个产出/写作 skill
+│   └── productivity/         ← 4 个产出/写作 skill
 └── .omo/                     ← Boulder 计划状态、证据与 notepads（不入版本控制）
 ```
 
@@ -76,7 +76,7 @@ omo-skills/
 
 ## 微调策略
 
-为了让 12 个采纳 skill 在 omo 风格下稳定触发，本仓库对 SKILL.md 的 frontmatter `description` 做了最小侵入优化（仅改 description 字段，不动正文逻辑）：
+为了让 14 个采纳 skill 在 omo 风格下稳定触发，本仓库对 SKILL.md 的 frontmatter `description` 做了最小侵入优化（仅改 description 字段，不动正文逻辑）：
 
 - **2 个 user-invoked 守卫**：`improve-codebase-architecture` 与 `setup-meisijiya-skills` 显式标注 `User-invoked only`，避免 Agent 在不合适时机自动调用。
 - **5 个 omo 触发词 / 去歧义更新**：

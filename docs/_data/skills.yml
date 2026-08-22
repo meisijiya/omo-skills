@@ -75,6 +75,20 @@
   desc: 严格交叉质询流程（质询用户的 plan / design）。
   file: https://github.com/meisijiya/omo-skills/blob/main/skills/productivity/grilling/SKILL.md
 
+- name: teach
+  tag: productivity · user-invoked
+  category: productivity
+  phase: user-invoked
+  desc: 学习概念或 OSS 仓库（生成交互式课程 + 测验，写入 `docs/teach/{concept,repo}/`）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/productivity/teach/SKILL.md
+
+- name: to-questionnaire
+  tag: productivity · user-invoked
+  category: productivity
+  phase: user-invoked
+  desc: 把不能完全回答的决定转成问卷（异步需求收集，输出到 cwd）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/productivity/to-questionnaire/SKILL.md
+
 - name: writing-for-agents
   tag: productivity · daily
   category: productivity

@@ -1,8 +1,8 @@
-# INSTALL — omo-skills（Meisijiya 12 skill）安装指南
+# INSTALL — omo-skills（Meisijiya 14 skill）安装指南
 
 > 📖 在线指南：[meisijiya.github.io/omo-skills/](https://meisijiya.github.io/omo-skills/)
 
-本仓库专为 [OhMyOpenCode](https://github.com/code-yeongyu/oh-my-opencode)（omo）服务。INSTALL 仅指导把 12 个采纳 skill 装入 omo。其它 Agent（pi / senpi / Xiaomi mimocode / 等）不在本仓库服务边界内。
+本仓库专为 [OhMyOpenCode](https://github.com/code-yeongyu/oh-my-opencode)（omo）服务。INSTALL 仅指导把 14 个采纳 skill 装入 omo。其它 Agent（pi / senpi / Xiaomi mimocode / 等）不在本仓库服务边界内。
 
 Agent 读完本指南后，按流程逐节执行即可，无需再回头询问用户目录。
 
@@ -77,7 +77,7 @@ omo 已内置同名或同等能力的 skill，跳过避免重复触发。
 
 进入对话后第一句话必须包含以下要点（不写「自动执行破坏性操作」措辞）：
 
-> 「请问本次要把这 12 个采纳 skill 装到 omo 的哪个目录？默认 `~/.config/opencode/skills/`；如已有同名 skill，`cp -r` 会覆盖原目录。」
+> 「请问本次要把这 14 个采纳 skill 装到 omo 的哪个目录？默认 `~/.config/opencode/skills/`；如已有同名 skill，`cp -r` 会覆盖原目录。」
 
 收到明确答复后才进入步骤 1；未明确前不复制任何文件。
 
@@ -120,7 +120,7 @@ cp -r skills/<bucket>/<name> <目标skill目录>/
 - `<name>` 是 skill 目录名（不带斜杠、不带 `.md`）。
 - `<目标skill目录>` 是 §1 表里的目录字面值。
 - 同一目标目录多次复制不同 skill 时，每次 `cp -r` 独立执行；不要写 `cp -r ... skills/* <dir>/` 这种一把梭的写法——会顺带把 bucket 下的 `README.md` 复制进去，污染目标目录。
-- 本仓库 12 个 skill 与 omo 用户层已装副本同名，`cp -r` 会**覆盖**已存在的同名目录；如需保留原版，先 `mv ~/.config/opencode/skills/engineering/<name> ~/.config/opencode/skills/engineering/<name>.bak`。
+- 本仓库 14 个 skill 与 omo 用户层已装副本同名，`cp -r` 会**覆盖**已存在的同名目录；如需保留原版，先 `mv ~/.config/opencode/skills/engineering/<name> ~/.config/opencode/skills/engineering/<name>.bak`。
 
 **步骤 4：汇报。**
 
@@ -146,7 +146,7 @@ cp -r skills/<bucket>/<name> <目标skill目录>/
 
 **目录**：`~/.config/opencode/skills/` 与 `~/.agents/skills/`（任选其一即可，建议主目录 `~/.config/opencode/skills/`）。
 
-**装机策略**：默认 12 个 skill 全量。
+**装机策略**：默认 14 个 skill 全量。
 
 ```bash
 ENGINEERING=(
@@ -165,12 +165,12 @@ for s in "${PRODUCTIVITY[@]}"; do cp -r "skills/productivity/$s" ~/.config/openc
 
 ```bash
 ls -1 ~/.config/opencode/skills/engineering/ | wc -l   # 期望 ≥ 10
-ls -1 ~/.config/opencode/skills/productivity/ | wc -l  # 期望 ≥ 2
+ls -1 ~/.config/opencode/skills/productivity/ | wc -l  # 期望 ≥ 4
 ```
 
 ## 5.1 prompt_append 配置（三个主 Agent 的 skill 融合内化）
 
-为了让 omo 的三个主 Agent 稳定触发 12 个 Meisijiya skill，**不要在每次 prompt 里重复说**，把规则内化到 `~/.config/opencode/oh-my-openagent.jsonc` 的 `agents.*.prompt_append` 字段（`prompt_append` 是 agent 级通用字段，追加到各 agent system prompt 末尾）。
+为了让 omo 的三个主 Agent 稳定触发 14 个 Meisijiya skill，**不要在每次 prompt 里重复说**，把规则内化到 `~/.config/opencode/oh-my-openagent.jsonc` 的 `agents.*.prompt_append` 字段（`prompt_append` 是 agent 级通用字段，追加到各 agent system prompt 末尾）。
 
 配置内容已提取为仓库文件 **`config/oh-my-openagent.prompt-append.jsonc`**（唯一事实来源，只含三个 `prompt_append`；model / variant / categories / team_mode 由用户自行配置，脚本不碰）。
 
@@ -211,7 +211,7 @@ rm -rf ~/.config/opencode/skills/grill-with-docs
 
 | Agent | 验证版本 | 验证日期 | 装机策略 | 备注 |
 | --- | --- | --- | --- | --- |
-| omo (OpenCode) | main | — | 12 全量（engineering 10 + productivity 2，无前缀） | 待本机验证后补日期 |
+| omo (OpenCode) | main | — | 14 全量（engineering 10 + productivity 4，无前缀） | 待本机验证后补日期 |
 
 新验证一种 omo 安装环境（不同 ~/.config/opencode/ 路径或带 .agents/skills/ 双写）后，在表格里补一行；`MAINTENANCE.md §2` 监控信号 "INSTALL.md 漏目录" 已对照此表。
 

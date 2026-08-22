@@ -15,6 +15,8 @@ The teaching workspace lives at **`docs/teach/{concept,repo}/` inside the user's
 
 The trailing `<slug>` is the dash-cased topic (e.g. `react-hooks`, `tanstack-query`). If `docs/teach/{concept,repo}/` does not yet exist, create the directory tree before writing any file there. This skill is **independent of `to-questionnaire`**: that one writes to cwd, this one writes to the project-root workspace. Do not reuse the `to-questionnaire-<slug>.md` filename or cwd location.
 
+Treat `<slug>` as untrusted input: reject any value containing `/`, `\`, `..`, or leading `-`; re-prompt the user with the cleaned dash-cased version before writing files.
+
 ## Concept vs repo
 
 Pick the subworkspace from the user's phrasing:

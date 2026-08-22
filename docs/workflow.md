@@ -5,8 +5,8 @@ title: "Workflow"
 
 <section class="page-head">
   <p class="eyebrow mono">omo + Meisijiya skills · 工作流</p>
-  <h1 class="mono">从需求到落地：<span class="accent">三 Agent 接力 × 12 skill</span></h1>
-  <p class="muted">OhMyOpenCode（omo，运行在 OpenCode 平台）配合本仓库筛选的 12 个 skill 的完整工作流 —— 从三个核心 Agent 讲起，串起 skill 的使用场景。</p>
+  <h1 class="mono">从需求到落地：<span class="accent">三 Agent 接力 × 14 skill</span></h1>
+  <p class="muted">OhMyOpenCode（omo，运行在 OpenCode 平台）配合本仓库筛选的 14 个 skill 的完整工作流 —— 从三个核心 Agent 讲起，串起 skill 的使用场景。</p>
 </section>
 
 ## 1. 三个 Agent 的接力 {:#relay}
@@ -66,9 +66,9 @@ OpenCode 下 omo 的 skill 分两层：
 | 层 | 来源 | 类型 | 清单（节选） |
 |---|---|---|---|
 | **omo 内置层** | 插件自带 `dist/skills/` | 编排 / 工具型，三个 Agent 的「操作手册」 | `ulw-plan`、`start-work`、`ulw-research`、`review-work`、`debugging`、`git-master`、`frontend`、`programming`、`refactor`、`remove-ai-slops`、`visual-qa`、`lsp-setup`、`ast-grep` 等 |
-| **本仓库筛选层** | `~/.config/opencode/skills/` | 12 个 Meisijiya skill，工程 / 方法论型 | `engineering/`（10）：`setup-meisijiya-skills`、`codebase-design`、`domain-modeling`、`tdd`、`improve-codebase-architecture`、`prototype`、`diagnosing-bugs`、`code-review`、`resolving-merge-conflicts`、`wizard`；`productivity/`（2）：`grilling`、`writing-for-agents` |
+| **本仓库筛选层** | `~/.config/opencode/skills/` | 14 个 Meisijiya skill，工程 / 方法论型 | `engineering/`（10）：`setup-meisijiya-skills`、`codebase-design`、`domain-modeling`、`tdd`、`improve-codebase-architecture`、`prototype`、`diagnosing-bugs`、`code-review`、`resolving-merge-conflicts`、`wizard`；`productivity/`（4）：`grilling`、`writing-for-agents`、`teach`、`to-questionnaire` |
 
-**筛选原则是「去重」**：凡是 omo 内置能力已覆盖的一律弃用（15 个），避免重复触发 —— `research` → `/ulw-research`、`to-spec` / `to-tickets` / `slice-work` → `/ulw-plan`、`implement` / `handoff` → `task()`、`grill-me` / `wait-what` → `grilling`、`teach` → omo `teach`、`triage` → omo issue-tracker。
+**筛选原则是「去重」**：凡是 omo 内置能力已覆盖的一律弃用（13 个），避免重复触发 —— `research` → `/ulw-research`、`to-spec` / `to-tickets` / `slice-work` → `/ulw-plan`、`implement` / `handoff` → `task()`、`grill-me` / `wait-what` → `grilling`、`triage` → omo issue-tracker。
 
 ## 3. skill 在流水线各环节的注入点 {:#injection}
 
@@ -78,11 +78,11 @@ OpenCode 下 omo 的 skill 分两层：
 | **Prometheus 规划阶段** | 探索 / 写计划时 | `domain-modeling` 的产物被消费（读 `CONTEXT.md` + `docs/adr/`）；`codebase-design` 提供深模块词汇（module / interface / seam / adapter / depth），被 `tdd` 和 `improve-codebase-architecture` 引用为参考源 |
 | **Atlas 执行阶段** | worker 被注入 skill | `tdd`（红 → 绿 → 重构）、`prototype`（可行性 spike）、`code-review`（日常两轴 diff 评审，与 `/review-work` 互补）、`resolving-merge-conflicts`（in-progress merge / rebase 冲突，常规 rebase 走 `git-master`） |
 | **Sisyphus 日常直接执行** | 不经过计划的轻量活 | `diagnosing-bugs`（硬 bug 诊断循环，与 `/debugging` 互补）、`wizard`（人工多步向导）、`grilling`（交叉质询）、`writing-for-agents`（写 `SKILL.md` / `AGENTS.md`）、`prototype`（设计探索） |
-| **user-invoked 守卫** | 只能用户显式触发 | `improve-codebase-architecture`、`setup-meisijiya-skills`：带 `User-invoked only` 前缀 + `disable-model-invocation: true`，避免 Agent 误触发 |
+| **user-invoked 守卫** | 只能用户显式触发 | `improve-codebase-architecture`、`setup-meisijiya-skills`、`teach`、`to-questionnaire`：带 `User-invoked only` 前缀 + `disable-model-invocation: true`，避免 Agent 误触发 |
 
 规划阶段的探索工具链：`codegraph_explore` 优先 → `explore` / `librarian` 只读 subagent → `metis`（gap 分析）/ `momus`（高精度计划评审）。
 
-## 4. 12 个 skill 使用场景映射 {:#skills}
+## 4. 14 个 skill 使用场景映射 {:#skills}
 
 | Skill | 类别 | 触发阶段 | 一句话用途 |
 |---|---|---|---|
@@ -96,6 +96,8 @@ OpenCode 下 omo 的 skill 分两层：
 | `code-review` | engineering | 日常评审 | 两轴差异评审（vs /review-work） |
 | `resolving-merge-conflicts` | engineering | 冲突时 | 解决 in-progress merge / rebase 冲突 |
 | `wizard` | engineering | 人工操作 | 多步人工向导 |
+| `teach` | productivity | 学习 | 学习概念或 OSS 仓库（生成交互式课程 + 测验，写入 `docs/teach/{concept,repo}/`） |
+| `to-questionnaire` | productivity | 异步问询 | 把不能完全回答的决定转成问卷（输出到 cwd） |
 | `grilling` | productivity | 质询 | 严格交叉质询 |
 | `writing-for-agents` | productivity | 写文档 | 写 SKILL.md / AGENTS.md |
 

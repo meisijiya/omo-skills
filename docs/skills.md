@@ -4,9 +4,9 @@ title: "Skills 索引"
 ---
 
 <section class="page-head">
-  <p class="eyebrow mono">12 skills · 采纳清单</p>
+  <p class="eyebrow mono">14 skills · 采纳清单</p>
   <h1 class="mono">所有 skill 一览</h1>
-  <p class="muted">10 个 engineering skill + 2 个 productivity skill，按 phase 分组。</p>
+  <p class="muted">10 个 engineering skill + 4 个 productivity skill，按 phase 分组。</p>
 </section>
 
 {% assign engineering_skills = site.data.skills | where: "category", "engineering" %}
@@ -35,8 +35,8 @@ title: "Skills 索引"
 
 <section class="skills-group">
   <header class="section-head">
-    <h2 class="mono">productivity · 2</h2>
-    <span class="count mono">writing · grilling</span>
+    <h2 class="mono">productivity · 4</h2>
+    <span class="count mono">writing · grilling · teaching · eliciting</span>
   </header>
 
   <div class="skills-expanded">

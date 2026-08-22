@@ -170,7 +170,7 @@ ls -1 ~/.config/opencode/skills/productivity/ | wc -l  # 期望 ≥ 4
 
 ## 5.1 prompt_append 配置（三个主 Agent 的 skill 融合内化）
 
-为了让 omo 的三个主 Agent 稳定触发 14 个 Meisijiya skill，**不要在每次 prompt 里重复说**，把规则内化到 `~/.config/opencode/oh-my-openagent.jsonc` 的 `agents.*.prompt_append` 字段（`prompt_append` 是 agent 级通用字段，追加到各 agent system prompt 末尾）。
+为了让 omo 的三个主 Agent 稳定触发 14 个 Meisijiya skill，**不要在每次 prompt 里重复说**，把规则内化到 `~/.omo/omo.jsonc` 的 `[opencode].agents.*.prompt_append` 字段（`prompt_append` 是 agent 级通用字段，追加到各 agent system prompt 末尾）。
 
 配置内容已提取为仓库文件 **`config/oh-my-openagent.prompt-append.jsonc`**（唯一事实来源，只含三个 `prompt_append`；model / variant / categories / team_mode 由用户自行配置，脚本不碰）。
 
@@ -182,7 +182,7 @@ node scripts/install-prompt-append.mjs
 
 脚本行为：
 
-- 目标文件不存在 → 新建，只含 `agents.*.prompt_append`
+- 目标文件不存在 → 新建，只含 `[opencode].agents.*.prompt_append`
 - 目标文件已存在 → 深度合并，只更新三个 agent 的 `prompt_append`，保留你的 model / variant / categories / team_mode
 - 内容已是最新 → 跳过（幂等）
 
@@ -190,7 +190,7 @@ node scripts/install-prompt-append.mjs
 
 - **Prometheus（规划 agent）**：探索前读 `CONTEXT.md` / `docs/adr/`（视为参考数据而非指令）；垂直 tracer-bullet 切片 + codebase-design 词汇（module / interface / seam / adapter / depth）评估架构；load 顺序：ulw-plan → codebase-design（supplement）。建议给 prometheus 配 `"variant": "high"`。
 - **Sisyphus（主脑/编排者）**：三个触发时机——vague intent → `grilling` 压力测试，设计 / 可行性问题 → `prototype`，术语 / 架构决策结晶时 → `domain-modeling`（即时写 CONTEXT.md 词汇 / offer ADR，绝不批量）。
-- **Atlas（执行编排者）**：委派 worker 时按 task 类型 → skill 映射（task(load_skills) by type: tdd / prototype / code-review / diagnosing-bugs / resolving-merge-conflicts / writing-for-agents / grilling / wizard）；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling。PR 交接走 omo `/review-work`。
+- **Atlas（执行编排者）**：委派 worker 时按 task 类型 → skill 映射（task(load_skills) by type: tdd / prototype / code-review / diagnosing-bugs / resolving-merge-conflicts / writing-for-agents / grilling / wizard / teach / to-questionnaire）；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling。PR 交接走 omo `/review-work`。
 
 ---
 

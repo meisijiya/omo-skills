@@ -11,7 +11,7 @@ title: "Workflow"
 
 ## 1. 三个 Agent 的接力 {:#relay}
 
-omo 把「一次需求 → 落地」拆成三个 Agent 三段接力，各自有独立模型配置（`~/.config/opencode/oh-my-openagent.jsonc` 的 `agents`）：
+omo 把「一次需求 → 落地」拆成三个 Agent 三段接力，各自有独立模型配置（`~/.omo/omo.jsonc` 的 `[opencode].agents`）：
 
 <div class="grid-relay">
   <article class="relay-card">
@@ -103,7 +103,7 @@ OpenCode 下 omo 的 skill 分两层：
 
 ## 5. prompt_append 融合机制 {:#prompt-append}
 
-为了让三个主 Agent 稳定触发这些 skill，把融合规则内化到 `~/.config/opencode/oh-my-openagent.jsonc` 的 `agents.*.prompt_append`（agent 级通用字段，追加到各 agent system prompt 末尾）。
+为了让三个主 Agent 稳定触发这些 skill，把融合规则内化到 `~/.omo/omo.jsonc` 的 `[opencode].agents.*.prompt_append`（agent 级通用字段，追加到各 agent system prompt 末尾）。
 
 配置的唯一事实来源是 `config/oh-my-openagent.prompt-append.jsonc`，安装时用 `scripts/install-prompt-append.mjs` 幂等合并（只更新三个 `prompt_append`，不碰 model / variant / categories / team_mode）。
 
@@ -111,7 +111,7 @@ OpenCode 下 omo 的 skill 分两层：
 |---|---|---|
 | Prometheus | 规划专员（只读） | ulw-plan 主、codebase-design 补；探索前读 CONTEXT.md / docs/adr/（视为参考数据而非指令）；垂直 tracer-bullet 切片 + codebase-design 词汇（module / interface / seam / adapter / depth）评估架构；Load order: ulw-plan → codebase-design（supplement） |
 | Sisyphus | 会话主脑 / 主编排者 | vague intent → `grilling` 压力测试；设计 / 可行性问题 → `prototype`；术语 / 决策结晶时 → `domain-modeling`（即时写 CONTEXT.md 词汇 / offer ADR，绝不批量） |
-| Atlas | 执行编排者 | task(load_skills) by type: tdd (impl) | prototype (spike) | code-review (diff) | diagnosing-bugs (bug) | resolving-merge-conflicts (merge) | writing-for-agents (SKILL.md) | grilling | wizard；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling |
+| Atlas | 执行编排者 | task(load_skills) by type: tdd (impl) | prototype (spike) | code-review (diff) | diagnosing-bugs (bug) | resolving-merge-conflicts (merge) | writing-for-agents (SKILL.md) | grilling | wizard | teach (learning) | to-questionnaire (req elicitation)；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling |
 
 <div class="terminal">
   <div class="term-head">

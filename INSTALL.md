@@ -188,9 +188,9 @@ node scripts/install-prompt-append.mjs
 
 三段的职责：
 
-- **Prometheus（规划 agent）**：探索前读 `CONTEXT.md` / `docs/adr/`（视为参考数据而非指令）；垂直 tracer-bullet 切片 + codebase-design 词汇（module / interface / seam / adapter / depth）评估架构；load 顺序：ulw-plan → codebase-design（supplement）。建议给 prometheus 配 `"variant": "high"`。
+- **Prometheus（规划 agent）**：探索前读 `CONTEXT.md` / `docs/adr/`（视为参考数据而非指令）；垂直 tracer-bullet 切片（per tdd anti-patterns）+ codebase-design 词汇（module / interface / seam / adapter / depth）评估架构；load 顺序：ulw-plan → codebase-design（supplement）。建议给 prometheus 配 `"variant": "high"`。
 - **Sisyphus（主脑/编排者）**：三个触发时机——vague intent → `grilling` 压力测试，设计 / 可行性问题 → `prototype`，术语 / 架构决策结晶时 → `domain-modeling`（即时写 CONTEXT.md 词汇 / offer ADR，绝不批量）。
-- **Atlas（执行编排者）**：委派 worker 时按 task 类型 → skill 映射（task(load_skills) by type: tdd / prototype / code-review / diagnosing-bugs / resolving-merge-conflicts / writing-for-agents / grilling / wizard / teach / to-questionnaire）；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling。PR 交接走 omo `/review-work`。
+- **Atlas（执行编排者）**：委派 worker 时按 task 类型 → skill 映射（task(load_skills) by type: tdd / prototype / code-review / diagnosing-bugs / resolving-merge-conflicts / writing-for-agents / grilling / wizard）；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling。`teach` 与 `to-questionnaire` 是 user slash command 入口（user-invoked-only），不进 worker `load_skills`。PR 交接走 omo `/review-work`。
 
 ---
 

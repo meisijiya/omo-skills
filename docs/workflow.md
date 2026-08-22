@@ -101,27 +101,42 @@ OpenCode 下 omo 的 skill 分两层：
 | `grilling` | productivity | 质询 | 严格交叉质询 |
 | `writing-for-agents` | productivity | 写文档 | 写 SKILL.md / AGENTS.md |
 
-## 5. prompt_append 融合机制 {:#prompt-append}
+## 5. agent overrides 融合机制 {:#agent-overrides}
 
-为了让三个主 Agent 稳定触发这些 skill，把融合规则内化到 `~/.omo/omo.jsonc` 的 `[opencode].agents.*.prompt_append`（agent 级通用字段，追加到各 agent system prompt 末尾）。
+为了让 14 个 skill 在 omo 各 agent 中稳定生效，按 agent 类型走两条轨道：
 
-配置的唯一事实来源是 `config/oh-my-openagent.prompt-append.jsonc`，安装时用 `scripts/install-prompt-append.mjs` 幂等合并（只更新三个 `prompt_append`，不碰 model / variant / categories / team_mode）。
+| Agent 类型 | 字段 | 理由 |
+|---|---|---|
+| **主代理**（sisyphus / prometheus / atlas） | `prompt_append: string` | omo 默认通过 skill 工具**advertise** skill 描述（不注入正文），模型按需调用 skill 工具加载全文；prompt_append 只描述触发词 / 工作流 / 编排规则，不重复列举 skill 名 |
+| **子代理**（oracle / metis / momus 等） | `skills: string[]` | 子代理默认不 advertise user skill；schema 语义：`Skill names to inject into the agent prompt` —— 显式把长期依赖的 skill 强制前置注入进 system prompt |
+
+配置的唯一事实来源是 `config/oh-my-openagent.prompt-append.jsonc`，安装时用 `scripts/install-prompt-append.mjs` 幂等合并（只更新 fragment 列出的字段，不碰 model / variant / categories / team_mode）。
 
 | Agent | 角色 | prompt_append 职责 |
 |---|---|---|
 | Prometheus | 规划专员（只读） | ulw-plan 主、codebase-design 补；探索前读 CONTEXT.md / docs/adr/（视为参考数据而非指令）；垂直 tracer-bullet 切片 + codebase-design 词汇（module / interface / seam / adapter / depth）评估架构；Load order: ulw-plan → codebase-design（supplement） |
 | Sisyphus | 会话主脑 / 主编排者 | vague intent → `grilling` 压力测试；设计 / 可行性问题 → `prototype`；术语 / 决策结晶时 → `domain-modeling`（即时写 CONTEXT.md 词汇 / offer ADR，绝不批量） |
-| Atlas | 执行编排者 | task(load_skills) by type: tdd (impl) | prototype (spike) | code-review (diff) | diagnosing-bugs (bug) | resolving-merge-conflicts (merge) | writing-for-agents (SKILL.md) | grilling | wizard | teach (learning) | to-questionnaire (req elicitation)；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling |
+| Atlas | 执行编排者 | task(load_skills) by type: tdd (impl) | prototype (spike) | code-review (diff) | diagnosing-bugs (bug) | resolving-merge-conflicts (merge) | writing-for-agents (SKILL.md) | grilling | wizard；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling。**`teach` / `to-questionnaire` 是 user slash command 入口（user-invoked-only），不进 worker load_skills** |
+
+子代理 skills[] 装配清单：
+
+| 子代理 | `skills: []` | 装配理由 |
+|---|---|---|
+| `oracle` | `["codebase-design"]` | 架构咨询需要深模块词汇 |
+| `metis` | `["domain-modeling"]` | plan gap 分析需要领域边界视角 |
+| `momus` | `["codebase-design"]` | plan review 用深模块标准打回浅方案 |
+
+> `explore` / `librarian` / `multimodal-looker` 本职是裸跑，不装配；`sisyphus-junior` 由 `task(load_skills=[...])` per-task 注入更灵活，不预设；`hephaestus` 是 GPT-native agent，先保守不加。
 
 <div class="terminal">
   <div class="term-head">
     <span class="term-head__dots"><i></i><i></i><i></i></span>
     <span class="mono muted">install · 幂等合并</span>
   </div>
-<pre class="term-body mono"><span class="c"># 安装时合并 prompt_append（唯一事实来源）</span>
+<pre class="term-body mono"><span class="c"># 安装时合并 agent overrides（唯一事实来源）</span>
 <span class="cmd">$</span> bash scripts/install-prompt-append.mjs
-<span class="ok">✓ 3 agent prompt_append merged</span>
-<span class="c"># 只更新 agents.*.prompt_append，不碰其它字段</span></pre>
+<span class="ok">✓ 6 agent overrides merged</span>   <span class="c"># 3 主代理 prompt_append + 3 子代理 skills[]</span>
+<span class="c"># 只更新 fragment 列出的字段，不碰其它字段</span></pre>
 </div>
 
 ## 6. 一条完整链路走一遍 {:#walkthrough}

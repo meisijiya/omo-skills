@@ -2,15 +2,16 @@
 # scripts/test-prompt-append.sh — characterization suite for prompt_append install.
 #
 # Validates that scripts/install-prompt-append.mjs is frozen F4 behavior:
-#   S1  happy            install mutates ~/.config/...jsonc so 3 prompt_appends match current fragment (dynamic snapshot)
+#   S1  happy            install mutates ~/.config/...jsonc so 6 agent overrides match current fragment (dynamic snapshot):
+#                         3 prompt_append (sisyphus/prometheus/atlas) + 3 skills[] (oracle/metis/momus)
 #   S2  idempotency      re-run leaves mtime unchanged + stdout contains 已是最新
-#   S3  regression       non-target agents (8) preserved w/o prompt_append;
-#                         categories + team_mode byte-identical vs pre-test snapshot;
-#                         target agents (3) prompt_appends changed
+#   S3  regression       non-target agents (5: librarian/explore/multimodal-looker/sisyphus-junior/hephaestus)
+#                         preserved w/o prompt_append; categories + team_mode byte-identical vs pre-test snapshot;
+#                         target agents' fields match fragment
 #   S4  corrupt fragment truncated JSON → install exits non-zero + stderr has SyntaxError +
 #                         user config mtime unchanged; fragment restored from SNAP_V3 (dynamic snapshot taken at test start)
-#   S5  incomplete       2-of-3 fragment → install rejects OR merges ≤ 2 strings (silent
-#                         acceptance of >2 is a FAIL); fragment restored from SNAP_V3 (dynamic snapshot taken at test start)
+#   S5  incomplete       5-of-6 fragment → install rejects OR merges the 5 strings/arrays (silent
+#                         acceptance of >5 is a FAIL); fragment restored from SNAP_V3 (dynamic snapshot taken at test start)
 #   D1  docs workflow    docs/workflow.md has 'grilling' ≥ 1 + 'Load order' ≥ 1
 #   D2  docs INSTALL     INSTALL.md has 'grilling' ≥ 1 + 'diagnosing-bugs' ≥ 2
 #
@@ -22,8 +23,8 @@
 #                                     picked up via glob if available; falls back to TARGET)
 #   - /tmp/test-user-config.bak.jsonc  pre-test user config snapshot (kept for legacy audit)
 #   - /tmp/test-S<n>.log / .out / .err per-scenario logs for debugging
-#   - Script ENDS with fragment matching SNAP_V3 + user config containing all 3 prompt_appends
-#     (final `node install-prompt-append.mjs` re-installs SNAP_V3 state if S5 reduced prompt_append count).
+#   - Script ENDS with fragment matching SNAP_V3 + user config containing all 6 agent overrides
+#     (final `node install-prompt-append.mjs` re-installs SNAP_V3 state if S5 reduced override count).
 #
 # Snapshot path is dynamic — see SNAP_V3 captured fresh at test start from current FRAGMENT; do not hardcode version labels.
 #
@@ -120,7 +121,7 @@ restore_fragment() {
 test_S1() {
   local id=S1 log="$LOG_DIR/test-S1.log" rc
   {
-    echo "== test_S1: happy install + verify 3 prompt_appends match current fragment (dynamic snapshot) =="
+    echo "== test_S1: happy install + verify 6 agent overrides match current fragment (dynamic snapshot) =="
     rc=$(run_install "$log.out" "$log.err")
     echo "install exit=$rc"
     cat "$log.out"
@@ -131,6 +132,7 @@ test_S1() {
       return 1
     fi
 
+    # 3 main agents: prompt_append (string)
     for agent in prometheus sisyphus atlas; do
       local expected actual
       expected=$(jq_jsonc "$FRAGMENT" ".agents.${agent}.prompt_append")
@@ -141,7 +143,21 @@ test_S1() {
         echo "actual:   $actual" >&2
         return 1
       fi
-      printf 'OK %s: %s...\n' "$agent" "$(printf '%s' "$actual" | head -c 50)"
+      printf 'OK %s.prompt_append: %s...\n' "$agent" "$(printf '%s' "$actual" | head -c 50)"
+    done
+
+    # 3 subagents: skills[] (string[])
+    for agent in oracle metis momus; do
+      local expected actual
+      expected=$(jq_jsonc "$FRAGMENT" ".agents.${agent}.skills")
+      actual=$(jq_jsonc "$TARGET" ".[\"[opencode]\"].agents.${agent}.skills")
+      if [ "$expected" != "$actual" ]; then
+        fail "$id" "agents.${agent}.skills mismatch"
+        echo "expected: $expected" >&2
+        echo "actual:   $actual" >&2
+        return 1
+      fi
+      printf 'OK %s.skills: %s\n' "$agent" "$actual"
     done
 
     pass "$id"
@@ -158,8 +174,8 @@ test_S3() {
   {
     echo "== test_S3: regression — non-target preserved + categories + team_mode + target matches fragment =="
 
-    # 8 non-target agents must NOT have prompt_append
-    for agent in oracle librarian explore multimodal-looker metis momus sisyphus-junior hephaestus; do
+    # 5 non-target agents must NOT have prompt_append
+    for agent in librarian explore multimodal-looker sisyphus-junior hephaestus; do
       local has_pp
       has_pp=$(jq_jsonc "$TARGET" --arg a "$agent" '.["[opencode]"].agents[$a] | has("prompt_append")')
       if [ "$has_pp" != "false" ]; then
@@ -436,7 +452,7 @@ for scenario in test_S1 test_S3 test_S2 test_S4 test_S5 test_D1 test_D2; do
   fi
 done
 
-# Final canonicalization: ensure fragment matches SNAP_V3 + user config has all 3 prompt_appends
+# Final canonicalization: ensure fragment matches SNAP_V3 + user config has all 6 agent overrides
 cp -f "$SNAP_V3" "$FRAGMENT"
 final_rc=$(run_install /tmp/test-final.out /tmp/test-final.err) || true
 echo "final canonicalization install exit=$final_rc"

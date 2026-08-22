@@ -1,6 +1,16 @@
-// omo-skills 三个主 Agent 的 prompt_append 增量片段（唯一事实来源）
-// 由 scripts/install-prompt-append.mjs 幂等合并进 ~/.config/opencode/oh-my-openagent.jsonc
-// 本文件只含 prompt_append；model / variant / categories / team_mode 等由用户自行配置
+// omo-skills 的 agent overrides 唯一事实来源（主 Agent prompt_append + 子 Agent skills[]）
+// 由 scripts/install-prompt-append.mjs 幂等合并进 ~/.omo/omo.jsonc 的 [opencode].agents.*
+//
+// 字段职责：
+//   - 主代理 (sisyphus / prometheus / atlas) 用 prompt_append：omo 默认通过 skill 工具 advertise
+//     skill 描述（不注入正文），模型按需调用 skill 工具加载全文；这里的 prompt_append 只描述
+//     触发词 / 工作流 / 编排规则，不重复列举 skill 名。
+//   - 子代理 (oracle / metis / momus 等) 用 skills[]：子代理默认不 advertise user skill；
+//     schema 语义 `string[] of skill names to inject into the agent prompt` —— 显式把该子代理
+//     长期依赖的 skill 强制前置注入进 system prompt。
+//
+// 同 agent 可同时含 prompt_append + skills（无冲突）。本仓库当前 6 个 agent 各只用其一。
+// model / variant / categories / team_mode 等由用户自行配置，脚本不碰。
 {
   "agents": {
     "prometheus": {
@@ -11,6 +21,15 @@
     },
     "atlas": {
       "prompt_append": "Map worker load_skills by task type: tdd (impl) | prototype (spike) | code-review (diff) | diagnosing-bugs (bug) | resolving-merge-conflicts (merge) | writing-for-agents (SKILL.md) | grilling (stress-test) | wizard (infra wizard). If worker edits CONTEXT.md or docs/adr/, also pass domain-modeling. teach and to-questionnaire are user-invoked slash commands — never load them into a worker."
+    },
+    "oracle": {
+      "skills": ["codebase-design"]
+    },
+    "metis": {
+      "skills": ["domain-modeling"]
+    },
+    "momus": {
+      "skills": ["codebase-design"]
     }
   }
 }

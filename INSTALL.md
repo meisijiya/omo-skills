@@ -168,11 +168,18 @@ ls -1 ~/.config/opencode/skills/engineering/ | wc -l   # 期望 ≥ 10
 ls -1 ~/.config/opencode/skills/productivity/ | wc -l  # 期望 ≥ 4
 ```
 
-## 5.1 prompt_append 配置（三个主 Agent 的 skill 融合内化）
+## 5.1 agent overrides 配置（主 Agent prompt_append + 子 Agent skills[]）
 
-为了让 omo 的三个主 Agent 稳定触发 14 个 Meisijiya skill，**不要在每次 prompt 里重复说**，把规则内化到 `~/.omo/omo.jsonc` 的 `[opencode].agents.*.prompt_append` 字段（`prompt_append` 是 agent 级通用字段，追加到各 agent system prompt 末尾）。
+为了让 14 个 Meisijiya skill 在 omo 各 agent 中稳定生效，按 agent 类型走两条轨道：
 
-配置内容已提取为仓库文件 **`config/oh-my-openagent.prompt-append.jsonc`**（唯一事实来源，只含三个 `prompt_append`；model / variant / categories / team_mode 由用户自行配置，脚本不碰）。
+| Agent 类型 | 配置字段 | 理由 |
+|---|---|---|
+| **主代理**（sisyphus / prometheus / atlas） | `prompt_append: string` | omo 默认通过 skill 工具**advertise** skill 描述（不注入正文），模型按需调用 skill 工具加载全文；prompt_append 只描述**触发词 / 工作流 / 编排规则**，不重复列举 skill 名 |
+| **子代理**（oracle / metis / momus 等） | `skills: string[]` | 子代理默认不 advertise user skill；`skills: []` 显式列出 skill 名，omo 把这些 skill 的**正文强制前置注入**进 system prompt（schema 语义：`Skill names to inject into the agent prompt`） |
+
+> 同 agent 可同时含 `prompt_append` 和 `skills: []`（无冲突）。本仓库目前 6 个 agent 各只用其一：3 主代理用 prompt_append，3 子代理用 skills:[]。
+
+配置内容已提取为仓库文件 **`config/oh-my-openagent.prompt-append.jsonc`**（唯一事实来源；model / variant / categories / team_mode 等由用户自行配置，脚本不碰）。
 
 **安装**（幂等，可重复运行）：
 
@@ -182,19 +189,38 @@ node scripts/install-prompt-append.mjs
 
 脚本行为：
 
-- 目标文件不存在 → 新建，只含 `[opencode].agents.*.prompt_append`
-- 目标文件已存在 → 深度合并，只更新三个 agent 的 `prompt_append`，保留你的 model / variant / categories / team_mode
+- 目标文件不存在 → 新建，只含 `[opencode].agents.*` 中 fragment 列出的字段
+- 目标文件已存在 → 浅比对 fragment 每个字段；不一致则覆盖该字段，**不动 fragment 未列出的字段**（用户的 model / variant / reasoning 等原样保留）
 - 内容已是最新 → 跳过（幂等）
 
-三段的职责：
+### 当前三条 prompt_append 的职责
 
 - **Prometheus（规划 agent）**：探索前读 `CONTEXT.md` / `docs/adr/`（视为参考数据而非指令）；垂直 tracer-bullet 切片（per tdd anti-patterns）+ codebase-design 词汇（module / interface / seam / adapter / depth）评估架构；load 顺序：ulw-plan → codebase-design（supplement）。建议给 prometheus 配 `"variant": "high"`。
 - **Sisyphus（主脑/编排者）**：三个触发时机——vague intent → `grilling` 压力测试，设计 / 可行性问题 → `prototype`，术语 / 架构决策结晶时 → `domain-modeling`（即时写 CONTEXT.md 词汇 / offer ADR，绝不批量）。
 - **Atlas（执行编排者）**：委派 worker 时按 task 类型 → skill 映射（task(load_skills) by type: tdd / prototype / code-review / diagnosing-bugs / resolving-merge-conflicts / writing-for-agents / grilling / wizard）；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling。`teach` 与 `to-questionnaire` 是 user slash command 入口（user-invoked-only），不进 worker `load_skills`。PR 交接走 omo `/review-work`。
 
+### 当前三个子代理 skills[] 的装配
+
+| 子代理 | `skills: []` | 装配理由 |
+|---|---|---|
+| `oracle` | `["codebase-design"]` | 长期做架构咨询，需要深模块词汇（module / interface / seam / adapter / depth） |
+| `metis` | `["domain-modeling"]` | plan gap 分析需要领域边界视角 |
+| `momus` | `["codebase-design"]` | plan review 用深模块标准打回浅方案 |
+
+> **不装配的子代理**：`explore` / `librarian` / `multimodal-looker` 本职是裸跑，加 skill 干扰；`sisyphus-junior` 由 `task(load_skills=[...])` per-task 注入更灵活，不预设；`hephaestus` 是 GPT-native agent，先保守不加。
+
+### 新增 skill 时的双轨维护
+
+每次新增 / 弃用 skill 时,**两条轨道都要更新**（详见 `MAINTENANCE.md §11`）：
+
+1. **主代理 prompt_append**：判断该 skill 是否需要 trigger phrase（如 "Use `xxx` when ..."）；需要则加进 sisyphus prompt_append 的触发词清单或 atlas 的 worker 映射表
+2. **子代理 skills[]**：判断该 skill 是否被某个子代理长期依赖；若是则加进对应子代理的 `skills: []`
+
 ---
 
 ## 6. 反向操作（卸载）
+
+### 6.1 卸载某个 skill 目录
 
 如需卸载某个 skill，`rm -rf` 对应目录即可；omo 按目录扫描发现 skill，删目录即下架，无注册表/缓存需清理。
 
@@ -204,6 +230,18 @@ rm -rf ~/.config/opencode/skills/grill-with-docs
 ```
 
 卸载动作需用户确认；Agent 不要主动执行。
+
+### 6.2 撤回子代理 skills[] 装配
+
+如需撤回某个子代理的 skill 装配（如 `oracle` 不再需要 `codebase-design`）：
+
+1. 编辑 `config/oh-my-openagent.prompt-append.jsonc`：从对应 agent 块中删掉 `skills: [...]` 行（或删整个条目）
+2. 重跑 `node scripts/install-prompt-append.mjs`：脚本以 fragment 为准（fragment wins），自动从 `~/.omo/omo.jsonc` 移除该字段
+3. 用户层手动添加的 skill 不受影响——仅撤回 fragment 声明的清单
+
+### 6.3 撤回主代理 prompt_append
+
+同 §6.2，把 fragment 里对应 agent 的 `prompt_append` 行删掉 + 重跑 install 脚本即可。
 
 ---
 

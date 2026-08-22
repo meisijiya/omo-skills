@@ -96,16 +96,18 @@ omo-skills/
 它覆盖：
 
 - 把采纳 skill 装入 omo 的步骤（专门服务 omo）
-- `oh-my-openagent.jsonc` 中三个主 Agent（`sisyphus`/`prometheus`/`atlas`）`prompt_append` 的 skill 融合内化配置
-- 升级 skill（添加新 skill / 修改现有 skill）的方法
+- `oh-my-openagent.jsonc` 中 agent overrides 的 skill 融合内化配置：
+  - 三个主 Agent（`sisyphus` / `prometheus` / `atlas`）的 `prompt_append`
+  - 三个子 Agent（`oracle` / `metis` / `momus`）的 `skills: []`
+- 升级 skill（添加新 skill / 修改现有 skill）的方法 —— 详见 `MAINTENANCE.md §11` 双轨维护
 - 卸载 / 禁用方式
 - 故障排查（触发不灵、与 omo 内置 skill 撞车等）
 
 ## 历史（已脱离上游）
 
-仓库早期 fork 自 `mattpocock/mattpocock-skills`，但早已脱离上游同步（不再 fetch / rebase），fork 目录已删除。本仓库 `skills/` 是唯一来源。
+仓库早期 fork 自 `mattpocock/skills`，但早已脱离上游同步（不再 fetch / rebase），fork 目录已删除。本仓库 `skills/` 是唯一来源。
 
-新 skill 直接在 `skills/<bucket>/<name>/` 下新建，按 `MAINTENANCE.md §5` Step 0 讨论通过后纳入。
+新 skill 直接在 `skills/<bucket>/<name>/` 下新建，按 `MAINTENANCE.md §5` Step 0 讨论通过后纳入；纳入后必须按 `MAINTENANCE.md §11` 双轨维护 prompt_append + 子代理 skills[]。
 
 ## 许可
 
@@ -126,5 +128,6 @@ omo-skills/
 - **§5 Skill 引入规则（讨论流程）**：先讨论再决定，不靠自动化
 - **§9 文档落地路径分类**：提交类（`docs/adr/` `CONTEXT.md` `CONTEXT-MAP.md` `docs/agents/`）vs 临时态（`.scratch/` `.out-of-scope/`）的判定标准（讨论参考，非自动化）
 - **§10 skill 新建流程**（已脱离上游，按 §5 Step 0 讨论后再决定是否纳入）
+- **§11 agent overrides 双轨维护**（新增 / 废弃 skill 时强制：主代理 prompt_append + 子代理 skills[] 双轨更新）
 - 退役 skill 的流程
 - 故障排查速查表

@@ -1,7 +1,9 @@
 #!/usr/bin/env node
-// 幂等地把 config/oh-my-openagent.prompt-append.jsonc 的 prompt_append 合并进
-// ~/.omo/omo.jsonc 的 target["[opencode]"].agents.*.prompt_append（只更新三个 agent 的 prompt_append，
-// 不碰用户的 model / variant / categories / team_mode 等其它字段）。
+// 幂等地把 config/oh-my-openagent.prompt-append.jsonc 的 agent overrides 合并进
+// ~/.omo/omo.jsonc 的 target["[opencode]"].agents.*：
+//   - 主代理（sisyphus / prometheus / atlas）的 prompt_append
+//   - 子代理（oracle / metis / momus 等）的 skills[]
+// 只更新 fragment 列出的字段；model / variant / categories / team_mode 等用户字段不动。
 //
 // 用法：node scripts/install-prompt-append.mjs
 
@@ -31,6 +33,9 @@ function parseJsonc(text) {
   return JSON.parse(out.replace(/,\s*([}\]])/g, "$1"));
 }
 
+// 浅比较两个值（JSON.stringify 足够：处理 string / number / array of string 等原子类型）
+const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+
 const fragment = parseJsonc(fs.readFileSync(FRAGMENT, "utf8"));
 const targetExists = fs.existsSync(TARGET);
 const target = targetExists ? parseJsonc(fs.readFileSync(TARGET, "utf8")) : {};
@@ -39,15 +44,19 @@ target["[opencode]"] ??= {};
 target["[opencode]"].agents ??= {};
 
 let changed = 0;
+const diffs = [];
 for (const [name, cfg] of Object.entries(fragment.agents)) {
-  if (target["[opencode]"].agents[name]?.prompt_append !== cfg.prompt_append) {
-    target["[opencode]"].agents[name] = { ...target["[opencode]"].agents[name], prompt_append: cfg.prompt_append };
-    changed++;
-  }
+  const existing = target["[opencode]"].agents[name] ?? {};
+  // 浅比对 fragment 里的每个字段；任一字段不一致即触发该 agent 的合并
+  const fieldDiffs = Object.keys(cfg).filter((k) => !same(existing[k], cfg[k]));
+  if (fieldDiffs.length === 0) continue;
+  target["[opencode]"].agents[name] = { ...existing, ...cfg };
+  diffs.push(`${name}: ${fieldDiffs.join(", ")}`);
+  changed++;
 }
 
 if (changed === 0) {
-  console.log("✓ prompt_append 已是最新，无需改动（幂等）。");
+  console.log("✓ agent overrides 已是最新，无需改动（幂等）。");
 } else {
   // 保留目标文件的首行 // 注释（如有），其余按标准 JSON 写回
   let header = "";
@@ -58,6 +67,7 @@ if (changed === 0) {
   }
   fs.mkdirSync(path.dirname(TARGET), { recursive: true });
   fs.writeFileSync(TARGET, header + JSON.stringify(target, null, 2) + "\n");
-  console.log(`✓ 已合并 ${changed} 个 agent 的 prompt_append → ${TARGET}`);
+  console.log(`✓ 已合并 ${changed} 个 agent 的 override → ${TARGET}`);
+  for (const d of diffs) console.log(`    · ${d}`);
   console.log("  提示：写回为标准 JSON；首行注释保留，其余行内注释会移除。");
 }

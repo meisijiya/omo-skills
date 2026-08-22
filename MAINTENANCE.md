@@ -226,3 +226,77 @@ mkdir -p skills/engineering/<new-skill>/agents
 ### 已废止：上游同步
 
 仓库不再依赖任何上游 fork。无 `fetch` / `rebase` / `merge` 流程。`mattpocock-skills/` 目录已删除。
+
+---
+
+## §11. agent overrides 双轨维护（新增 / 废弃 skill 时的强制检查项）
+
+> **核心约束**：每新增或废弃一个 skill，**两条轨道都必须更新**，遗漏任意一条都会导致部分 agent 看不到 / 误触发。
+
+### §11.1 双轨定义
+
+| 轨道 | 配置字段 | 适用 agent | 触发逻辑 |
+|---|---|---|---|
+| **A. 主代理 prompt_append** | `agents.<name>.prompt_append: string` | sisyphus / prometheus / atlas | omo 默认通过 skill 工具**advertise** skill 描述（不注入正文），模型按需调用 skill 工具加载全文；prompt_append 描述 **触发词 / 工作流 / 编排规则**，让模型在合适时机主动调用 |
+| **B. 子代理 skills[]** | `agents.<name>.skills: string[]` | oracle / metis / momus 等 | 子代理默认不 advertise user skill；`skills: []` 显式列出 skill 名，omo 把这些 skill 的**正文强制前置注入**进 system prompt（schema 语义：`Skill names to inject into the agent prompt`） |
+
+### §11.2 新增 skill 时的双轨检查
+
+```text
+对每个新 skill（按 MAINTENANCE.md §5 Step 0 通过讨论纳入）回答：
+  1. 主代理 prompt_append 是否要更新？
+     □ 是 → 把 trigger phrase 加进 sisyphus.prompt_append
+            或在 atlas.prompt_append 字符串里的 worker 映射表追加新条目
+            （例：atlas 的 `tdd (impl) | prototype (spike) | ...`）
+     □ 否 → 仅 README/INSTALL 文档登记，prompt_append 不动
+
+  2. 子代理 skills[] 是否要更新？
+     □ 是 → 判断该 skill 是否被某个子代理长期依赖
+            - oracle（架构咨询）→ 通常加 codebase-design 类
+            - metis（gap 分析）→ 通常加 domain-modeling 类
+            - momus（plan review）→ 通常加 codebase-design 类
+            - 其他子代理按职责判断
+            然后在 fragment 加 `agents.<xxx>.skills: ["<新 skill>"]`
+     □ 否 → 子代理不装配，per-task 用 `task(load_skills=[...])` 临时注入
+
+  3. 跑 §4 的 3 条断言
+  4. 跑 `node scripts/install-prompt-append.mjs` 验证幂等
+  5. grep 确认 `~/.omo/omo.jsonc` 已写入
+```
+
+### §11.3 废弃 skill 时的双轨检查
+
+```text
+对每个废弃 skill：
+  1. 从 sisyphus.prompt_append / atlas.prompt_append 移除 trigger phrase 与 worker 映射项
+  2. 从相关子代理的 skills[] 移除（如果之前装配过）
+  3. 更新 README 弃用表 + INSTALL.md §3 跳过表
+  4. 删除本地 SKILL.md 目录（保留弃用表作为历史决策可查）
+  5. 跑 §4 断言更新（去掉退役 skill 的引用）+ 跑 install 脚本验证
+```
+
+### §11.4 维护位置（事实来源）
+
+- **fragment 文件**：`config/oh-my-openagent.prompt-append.jsonc`（仓库内唯一事实来源）
+- **合并目标**：`~/.omo/omo.jsonc` 的 `[opencode].agents.*`（运行 install 脚本写入）
+- **merge 脚本**：`scripts/install-prompt-append.mjs`（浅比对 + fragment 字段覆盖，不动用户字段）
+
+### §11.4.1 文档同步契约
+
+仓库文档有三层事实来源：
+
+| 来源 | 跟踪 | 同步时机 |
+|---|---|---|
+| `INSTALL.md` / `MAINTENANCE.md` / `config/*.jsonc` | git | 每次改 §5.1 / §11 必同步 |
+| `docs/*.md`（Jekyll 站点镜像） | 手工 | 不强制每次同步；按 §2 监控信号 `docs/ drift` 触发批量对齐 |
+| `~/.omo/omo.jsonc` | 运行时 | 跑 `install-prompt-append.mjs` 自动写入 |
+
+### §11.5 不装配的子代理（避免越界）
+
+| 子代理 | 不装配的原因 |
+|---|---|
+| `explore` / `librarian` / `multimodal-looker` | 本职是裸跑（grep / 文档搜索 / 视觉解析），加 skill 干扰本职 |
+| `sisyphus-junior` | 由 `task(load_skills=[...])` per-task 注入更灵活；预设会污染 task 调度灵活性 |
+| `hephaestus` | GPT-native agent，先保守不加；如未来需要工程纪律再补 `["tdd", "diagnosing-bugs"]` |
+
+> **未来扩展 skill 时的最低动作清单**：每加 1 个 skill，至少检查 §11.2 的 5 个 checkbox 与 §11.3 的 5 个 checkbox。

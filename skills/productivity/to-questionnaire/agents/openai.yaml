@@ -1,0 +1,5 @@
+interface:
+  display_name: "To Questionnaire"
+  short_description: "Async third-party requirement elicitation via structured questionnaire"
+policy:
+  allow_implicit_invocation: false

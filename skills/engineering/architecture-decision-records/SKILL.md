@@ -1,6 +1,6 @@
 ---
 name: architecture-decision-records
-description: "Author and maintain Architecture Decision Records (ADRs) for significant technical decisions. Use when: documenting tech-stack or framework choices, capturing trade-offs that supersede a prior decision, retiring a previously-accepted decision, / write an ADR, / capture this decision, / ADR lifecycle. ADRs land under `docs/adr/` per `domain-modeling` convention with `NNNN-kebab-title.md` numbering and lifecycle `Proposed → Accepted → Deprecated → Superseded`. Use `domain-modeling` for the surrounding vocabulary in CONTEXT.md; NOT for routine code-level choices (just write the code) or for deep-module design vocabulary itself (use `codebase-design`)."
+description: "Author and maintain Architecture Decision Records (ADRs) — the ONLY skill that writes to `docs/adr/`. Use when: documenting tech-stack or framework choices, capturing trade-offs that supersede a prior decision, retiring a previously-accepted decision, / write an ADR, / capture this decision, / ADR lifecycle. Owns templates (MADR / Lightweight / Y-Statement / Deprecation / RFC), `NNNN-kebab-title.md` numbering, `Proposed → Accepted → Deprecated → Superseded` lifecycle, and `docs/adr/README.md` index. `domain-modeling` writes CONTEXT.md (vocabulary only) and routes architecture-level decisions here. NOT for routine code-level choices (just write the code), for deep-module design vocabulary (use `codebase-design`), or for term/glossary work (use `domain-modeling`)."
 ---
 
 # Architecture Decision Records

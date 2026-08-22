@@ -1,6 +1,6 @@
 ---
 name: domain-modeling
-description: "Write or edit the project's domain model: CONTEXT.md vocabulary and docs/adr/ ADRs. Use when: a term or decision crystallises / writing or editing a CONTEXT.md / recording or editing an ADR / 术语结晶 / 写 ADR / 决策敲定. Requires the domain doc layout (run setup-meisijiya-skills first if missing). NOT for SKILL.md or AGENTS.md (use writing-for-agents) or for deep-module design vocabulary (use codebase-design)."
+description: "Write or edit the project's domain vocabulary in CONTEXT.md. Use when: a term crystallises / writing or editing a CONTEXT.md / 术语结晶 / 决策敲定. For architecture-level decisions (technical stack, cross-context boundaries, hard-to-reverse choices), offer routing to `architecture-decision-records` — that skill is the ONLY owner of `docs/adr/` (templates, numbering, lifecycle, index). Requires the domain doc layout (run setup-meisijiya-skills first if missing). NOT for SKILL.md or AGENTS.md (use writing-for-agents), for deep-module design vocabulary (use codebase-design), or for writing ADRs (use architecture-decision-records)."
 ---
 
 # Domain Modeling
@@ -37,7 +37,7 @@ If a `CONTEXT-MAP.md` exists at the root, the repo has multiple contexts. The ma
 │       └── docs/adr/
 ```
 
-Create files lazily: only when you have something to write. If no `CONTEXT.md` exists, create one when the first term is resolved. If no `docs/adr/` exists, create it when the first ADR is needed.
+Create files lazily: only when you have something to write. If no `CONTEXT.md` exists, create one when the first term is resolved. The `docs/adr/` directory is owned by `architecture-decision-records` — this skill no longer creates it.
 
 ## During the session
 
@@ -63,12 +63,17 @@ When a term is resolved, update `CONTEXT.md` right there. Don't batch these up: 
 
 `CONTEXT.md` should be totally devoid of implementation details. Do not treat `CONTEXT.md` as a spec, a scratch pad, or a repository for implementation decisions. It is a glossary and nothing else.
 
-### Offer ADRs sparingly
+### Offer to route architecture-level decisions to architecture-decision-records
 
-Only offer to create an ADR when all three are true:
+This skill owns `CONTEXT.md` only. When a decision crystallises in conversation, first judge whether it's **vocabulary** (terminology, definitions, glossary entries) or **architecture** (technical stack, cross-context boundaries, hard-to-reverse choices):
 
-1. **Hard to reverse**: the cost of changing your mind later is meaningful
-2. **Surprising without context**: a future reader will wonder "why did they do it this way?"
-3. **The result of a real trade-off**: there were genuine alternatives and you picked one for specific reasons
+- **Vocabulary** → update `CONTEXT.md` right there (see "Update CONTEXT.md inline" above).
+- **Architecture** → if all three are true, offer to route it to `architecture-decision-records`:
 
-If any of the three is missing, skip the ADR. Use the format in [ADR-FORMAT.md](./ADR-FORMAT.md).
+  1. **Hard to reverse**: the cost of changing your mind later is meaningful
+  2. **Surprising without context**: a future reader will wonder "why did they do it this way?"
+  3. **The result of a real trade-off**: there were genuine alternatives and you picked one for specific reasons
+
+  If any of the three is missing, skip the ADR — record it in `CONTEXT.md` if it stays a term, or just write the code if it's reversible.
+
+`architecture-decision-records` owns the full ADR workflow: templates (MADR / Lightweight / Y-Statement / Deprecation / RFC), `NNNN-kebab-title.md` numbering, `Proposed → Accepted → Deprecated → Superseded` lifecycle, `docs/adr/README.md` index, and review checklist. Do **not** write ADR files directly from this skill.

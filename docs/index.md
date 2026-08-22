@@ -2,23 +2,23 @@
 layout: default
 title: "omo-skills — Matt Pocock 工程 skill 仓库"
 description: >-
-  omo 适配的 Matt Pocock 工程 skill 仓库在线指南 —— 12 个采纳 skill、
+  omo 适配的 Matt Pocock 工程 skill 仓库在线指南 —— 14 个采纳 skill、
   三 Agent 接力工作流、4 步安装与维护手册。
 ---
 
 <section class="hero">
   <p class="eyebrow mono">omo · 工程 skill 仓库</p>
   <h1 class="mono">Matt Pocock 的工程 skill，<br><span style="color: var(--accent);">为 omo 量身筛选。</span></h1>
-  <p class="hero-subtitle" style="color: var(--muted);">12 个工程 / 产出 skill · 三 Agent 接力工作流 · 4 步安装即用 · 长期维护手册。</p>
+  <p class="hero-subtitle" style="color: var(--muted);">14 个工程 / 产出 skill · 三 Agent 接力工作流 · 4 步安装即用 · 长期维护手册。</p>
   <div class="ctas">
-    <a class="btn btn-primary mono" href="{{ '/skills/' | relative_url }}">→ 浏览 12 skill</a>
+    <a class="btn btn-primary mono" href="{{ '/skills/' | relative_url }}">→ 浏览 14 skill</a>
     <a class="btn btn-ghost mono" href="{{ '/install/' | relative_url }}">4 步安装</a>
   </div>
 </section>
 
 <section class="skills-snapshot">
   <header class="section-head">
-    <h2 class="mono">skills · 12 采纳</h2>
+    <h2 class="mono">skills · 14 采纳</h2>
     {% assign eng_count = site.data.skills | where: "category", "engineering" | size %}
     {% assign prod_count = site.data.skills | where: "category", "productivity" | size %}
     <span class="count mono">{{ eng_count }} engineering · {{ prod_count }} productivity</span>
@@ -71,8 +71,8 @@ description: >-
     </div>
 <pre class="term-body mono"><span class="c"># 1. 选目录</span>
 <span class="cmd">$</span> ls ~/.config/opencode/skills/
-<span class="ok">→</span> 12 skill dir created
-<span class="c"># 2-4. cp -r × 12 + merge prompt_append</span>
+<span class="ok">→</span> 14 skill dir created
+<span class="c"># 2-4. cp -r × 14 + merge prompt_append</span>
 <span class="cmd">$</span> bash scripts/install-prompt-append.mjs
 <span class="ok">✓ 3 agent prompt_append merged</span></pre>
   </div>

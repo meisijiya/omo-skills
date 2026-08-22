@@ -1,0 +1,5 @@
+interface:
+  display_name: "Teach"
+  short_description: "Learn concepts through hands-on walkthroughs of OSS repositories"
+policy:
+  allow_implicit_invocation: false

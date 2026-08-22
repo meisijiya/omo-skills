@@ -10,7 +10,7 @@
       "prompt_append": "Use `grilling` when intent is vague or a decision needs stress-testing before planning. Use `prototype` for design / feasibility questions. Use `domain-modeling` the moment a term or decision crystallises — write CONTEXT.md or offer ADR inline, never batch."
     },
     "atlas": {
-      "prompt_append": "Map worker load_skills by task type: tdd (impl) | prototype (spike) | code-review (diff) | diagnosing-bugs (bug) | resolving-merge-conflicts (merge) | writing-for-agents (SKILL.md) | grilling | wizard. If worker edits CONTEXT.md or docs/adr/, also pass domain-modeling."
+      "prompt_append": "Map worker load_skills by task type: tdd (impl) | prototype (spike) | code-review (diff) | diagnosing-bugs (bug) | resolving-merge-conflicts (merge) | writing-for-agents (SKILL.md) | grilling | wizard | teach (learning) | to-questionnaire (req elicitation). If worker edits CONTEXT.md or docs/adr/, also pass domain-modeling."
     }
   }
 }

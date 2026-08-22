@@ -24,7 +24,7 @@ Agent 读完本指南后，按流程逐节执行即可，无需再回头询问�
 
 ## 2. 能力对照表
 
-本节把 12 个采纳 skill 与 omo 内置的对应能力并列对照，方便选型。
+本节把 14 个采纳 skill 与 omo 内置的对应能力并列对照，方便选型。
 
 | Skill | omo 内置对应 | 备注 |
 |---|---|---|
@@ -38,6 +38,8 @@ Agent 读完本指南后，按流程逐节执行即可，无需再回头询问�
 | `code-review` | `/review-work` | 互补：日常 diff review vs PR 交接 full QA |
 | `resolving-merge-conflicts` | — | rebase conflict playbooks（不是常规 rebase / squash / git-history） |
 | `wizard` | — | 多步人工向导 |
+| `teach` | — | 概念 / OSS 仓库学习（user-invoked） |
+| `to-questionnaire` | — | 异步第三方需求问询（user-invoked） |
 | `grilling` | — | 严格交叉质询 |
 | `writing-for-agents` | — | SKILL.md / AGENTS.md 写作 |
 
@@ -63,8 +65,6 @@ omo 已内置同名或同等能力的 skill，跳过避免重复触发。
 | `triage` | skip | omo `issue-tracker` workflow 内置类似流程 |
 | `wayfinder` | skip | 仅大型 monorepo 需要，触发噪音明显 |
 | `grill-me` | skip | 由 `grilling` 合并 |
-| `teach` | skip | omo 内置 `teach` skill |
-| `to-questionnaire` | skip | 与 `grilling` 工作流重叠 |
 | `wait-what` | skip | 由 `grilling` 承接 |
 | `slice-work` | skip | 与 omo `/ulw-plan` 触发面重叠、缺任务行语法约束；omo prompt_append 内化垂直切片纪律（见 §5.1） |
 | `setup-matt-pocock-skills` | skip | 重命名为 `setup-meisijiya-skills` |
@@ -132,7 +132,7 @@ cp -r skills/<bucket>/<name> <目标skill目录>/
   - productivity/<name2> → ...
 未安装 <M> 个（已弃用或 omo 内置覆盖，见 README 弃用表 + §3 表）：
   - ask-matt / grill-with-docs / implement / research / to-spec / to-tickets
-  - triage / wayfinder / grill-me / handoff / teach / to-questionnaire
+  - triage / wayfinder / grill-me / handoff
   - wait-what / slice-work / setup-matt-pocock-skills
 ```
 
@@ -154,7 +154,7 @@ ENGINEERING=(
   tdd improve-codebase-architecture prototype
   diagnosing-bugs code-review resolving-merge-conflicts wizard
 )
-PRODUCTIVITY=(grilling writing-for-agents)
+PRODUCTIVITY=(grilling writing-for-agents teach to-questionnaire)
 
 mkdir -p ~/.config/opencode/skills/engineering ~/.config/opencode/skills/productivity
 for s in "${ENGINEERING[@]}"; do cp -r "skills/engineering/$s" ~/.config/opencode/skills/engineering/; done

@@ -35,9 +35,9 @@ omo-skills/
 
 ## 挑选清单
 
-仓库自有 12 个 skill，按「保留 / 弃用」分类如下：
+仓库自有 14 个 skill，按「保留 / 弃用」分类如下：
 
-### ✅ 采纳（12 个）
+### ✅ 采纳（14 个）
 
 | Skill | 类别 | 一句话用途 |
 |---|---|---|
@@ -51,10 +51,12 @@ omo-skills/
 | `code-review` | engineering | 两轴差异评审（Standards vs Spec）/review-work 走 PR 交接 |
 | `resolving-merge-conflicts` | engineering | 解决 in-progress merge / rebase 冲突（非常规 rebase 走 omo `git-master`） |
 | `wizard` | engineering | 复杂流程的多步向导 |
+| `teach` | productivity | 学习概念或 OSS 仓库（生成交互式课程 + 测验，写入 `docs/teach/{concept,repo}/`） |
+| `to-questionnaire` | productivity | 把不能完全回答的决定转成问卷（异步需求收集，输出到 cwd） |
 | `grilling` | productivity | 严格交叉质询流程 |
 | `writing-for-agents` | productivity | 写让 Agent 看得懂的文档（SKILL.md / AGENTS.md；opencode 配置走 `customize-opencode`） |
 
-### ❌ 弃用（15 个，已从 `skills/` 删除）
+### ❌ 弃用（13 个，已从 `skills/` 删除）
 
 | Skill | 类别 | 弃用原因 |
 |---|---|---|
@@ -65,12 +67,10 @@ omo-skills/
 | `research` | engineering | 范围过大，触发噪音明显；omo `/ulw-research` 已覆盖 |
 | `to-spec` | engineering | 由 omo `/ulw-plan` 承接 |
 | `to-tickets` | engineering | 由 omo `/ulw-plan` 承接 |
-| `triage` | engineering | omo `issue-tracker` workflow 内置类似流程 |
+| `triage` | engineering | omo 内置 issue-tracker workflow 部分覆盖（github-triage subface），全 triage 工作流需自行补全 |
 | `wayfinder` | engineering | 仅大型 monorepo 需要，触发噪音明显 |
 | `grill-me` | productivity | 由 `grilling` 合并 |
 | `handoff` | productivity | 与 omo `task()` 多 Agent 委派机制重叠 |
-| `teach` | productivity | omo 内置 `teach` skill |
-| `to-questionnaire` | productivity | 与 `grilling` 工作流重叠 |
 | `wait-what` | productivity | 由 `grilling` 承接 |
 | `slice-work` | engineering | 与 omo `/ulw-plan` 触发面重叠、缺任务行语法约束；omo `prometheus.prompt_append`（见 INSTALL.md §5.1）已内化垂直切片纪律 |
 

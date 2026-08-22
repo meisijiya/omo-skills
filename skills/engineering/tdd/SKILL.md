@@ -1,6 +1,6 @@
 ---
 name: tdd
-description: Test-driven development for NEW code: red → green → refactor. Use when: writing a feature test-first / mentions 'red-green-refactor' / wants integration tests written before the impl / 想 TDD / 红绿重构 / 先写测试. NOT for diagnosing an existing failure (use diagnosing-bugs), throwaway exploration (use prototype), or refactor roadmaps (use improve-codebase-architecture).
+description: "Test-driven development for NEW code: red → green → refactor. Use when: writing a feature test-first / mentions 'red-green-refactor' / wants integration tests written before the impl / 想 TDD / 红绿重构 / 先写测试. NOT for diagnosing an existing failure (use diagnosing-bugs), throwaway exploration (use prototype), or refactor roadmaps (use improve-codebase-architecture)."
 ---
 
 # Test-Driven Development

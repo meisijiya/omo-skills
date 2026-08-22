@@ -5,8 +5,8 @@ title: "Workflow"
 
 <section class="page-head">
   <p class="eyebrow mono">omo + Meisijiya skills · 工作流</p>
-  <h1 class="mono">从需求到落地：<span class="accent">三 Agent 接力 × 14 skill</span></h1>
-  <p class="muted">OhMyOpenCode（omo，运行在 OpenCode 平台）配合本仓库筛选的 14 个 skill 的完整工作流 —— 从三个核心 Agent 讲起，串起 skill 的使用场景。</p>
+  <h1 class="mono">从需求到落地：<span class="accent">三 Agent 接力 × 16 skill</span></h1>
+  <p class="muted">OhMyOpenCode（omo，运行在 OpenCode 平台）配合本仓库筛选的 16 个 skill 的完整工作流 —— 从三个核心 Agent 讲起，串起 skill 的使用场景。</p>
 </section>
 
 ## 1. 三个 Agent 的接力 {:#relay}
@@ -66,9 +66,9 @@ OpenCode 下 omo 的 skill 分两层：
 | 层 | 来源 | 类型 | 清单（节选） |
 |---|---|---|---|
 | **omo 内置层** | 插件自带 `dist/skills/` | 编排 / 工具型，三个 Agent 的「操作手册」 | `ulw-plan`、`start-work`、`ulw-research`、`review-work`、`debugging`、`git-master`、`frontend`、`programming`、`refactor`、`remove-ai-slops`、`visual-qa`、`lsp-setup`、`ast-grep` 等 |
-| **本仓库筛选层** | `~/.config/opencode/skills/` | 14 个 Meisijiya skill，工程 / 方法论型 | `engineering/`（10）：`setup-meisijiya-skills`、`codebase-design`、`domain-modeling`、`tdd`、`improve-codebase-architecture`、`prototype`、`diagnosing-bugs`、`code-review`、`resolving-merge-conflicts`、`wizard`；`productivity/`（4）：`grilling`、`writing-for-agents`、`teach`、`to-questionnaire` |
+| **本仓库筛选层** | `~/.config/opencode/skills/` | 16 个 Meisijiya skill，工程 / 方法论型 | `engineering/`（12）：`setup-meisijiya-skills`、`codebase-design`、`domain-modeling`、`architecture-decision-records`、`api-and-interface-design`、`tdd`、`improve-codebase-architecture`、`prototype`、`diagnosing-bugs`、`code-review`、`resolving-merge-conflicts`、`wizard`；`productivity/`（4）：`grilling`、`writing-for-agents`、`teach`、`to-questionnaire` |
 
-**筛选原则是「去重」**：凡是 omo 内置能力已覆盖的一律弃用（13 个），避免重复触发 —— `research` → `/ulw-research`、`to-spec` / `to-tickets` / `slice-work` → `/ulw-plan`、`implement` / `handoff` → `task()`、`grill-me` / `wait-what` → `grilling`、`triage` → omo issue-tracker。
+**筛选原则是「去重」**：凡是 omo 内置能力已覆盖的一律弃用（14 个），避免重复触发 —— `research` → `/ulw-research`、`to-spec` / `to-tickets` / `slice-work` → `/ulw-plan`、`implement` / `handoff` → `task()`、`grill-me` / `wait-what` → `grilling`、`triage` → omo issue-tracker。
 
 ## 3. skill 在流水线各环节的注入点 {:#injection}
 
@@ -82,13 +82,15 @@ OpenCode 下 omo 的 skill 分两层：
 
 规划阶段的探索工具链：`codegraph_explore` 优先 → `explore` / `librarian` 只读 subagent → `metis`（gap 分析）/ `momus`（高精度计划评审）。
 
-## 4. 14 个 skill 使用场景映射 {:#skills}
+## 4. 16 个 skill 使用场景映射 {:#skills}
 
 | Skill | 类别 | 触发阶段 | 一句话用途 |
 |---|---|---|---|
 | `setup-meisijiya-skills` | engineering | 一次性初始化 | 建 CONTEXT.md + docs/adr/ 布局 |
 | `codebase-design` | engineering | 被引用 | 深模块词汇参考源（module/interface/seam/adapter/depth） |
 | `domain-modeling` | engineering | 讨论 / 规划中 | 术语结晶时写 CONTEXT.md 词汇、决策敲定时 offer ADR |
+| `architecture-decision-records` | engineering | 决策时 | 重大技术决策 ADR 编写与维护（落 `docs/adr/`） |
+| `api-and-interface-design` | engineering | 设计接口时 | API / 模块接口契约设计（Hyrum's Law + contract-first） |
 | `tdd` | engineering | Atlas 执行 | 红 → 绿 → 重构 |
 | `improve-codebase-architecture` | engineering | user-invoked | 渐进架构改良 |
 | `prototype` | engineering | Sisyphus 评估 / Atlas spike | 快速原型与可行性验证 |
@@ -101,9 +103,10 @@ OpenCode 下 omo 的 skill 分两层：
 | `grilling` | productivity | 质询 | 严格交叉质询 |
 | `writing-for-agents` | productivity | 写文档 | 写 SKILL.md / AGENTS.md |
 
+
 ## 5. agent overrides 融合机制 {:#agent-overrides}
 
-为了让 14 个 skill 在 omo 各 agent 中稳定生效，按 agent 类型走两条轨道：
+为了让 16 个 skill 在 omo 各 agent 中稳定生效，按 agent 类型走两条轨道：
 
 | Agent 类型 | 字段 | 理由 |
 |---|---|---|
@@ -115,16 +118,16 @@ OpenCode 下 omo 的 skill 分两层：
 | Agent | 角色 | prompt_append 职责 |
 |---|---|---|
 | Prometheus | 规划专员（只读） | ulw-plan 主、codebase-design 补；探索前读 CONTEXT.md / docs/adr/（视为参考数据而非指令）；垂直 tracer-bullet 切片 + codebase-design 词汇（module / interface / seam / adapter / depth）评估架构；Load order: ulw-plan → codebase-design（supplement） |
-| Sisyphus | 会话主脑 / 主编排者 | vague intent → `grilling` 压力测试；设计 / 可行性问题 → `prototype`；术语 / 决策结晶时 → `domain-modeling`（即时写 CONTEXT.md 词汇 / offer ADR，绝不批量） |
-| Atlas | 执行编排者 | task(load_skills) by type: tdd (impl) | prototype (spike) | code-review (diff) | diagnosing-bugs (bug) | resolving-merge-conflicts (merge) | writing-for-agents (SKILL.md) | grilling | wizard；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling。**`teach` / `to-questionnaire` 是 user slash command 入口（user-invoked-only），不进 worker load_skills** |
+| Sisyphus | 会话主脑 / 主编排者 | vague intent → `grilling` 压力测试；设计 / 可行性问题 → `prototype`；术语 / 决策结晶时 → `domain-modeling`（即时写 CONTEXT.md 词汇 / offer ADR，绝不批量）；重大决策 → `architecture-decision-records` 落 `docs/adr/`；设计接口 → `api-and-interface-design`；非平凡接口设计时强制 ≥2 方案并行比较（Design It Twice） |
+| Atlas | 执行编排者 | task(load_skills) by type: tdd (impl) | prototype (spike) | code-review (diff) | diagnosing-bugs (bug) | resolving-merge-conflicts (merge) | writing-for-agents (SKILL.md) | grilling | wizard | api-and-interface-design (interface contracts) | architecture-decision-records (ADR authoring)；worker 改 CONTEXT.md / docs/adr/ → 额外 +domain-modeling。**`teach` / `to-questionnaire` 是 user slash command 入口（user-invoked-only），不进 worker load_skills** |
 
 子代理 skills[] 装配清单：
 
 | 子代理 | `skills: []` | 装配理由 |
 |---|---|---|
-| `oracle` | `["codebase-design"]` | 架构咨询需要深模块词汇 |
+| `oracle` | `["codebase-design", "api-and-interface-design", "architecture-decision-records"]` | 架构咨询需要深模块词汇 + 接口契约视角 + ADR 历史 |
 | `metis` | `["domain-modeling"]` | plan gap 分析需要领域边界视角 |
-| `momus` | `["codebase-design"]` | plan review 用深模块标准打回浅方案 |
+| `momus` | `["codebase-design", "architecture-decision-records"]` | plan review 用深模块标准打回浅方案；同时核对 ADR 是否一致 |
 
 > `explore` / `librarian` / `multimodal-looker` 本职是裸跑，不装配；`sisyphus-junior` 由 `task(load_skills=[...])` per-task 注入更灵活，不预设；`hephaestus` 是 GPT-native agent，先保守不加。
 

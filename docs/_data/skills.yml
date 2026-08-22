@@ -19,6 +19,20 @@
   desc: 用领域模型梳理业务实体与边界（更新 CONTEXT.md / 写 ADR）。
   file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/domain-modeling/SKILL.md
 
+- name: architecture-decision-records
+  tag: engineering · planning
+  category: engineering
+  phase: planning
+  desc: ADR 编写与维护（产物落 docs/adr/，与 domain-modeling 协同）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/architecture-decision-records/SKILL.md
+
+- name: api-and-interface-design
+  tag: engineering · planning
+  category: engineering
+  phase: planning
+  desc: API / 模块接口契约设计（Hyrum's Law + contract-first）。
+  file: https://github.com/meisijiya/omo-skills/blob/main/skills/engineering/api-and-interface-design/SKILL.md
+
 - name: tdd
   tag: engineering · execution
   category: engineering
@@ -95,3 +109,4 @@
   phase: daily
   desc: 写让 Agent 看得懂的文档（SKILL.md / AGENTS.md；opencode 配置走 customize-opencode）。
   file: https://github.com/meisijiya/omo-skills/blob/main/skills/productivity/writing-for-agents/SKILL.md
+

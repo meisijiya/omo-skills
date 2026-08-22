@@ -6,7 +6,7 @@ Matt Pocock [`mattpocock/skills`](https://github.com/mattpocock/skills) 的 **om
 
 本仓库专为 [OhMyOpenCode](https://github.com/code-yeongyu/oh-my-opencode)（omo）服务，吸收其 skill 工具栈约定，让上游 Matt Pocock 的工程 skill 在 omo 下稳定触发。其它 Agent（pi / senpi / Xiaomi mimocode 等）不在本仓库服务边界内。
 
-本仓库对 14 个采纳 skill 做了挑选与微调（含去歧义描述、user-invoked 守卫、路径约定），让它们在 omo 风格下稳定触发并被 Agent 正确路由。
+本仓库对 16 个采纳 skill 做了挑选与微调（含去歧义描述、user-invoked 守卫、路径约定），让它们在 omo 风格下稳定触发并被 Agent 正确路由。
 
 ## 仓库布局
 
@@ -23,8 +23,8 @@ omo-skills/
 ├── docs/                     ← 工作流文档与 Agent 约定
 │   ├── workflow.md           ← 三个 Agent + skill 使用场景工作流
 │   └── agents/domain.md      ← 领域文档消费契约
-├── skills/                   ← 微调后的 14 个 skill（产物，INSTALL.md 安装源）
-│   ├── engineering/          ← 10 个工程 skill
+├── skills/                   ← 微调后的 16 个 skill（产物，INSTALL.md 安装源）
+│   ├── engineering/          ← 12 个工程 skill
 │   └── productivity/         ← 4 个产出/写作 skill
 └── .omo/                     ← Boulder 计划状态、证据与 notepads（不入版本控制）
 ```
@@ -35,15 +35,17 @@ omo-skills/
 
 ## 挑选清单
 
-仓库自有 14 个 skill，按「保留 / 弃用」分类如下：
+仓库自有 16 个 skill，按「保留 / 弃用」分类如下：
 
-### ✅ 采纳（14 个）
+### ✅ 采纳（16 个）
 
 | Skill | 类别 | 一句话用途 |
 |---|---|---|
 | `setup-meisijiya-skills` | engineering | 初始化领域文档布局（首次使用前跑一次） |
 | `codebase-design` | engineering | 深模块设计词汇与原则（被 tdd / improve-codebase-architecture 引用为参考源） |
 | `domain-modeling` | engineering | 用领域模型梳理业务实体与边界（更新 CONTEXT.md / 写 ADR） |
+| `architecture-decision-records` | engineering | ADR 编写与维护（产物落 `docs/adr/`，与 `domain-modeling` 协同） |
+| `api-and-interface-design` | engineering | API / 模块接口契约设计（Hyrum's Law + contract-first，重大契约写 ADR） |
 | `tdd` | engineering | 严格 TDD 节奏（红→绿→重构） |
 | `improve-codebase-architecture` | engineering | 渐进式架构改良（user-invoked） |
 | `prototype` | engineering | 快速原型与可行性验证 |
@@ -56,7 +58,8 @@ omo-skills/
 | `grilling` | productivity | 严格交叉质询流程 |
 | `writing-for-agents` | productivity | 写让 Agent 看得懂的文档（SKILL.md / AGENTS.md；opencode 配置走 `customize-opencode`） |
 
-### ❌ 弃用（13 个，已从 `skills/` 删除）
+
+### ❌ 弃用（14 个，已从 `skills/` 删除）
 
 | Skill | 类别 | 弃用原因 |
 |---|---|---|
@@ -73,19 +76,24 @@ omo-skills/
 | `handoff` | productivity | 与 omo `task()` 多 Agent 委派机制重叠 |
 | `wait-what` | productivity | 由 `grilling` 承接 |
 | `slice-work` | engineering | 与 omo `/ulw-plan` 触发面重叠、缺任务行语法约束；omo `prometheus.prompt_append`（见 INSTALL.md §5.1）已内化垂直切片纪律 |
+| `create-design-md` | productivity | omo 内置 `/frontend` 自带 DESIGN.md 8-section schema（`design-system-architecture.md`），与本 skill 的 `@google/design.md` schema 互不兼容；user-invoked + `disable-model-invocation` 守卫不足以解决 schema 冲突，统一走 `/frontend` |
 
 ## 微调策略
 
-为了让 14 个采纳 skill 在 omo 风格下稳定触发，本仓库对 SKILL.md 的 frontmatter `description` 做了最小侵入优化（仅改 description 字段，不动正文逻辑）：
+为了让 16 个采纳 skill 在 omo 风格下稳定触发，本仓库对 SKILL.md 的 frontmatter `description` 做了最小侵入优化（仅改 description 字段，不动正文逻辑）：
 
-- **2 个 user-invoked 守卫**：`improve-codebase-architecture` 与 `setup-meisijiya-skills` 显式标注 `User-invoked only`，避免 Agent 在不合适时机自动调用。
+- **2 个 user-invoked 守卫**：`improve-codebase-architecture` / `setup-meisijiya-skills` 显式标注 `User-invoked only`，避免 Agent 在不合适时机自动调用。
 - **5 个 omo 触发词 / 去歧义更新**：
   - `domain-modeling`：保留 setup 依赖句，补回 "writing or editing a CONTEXT.md, or recording or editing an ADR" 具体动作锚点
   - `resolving-merge-conflicts`：加 "NOT for routine rebase/squash/git-history investigation (that's omo's git-master)" 反向指引
   - `diagnosing-bugs`：加 "For crashes / hangs / attach-debugger / runtime inspection / sourcemap issues, use omo's built-in /debugging instead" 反向指引
   - `code-review`：加 "Use /review-work instead for pre-PR handoff full QA" 反向指引
   - `grilling`：保留 'grill' trigger phrase + plan/design challenged 措辞
+- **2 个新引入 skill 的去歧义**：
+  - `architecture-decision-records`：锚定到 `docs/adr/` + `NNNN-kebab-title.md` 编号 + `Proposed → Accepted → Deprecated → Superseded` lifecycle（与 `domain-modeling` 路径约定一致）
+  - `api-and-interface-design`：区分重大契约（写 ADR）vs 模块内部契约（落 `docs/agents/<module>.md`），反向指引 `codebase-design` / `architecture-decision-records`
 - **1 个 stale 引用修正**：`code-review/SKILL.md` 第 13 行从 `setup-matt-pocock-skills` 改为 `setup-meisijiya-skills`；`writing-for-agents/SKILL.md` 第 3 行删 `CLAUDE.md`（omo 不使用），加 customize-opencode 去歧义
+- **2 个新引入 skill 全部加 NOT-for 反向指引**：`architecture-decision-records` / `api-and-interface-design` 加 NOT-for 反向指引避免撞 `codebase-design` / `domain-modeling` 触发面
 
 仓库已脱离上游 fork，`skills/` 是唯一来源——不再依赖任何 `mattpocock-skills/` 同步流程。
 

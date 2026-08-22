@@ -5,7 +5,7 @@ title: "Retired Skills"
 
 <section class="page-head">
   <p class="eyebrow mono">归档 · 已弃用</p>
-  <h1 class="mono">13 个 retired skill</h1>
+  <h1 class="mono">14 个 retired skill</h1>
   <p class="muted">合并 / 由 omo 内置替代 / 触发噪音，已从 `skills/` 删除。</p>
 </section>
 
@@ -24,6 +24,7 @@ title: "Retired Skills"
 | `handoff` | productivity | 与 omo `task()` 多 Agent 委派机制重叠 | omo `task()` |
 | `wait-what` | productivity | 由 `grilling` 承接 | `grilling` |
 | `slice-work` | engineering | 与 omo `/ulw-plan` 触发面重叠、缺任务行语法约束；omo `prometheus.prompt_append` 已内化垂直切片纪律 | omo `/ulw-plan` + `prometheus.prompt_append` |
+| `create-design-md` | productivity | omo 内置 `/frontend` 自带 DESIGN.md 8-section schema（`design-system-architecture.md`），与本 skill 的 `@google/design.md` schema 互不兼容；user-invoked + `disable-model-invocation` 守卫不足以解决 schema 冲突 | omo `/frontend` |
 
 ## 分类小结
 
@@ -41,6 +42,7 @@ title: "Retired Skills"
 - `to-tickets` → omo `/ulw-plan`
 - `slice-work` → omo `prompt_append`
 - `triage` → omo `issue-tracker`
+- `create-design-md` → omo `/frontend`
 
 ### 触发噪音去除 {#noise}
 

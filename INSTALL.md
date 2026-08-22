@@ -1,8 +1,8 @@
-# INSTALL — omo-skills（Meisijiya 14 skill）安装指南
+# INSTALL — omo-skills（Meisijiya 16 skill）安装指南
 
 > 📖 在线指南：[meisijiya.github.io/omo-skills/](https://meisijiya.github.io/omo-skills/)
 
-本仓库专为 [OhMyOpenCode](https://github.com/code-yeongyu/oh-my-opencode)（omo）服务。INSTALL 仅指导把 14 个采纳 skill 装入 omo。其它 Agent（pi / senpi / Xiaomi mimocode / 等）不在本仓库服务边界内。
+本仓库专为 [OhMyOpenCode](https://github.com/code-yeongyu/oh-my-opencode)（omo）服务。INSTALL 仅指导把 16 个采纳 skill 装入 omo。其它 Agent（pi / senpi / Xiaomi mimocode / 等）不在本仓库服务边界内。
 
 Agent 读完本指南后，按流程逐节执行即可，无需再回头询问用户目录。
 
@@ -24,13 +24,15 @@ Agent 读完本指南后，按流程逐节执行即可，无需再回头询问�
 
 ## 2. 能力对照表
 
-本节把 14 个采纳 skill 与 omo 内置的对应能力并列对照，方便选型。
+本节把 16 个采纳 skill 与 omo 内置的对应能力并列对照，方便选型。
 
 | Skill | omo 内置对应 | 备注 |
 |---|---|---|
 | `setup-meisijiya-skills` | — | 仓库初始化（首次使用前跑一次） |
 | `codebase-design` | — | 深模块设计词汇与原则（被 tdd / improve-codebase-architecture 引用为参考源） |
 | `domain-modeling` | — | 领域模型 / ADR |
+| `architecture-decision-records` | — | ADR 编写与维护（产物落 `docs/adr/`，与 `domain-modeling` 协同） |
+| `api-and-interface-design` | — | API / 模块接口契约设计（重大契约写 ADR） |
 | `tdd` | `tdd` skill | 与 omo 内置同名一致（作为对外承诺保留） |
 | `improve-codebase-architecture` | — | user-invoked |
 | `prototype` | `prototype` skill | 与 omo 内置同名一致（作为对外承诺保留） |
@@ -42,6 +44,7 @@ Agent 读完本指南后，按流程逐节执行即可，无需再回头询问�
 | `to-questionnaire` | — | 异步第三方需求问询（user-invoked） |
 | `grilling` | — | 严格交叉质询 |
 | `writing-for-agents` | — | SKILL.md / AGENTS.md 写作 |
+
 
 ---
 
@@ -77,7 +80,7 @@ omo 已内置同名或同等能力的 skill，跳过避免重复触发。
 
 进入对话后第一句话必须包含以下要点（不写「自动执行破坏性操作」措辞）：
 
-> 「请问本次要把这 14 个采纳 skill 装到 omo 的哪个目录？默认 `~/.config/opencode/skills/`；如已有同名 skill，`cp -r` 会覆盖原目录。」
+> 「请问本次要把这 16 个采纳 skill 装到 omo 的哪个目录？默认 `~/.config/opencode/skills/`；如已有同名 skill，`cp -r` 会覆盖原目录。」
 
 收到明确答复后才进入步骤 1；未明确前不复制任何文件。
 
@@ -120,7 +123,7 @@ cp -r skills/<bucket>/<name> <目标skill目录>/
 - `<name>` 是 skill 目录名（不带斜杠、不带 `.md`）。
 - `<目标skill目录>` 是 §1 表里的目录字面值。
 - 同一目标目录多次复制不同 skill 时，每次 `cp -r` 独立执行；不要写 `cp -r ... skills/* <dir>/` 这种一把梭的写法——会顺带把 bucket 下的 `README.md` 复制进去，污染目标目录。
-- 本仓库 14 个 skill 与 omo 用户层已装副本同名，`cp -r` 会**覆盖**已存在的同名目录；如需保留原版，先 `mv ~/.config/opencode/skills/engineering/<name> ~/.config/opencode/skills/engineering/<name>.bak`。
+- 本仓库 16 个 skill 与 omo 用户层已装副本同名，`cp -r` 会**覆盖**已存在的同名目录；如需保留原版，先 `mv ~/.config/opencode/skills/engineering/<name> ~/.config/opencode/skills/engineering/<name>.bak`。
 
 **步骤 4：汇报。**
 
@@ -146,11 +149,12 @@ cp -r skills/<bucket>/<name> <目标skill目录>/
 
 **目录**：`~/.config/opencode/skills/` 与 `~/.agents/skills/`（任选其一即可，建议主目录 `~/.config/opencode/skills/`）。
 
-**装机策略**：默认 14 个 skill 全量。
+**装机策略**：默认 16 个 skill 全量。
 
 ```bash
 ENGINEERING=(
   setup-meisijiya-skills codebase-design domain-modeling
+  architecture-decision-records api-and-interface-design
   tdd improve-codebase-architecture prototype
   diagnosing-bugs code-review resolving-merge-conflicts wizard
 )
@@ -164,13 +168,13 @@ for s in "${PRODUCTIVITY[@]}"; do cp -r "skills/productivity/$s" ~/.config/openc
 **复制完成标志**：
 
 ```bash
-ls -1 ~/.config/opencode/skills/engineering/ | wc -l   # 期望 ≥ 10
+ls -1 ~/.config/opencode/skills/engineering/ | wc -l   # 期望 ≥ 12
 ls -1 ~/.config/opencode/skills/productivity/ | wc -l  # 期望 ≥ 4
 ```
 
 ## 5.1 agent overrides 配置（主 Agent prompt_append + 子 Agent skills[]）
 
-为了让 14 个 Meisijiya skill 在 omo 各 agent 中稳定生效，按 agent 类型走两条轨道：
+为了让 16 个 Meisijiya skill 在 omo 各 agent 中稳定生效，按 agent 类型走两条轨道：
 
 | Agent 类型 | 配置字段 | 理由 |
 |---|---|---|
@@ -203,9 +207,9 @@ node scripts/install-prompt-append.mjs
 
 | 子代理 | `skills: []` | 装配理由 |
 |---|---|---|
-| `oracle` | `["codebase-design"]` | 长期做架构咨询，需要深模块词汇（module / interface / seam / adapter / depth） |
+| `oracle` | `["codebase-design", "api-and-interface-design", "architecture-decision-records"]` | 长期做架构咨询，需要深模块词汇 + 接口契约视角 + ADR 历史 |
 | `metis` | `["domain-modeling"]` | plan gap 分析需要领域边界视角 |
-| `momus` | `["codebase-design"]` | plan review 用深模块标准打回浅方案 |
+| `momus` | `["codebase-design", "architecture-decision-records"]` | plan review 用深模块标准打回浅方案；同时核对 ADR 是否一致 |
 
 > **不装配的子代理**：`explore` / `librarian` / `multimodal-looker` 本职是裸跑，加 skill 干扰；`sisyphus-junior` 由 `task(load_skills=[...])` per-task 注入更灵活，不预设；`hephaestus` 是 GPT-native agent，先保守不加。
 
@@ -249,12 +253,76 @@ rm -rf ~/.config/opencode/skills/grill-with-docs
 
 | Agent | 验证版本 | 验证日期 | 装机策略 | 备注 |
 | --- | --- | --- | --- | --- |
-| omo (OpenCode) | main | — | 14 全量（engineering 10 + productivity 4，无前缀） | 待本机验证后补日期 |
+| omo (OpenCode) | main | — | 16 全量（engineering 12 + productivity 4，无前缀） | 待本机验证后补日期 |
 
 新验证一种 omo 安装环境（不同 ~/.config/opencode/ 路径或带 .agents/skills/ 双写）后，在表格里补一行；`MAINTENANCE.md §2` 监控信号 "INSTALL.md 漏目录" 已对照此表。
 
 ---
 
-## 8. 一句话总结
+## 8. 快速上手（3 步，人照搬版）
 
-> 问目录 → `ls` 现状 → 对照 §2 能力表列缺口 → `cp -r` 对应 skill 目录 → 运行 `scripts/install-prompt-append.mjs` 配置 system prompt → 汇报。
+> 本节面向**人**（不是 §4 那种面向 Agent 的协议）。如果你是 Agent 给用户装，按 §4 走；如果你是用户自己跑，按本节 3 步走。
+
+### 步骤 1：装 skill（`cp -r` 16 个目录）
+
+```bash
+# 默认装到 ~/.config/opencode/skills/，装 ~/.agents/skills/ 也行（二选一）
+ENGINEERING=(
+  setup-meisijiya-skills codebase-design domain-modeling
+  architecture-decision-records api-and-interface-design
+  tdd improve-codebase-architecture prototype
+  diagnosing-bugs code-review resolving-merge-conflicts wizard
+)
+PRODUCTIVITY=(grilling writing-for-agents teach to-questionnaire)
+
+mkdir -p ~/.config/opencode/skills/engineering ~/.config/opencode/skills/productivity
+for s in "${ENGINEERING[@]}"; do cp -r "skills/engineering/$s" ~/.config/opencode/skills/engineering/; done
+for s in "${PRODUCTIVITY[@]}"; do cp -r "skills/productivity/$s" ~/.config/opencode/skills/productivity/; done
+```
+
+### 步骤 2：装 prompt_append（合并 fragment 到 `~/.omo/omo.jsonc`）
+
+```bash
+node scripts/install-prompt-append.mjs
+```
+
+脚本会做：
+- 读 `config/oh-my-openagent.prompt-append.jsonc`（唯一事实来源）
+- 合并到 `~/.omo/omo.jsonc` 的 `[opencode].agents.*`
+- 浅比对，**只覆盖 fragment 列出的字段**（你的 `model` / `variant` / `reasoning` 等不动）
+- 幂等，重跑无副作用
+
+合并内容覆盖 6 个 agent：
+- 3 个**主代理** `prompt_append`：sisyphus / prometheus / atlas（触发词 + 工作流规则）
+- 3 个**子代理** `skills: []`：oracle / metis / momus（强制前置注入对应 skill 正文）
+
+### 步骤 3：验证（30 秒内能跑完）
+
+```bash
+# skill 数量对（12 + 4 = 16）
+ls ~/.config/opencode/skills/engineering/ | wc -l   # 期望 12
+ls ~/.config/opencode/skills/productivity/ | wc -l  # 期望 4
+
+# prompt_append 字段对（重点核对最新改动）
+grep -c 'architecture-decision-records\|api-and-interface-design\|Design It Twice' ~/.omo/omo.jsonc  # 期望 ≥ 1
+grep -A 1 '"oracle":' ~/.omo/omo.jsonc | head -3   # oracle.skills 应含 3 项
+grep -A 1 '"momus":'  ~/.omo/omo.jsonc | head -3   # momus.skills 应含 2 项
+
+# omo 下次启动自动扫描新 skill 与 prompt_append，无需重启注册表
+```
+
+### 一行话回顾
+
+> `cp -r` 16 个 skill → `node scripts/install-prompt-append.mjs` → 重启 omo 生效。
+
+---
+
+## 9. 故障排查
+
+| 现象 | 可能原因 | 检查命令 |
+|---|---|---|
+| skill 装了但 Agent 不识别 | 没装到 omo 扫描的目录 / symlink 断了 | `ls -la ~/.config/opencode/skills/engineering/ \| grep <name>`（应见 symlink 或实体目录） |
+| `prompt_append` 没生效 | 没跑 install 脚本 / 跑在 fragment 改动前 | `grep 'architecture-decision-records' ~/.omo/omo.jsonc` |
+| 子代理没拿到 skills[] | fragment 没列出对应 agent / 脚本未运行 | `grep -A 2 '"oracle":' ~/.omo/omo.jsonc`（看 `skills: [...]` 字段） |
+| 重跑 install 脚本但 fragment 字段没改 | 已幂等（已是最新），不是 bug | 应输出「agent overrides 已是最新，无需改动」 |
+| 安装版本错乱 | 多次安装不同源 / 多个 omo 配置互相覆盖 | `opencode debug config` 看 merged config 的 `[opencode].agents.*` |

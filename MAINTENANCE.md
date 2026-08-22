@@ -12,8 +12,8 @@
 
 ```
 omo-skills/
-├── skills/                 ← 微调后的 14 个 skill（产物，push 到 GitHub，INSTALL.md 安装源）
-│   ├── engineering/        ← 10 个工程 skill
+├── skills/                 ← 微调后的 16 个 skill（产物，push 到 GitHub，INSTALL.md 安装源）
+│   ├── engineering/        ← 12 个工程 skill
 │   └── productivity/       ← 4 个产出/写作 skill
 ├── README.md               ← 人读概览
 ├── INSTALL.md              ← Agent 询问后安装指引
@@ -50,12 +50,12 @@ omo-skills/
 ```bash
 cd omo-skills/      # 产物仓库根
 
-# 断言 1: 14 个 SKILL.md YAML 解析（engineering 10 + productivity 4）
+# 断言 1: 16 个 SKILL.md YAML 解析（engineering 12 + productivity 4）
 python3 -c "
 import glob, yaml, sys
 files = sorted(glob.glob('skills/engineering/*/SKILL.md')) + sorted(glob.glob('skills/productivity/*/SKILL.md'))
-if len(files) != 14:
-    print(f'FAIL: expected 14 SKILL.md, got {len(files)}')
+if len(files) != 16:
+    print(f'FAIL: expected 16 SKILL.md, got {len(files)}')
     sys.exit(1)
 errs = []
 for f in files:
@@ -73,8 +73,8 @@ for f in skills/engineering/{improve-codebase-architecture,setup-meisijiya-skill
   grep -q 'disable-model-invocation: true' "$f" || echo "FAIL_FIELD $f"
 done
 
-# 断言 3: 10 个 model-invoked 零守卫（slice-work 已弃用，从列表移除）
-for f in skills/engineering/{codebase-design,domain-modeling,tdd,resolving-merge-conflicts,wizard,prototype,code-review,diagnosing-bugs}/SKILL.md skills/productivity/{grilling,writing-for-agents}/SKILL.md; do
+# 断言 3: 12 个 model-invoked 零守卫（slice-work 已弃用，从列表移除；新增 architecture-decision-records / api-and-interface-design）
+for f in skills/engineering/{codebase-design,domain-modeling,tdd,resolving-merge-conflicts,wizard,prototype,code-review,diagnosing-bugs,architecture-decision-records,api-and-interface-design}/SKILL.md skills/productivity/{grilling,writing-for-agents}/SKILL.md; do
   grep -q 'User-invoked only' "$f" && echo "FAIL_EXTRA $f"
 done
 ```
@@ -170,6 +170,7 @@ done
 | `CONTEXT.md` | 项目主上下文（仓库根级） | `setup-meisijiya-skills/SKILL.md` |
 | `CONTEXT-MAP.md` | 上下文导航图（仓库根级） | `setup-meisijiya-skills/SKILL.md` |
 | `docs/agents/` | Agent 角色定义 | 各 skill 引用的元数据 |
+| `DESIGN.md` | UI 设计规范（仓库根级，与 `CONTEXT.md` 平级） | 由 omo 内置 `/frontend` 写入 |
 
 **B. 临时态（working / scratch / out-of-scope）** —— 上游原路径，工作区根直接子目录（与 omo / 上游双方一致）：
 
